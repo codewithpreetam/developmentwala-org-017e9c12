@@ -9,38 +9,898 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as TermsOfUseRouteImport } from './routes/terms-of-use'
+import { Route as SubmitScholarshipRouteImport } from './routes/submit-scholarship'
+import { Route as SubmitJobRouteImport } from './routes/submit-job'
+import { Route as SubmitInternshipRouteImport } from './routes/submit-internship'
+import { Route as SubmitGrantRouteImport } from './routes/submit-grant'
+import { Route as SubmitFellowshipRouteImport } from './routes/submit-fellowship'
+import { Route as SubmitEventRouteImport } from './routes/submit-event'
+import { Route as SitemapRouteImport } from './routes/sitemap'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as ScholarshipsRouteImport } from './routes/scholarships'
+import { Route as ScholarshipDetailRouteImport } from './routes/scholarship-detail'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PostOpportunityRouteImport } from './routes/post-opportunity'
+import { Route as LegalRouteImport } from './routes/legal'
+import { Route as JobsRouteImport } from './routes/jobs'
+import { Route as InternshipsRouteImport } from './routes/internships'
+import { Route as InternshipDetailRouteImport } from './routes/internship-detail'
+import { Route as GrantsRouteImport } from './routes/grants'
+import { Route as GrantDetailRouteImport } from './routes/grant-detail'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as FellowshipsRouteImport } from './routes/fellowships'
+import { Route as FellowshipDetailRouteImport } from './routes/fellowship-detail'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as EventDetailRouteImport } from './routes/event-detail'
+import { Route as EmployersRouteImport } from './routes/employers'
+import { Route as EmployerProfileRouteImport } from './routes/employer-profile'
+import { Route as EmployerDashboardRouteImport } from './routes/employer-dashboard'
+import { Route as EditOpportunityRouteImport } from './routes/edit-opportunity'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ChooseRoleRouteImport } from './routes/choose-role'
+import { Route as CandidateDashboardRouteImport } from './routes/candidate-dashboard'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AdminLoginRouteImport } from './routes/admin-login'
+import { Route as AdminDashboardRouteImport } from './routes/admin-dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ScholarshipsSlugRouteImport } from './routes/scholarships/$slug'
+import { Route as JobsSlugRouteImport } from './routes/jobs/$slug'
+import { Route as InternshipsSlugRouteImport } from './routes/internships/$slug'
+import { Route as GrantsSlugRouteImport } from './routes/grants/$slug'
+import { Route as FellowshipsSlugRouteImport } from './routes/fellowships/$slug'
+import { Route as EventsSlugRouteImport } from './routes/events/$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as BlogCategorySlugRouteImport } from './routes/blog/category/$slug'
 
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsOfUseRoute = TermsOfUseRouteImport.update({
+  id: '/terms-of-use',
+  path: '/terms-of-use',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmitScholarshipRoute = SubmitScholarshipRouteImport.update({
+  id: '/submit-scholarship',
+  path: '/submit-scholarship',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmitJobRoute = SubmitJobRouteImport.update({
+  id: '/submit-job',
+  path: '/submit-job',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmitInternshipRoute = SubmitInternshipRouteImport.update({
+  id: '/submit-internship',
+  path: '/submit-internship',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmitGrantRoute = SubmitGrantRouteImport.update({
+  id: '/submit-grant',
+  path: '/submit-grant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmitFellowshipRoute = SubmitFellowshipRouteImport.update({
+  id: '/submit-fellowship',
+  path: '/submit-fellowship',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmitEventRoute = SubmitEventRouteImport.update({
+  id: '/submit-event',
+  path: '/submit-event',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapRoute = SitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScholarshipsRoute = ScholarshipsRouteImport.update({
+  id: '/scholarships',
+  path: '/scholarships',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScholarshipDetailRoute = ScholarshipDetailRouteImport.update({
+  id: '/scholarship-detail',
+  path: '/scholarship-detail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PostOpportunityRoute = PostOpportunityRouteImport.update({
+  id: '/post-opportunity',
+  path: '/post-opportunity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsRoute = JobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternshipsRoute = InternshipsRouteImport.update({
+  id: '/internships',
+  path: '/internships',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternshipDetailRoute = InternshipDetailRouteImport.update({
+  id: '/internship-detail',
+  path: '/internship-detail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GrantsRoute = GrantsRouteImport.update({
+  id: '/grants',
+  path: '/grants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GrantDetailRoute = GrantDetailRouteImport.update({
+  id: '/grant-detail',
+  path: '/grant-detail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FellowshipsRoute = FellowshipsRouteImport.update({
+  id: '/fellowships',
+  path: '/fellowships',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FellowshipDetailRoute = FellowshipDetailRouteImport.update({
+  id: '/fellowship-detail',
+  path: '/fellowship-detail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventDetailRoute = EventDetailRouteImport.update({
+  id: '/event-detail',
+  path: '/event-detail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployersRoute = EmployersRouteImport.update({
+  id: '/employers',
+  path: '/employers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployerProfileRoute = EmployerProfileRouteImport.update({
+  id: '/employer-profile',
+  path: '/employer-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployerDashboardRoute = EmployerDashboardRouteImport.update({
+  id: '/employer-dashboard',
+  path: '/employer-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EditOpportunityRoute = EditOpportunityRouteImport.update({
+  id: '/edit-opportunity',
+  path: '/edit-opportunity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChooseRoleRoute = ChooseRoleRouteImport.update({
+  id: '/choose-role',
+  path: '/choose-role',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CandidateDashboardRoute = CandidateDashboardRouteImport.update({
+  id: '/candidate-dashboard',
+  path: '/candidate-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin-login',
+  path: '/admin-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/admin-dashboard',
+  path: '/admin-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScholarshipsSlugRoute = ScholarshipsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ScholarshipsRoute,
+} as any)
+const JobsSlugRoute = JobsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => JobsRoute,
+} as any)
+const InternshipsSlugRoute = InternshipsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => InternshipsRoute,
+} as any)
+const GrantsSlugRoute = GrantsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => GrantsRoute,
+} as any)
+const FellowshipsSlugRoute = FellowshipsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => FellowshipsRoute,
+} as any)
+const EventsSlugRoute = EventsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => EventsRoute,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
+const BlogCategorySlugRoute = BlogCategorySlugRouteImport.update({
+  id: '/category/$slug',
+  path: '/category/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin-dashboard': typeof AdminDashboardRoute
+  '/admin-login': typeof AdminLoginRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/candidate-dashboard': typeof CandidateDashboardRoute
+  '/choose-role': typeof ChooseRoleRoute
+  '/contact': typeof ContactRoute
+  '/edit-opportunity': typeof EditOpportunityRoute
+  '/employer-dashboard': typeof EmployerDashboardRoute
+  '/employer-profile': typeof EmployerProfileRoute
+  '/employers': typeof EmployersRoute
+  '/event-detail': typeof EventDetailRoute
+  '/events': typeof EventsRouteWithChildren
+  '/fellowship-detail': typeof FellowshipDetailRoute
+  '/fellowships': typeof FellowshipsRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/grant-detail': typeof GrantDetailRoute
+  '/grants': typeof GrantsRouteWithChildren
+  '/internship-detail': typeof InternshipDetailRoute
+  '/internships': typeof InternshipsRouteWithChildren
+  '/jobs': typeof JobsRouteWithChildren
+  '/legal': typeof LegalRoute
+  '/post-opportunity': typeof PostOpportunityRoute
+  '/pricing': typeof PricingRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/scholarship-detail': typeof ScholarshipDetailRoute
+  '/scholarships': typeof ScholarshipsRouteWithChildren
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
+  '/sitemap': typeof SitemapRoute
+  '/submit-event': typeof SubmitEventRoute
+  '/submit-fellowship': typeof SubmitFellowshipRoute
+  '/submit-grant': typeof SubmitGrantRoute
+  '/submit-internship': typeof SubmitInternshipRoute
+  '/submit-job': typeof SubmitJobRoute
+  '/submit-scholarship': typeof SubmitScholarshipRoute
+  '/terms-of-use': typeof TermsOfUseRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/events/$slug': typeof EventsSlugRoute
+  '/fellowships/$slug': typeof FellowshipsSlugRoute
+  '/grants/$slug': typeof GrantsSlugRoute
+  '/internships/$slug': typeof InternshipsSlugRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/scholarships/$slug': typeof ScholarshipsSlugRoute
+  '/blog/category/$slug': typeof BlogCategorySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin-dashboard': typeof AdminDashboardRoute
+  '/admin-login': typeof AdminLoginRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/candidate-dashboard': typeof CandidateDashboardRoute
+  '/choose-role': typeof ChooseRoleRoute
+  '/contact': typeof ContactRoute
+  '/edit-opportunity': typeof EditOpportunityRoute
+  '/employer-dashboard': typeof EmployerDashboardRoute
+  '/employer-profile': typeof EmployerProfileRoute
+  '/employers': typeof EmployersRoute
+  '/event-detail': typeof EventDetailRoute
+  '/events': typeof EventsRouteWithChildren
+  '/fellowship-detail': typeof FellowshipDetailRoute
+  '/fellowships': typeof FellowshipsRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/grant-detail': typeof GrantDetailRoute
+  '/grants': typeof GrantsRouteWithChildren
+  '/internship-detail': typeof InternshipDetailRoute
+  '/internships': typeof InternshipsRouteWithChildren
+  '/jobs': typeof JobsRouteWithChildren
+  '/legal': typeof LegalRoute
+  '/post-opportunity': typeof PostOpportunityRoute
+  '/pricing': typeof PricingRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/scholarship-detail': typeof ScholarshipDetailRoute
+  '/scholarships': typeof ScholarshipsRouteWithChildren
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
+  '/sitemap': typeof SitemapRoute
+  '/submit-event': typeof SubmitEventRoute
+  '/submit-fellowship': typeof SubmitFellowshipRoute
+  '/submit-grant': typeof SubmitGrantRoute
+  '/submit-internship': typeof SubmitInternshipRoute
+  '/submit-job': typeof SubmitJobRoute
+  '/submit-scholarship': typeof SubmitScholarshipRoute
+  '/terms-of-use': typeof TermsOfUseRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/events/$slug': typeof EventsSlugRoute
+  '/fellowships/$slug': typeof FellowshipsSlugRoute
+  '/grants/$slug': typeof GrantsSlugRoute
+  '/internships/$slug': typeof InternshipsSlugRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/scholarships/$slug': typeof ScholarshipsSlugRoute
+  '/blog/category/$slug': typeof BlogCategorySlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin-dashboard': typeof AdminDashboardRoute
+  '/admin-login': typeof AdminLoginRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/candidate-dashboard': typeof CandidateDashboardRoute
+  '/choose-role': typeof ChooseRoleRoute
+  '/contact': typeof ContactRoute
+  '/edit-opportunity': typeof EditOpportunityRoute
+  '/employer-dashboard': typeof EmployerDashboardRoute
+  '/employer-profile': typeof EmployerProfileRoute
+  '/employers': typeof EmployersRoute
+  '/event-detail': typeof EventDetailRoute
+  '/events': typeof EventsRouteWithChildren
+  '/fellowship-detail': typeof FellowshipDetailRoute
+  '/fellowships': typeof FellowshipsRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/grant-detail': typeof GrantDetailRoute
+  '/grants': typeof GrantsRouteWithChildren
+  '/internship-detail': typeof InternshipDetailRoute
+  '/internships': typeof InternshipsRouteWithChildren
+  '/jobs': typeof JobsRouteWithChildren
+  '/legal': typeof LegalRoute
+  '/post-opportunity': typeof PostOpportunityRoute
+  '/pricing': typeof PricingRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/scholarship-detail': typeof ScholarshipDetailRoute
+  '/scholarships': typeof ScholarshipsRouteWithChildren
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
+  '/sitemap': typeof SitemapRoute
+  '/submit-event': typeof SubmitEventRoute
+  '/submit-fellowship': typeof SubmitFellowshipRoute
+  '/submit-grant': typeof SubmitGrantRoute
+  '/submit-internship': typeof SubmitInternshipRoute
+  '/submit-job': typeof SubmitJobRoute
+  '/submit-scholarship': typeof SubmitScholarshipRoute
+  '/terms-of-use': typeof TermsOfUseRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/events/$slug': typeof EventsSlugRoute
+  '/fellowships/$slug': typeof FellowshipsSlugRoute
+  '/grants/$slug': typeof GrantsSlugRoute
+  '/internships/$slug': typeof InternshipsSlugRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/scholarships/$slug': typeof ScholarshipsSlugRoute
+  '/blog/category/$slug': typeof BlogCategorySlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin-dashboard'
+    | '/admin-login'
+    | '/blog'
+    | '/candidate-dashboard'
+    | '/choose-role'
+    | '/contact'
+    | '/edit-opportunity'
+    | '/employer-dashboard'
+    | '/employer-profile'
+    | '/employers'
+    | '/event-detail'
+    | '/events'
+    | '/fellowship-detail'
+    | '/fellowships'
+    | '/forgot-password'
+    | '/grant-detail'
+    | '/grants'
+    | '/internship-detail'
+    | '/internships'
+    | '/jobs'
+    | '/legal'
+    | '/post-opportunity'
+    | '/pricing'
+    | '/privacy-policy'
+    | '/reset-password'
+    | '/scholarship-detail'
+    | '/scholarships'
+    | '/sign-in'
+    | '/sign-up'
+    | '/sitemap'
+    | '/submit-event'
+    | '/submit-fellowship'
+    | '/submit-grant'
+    | '/submit-internship'
+    | '/submit-job'
+    | '/submit-scholarship'
+    | '/terms-of-use'
+    | '/verify-email'
+    | '/blog/$slug'
+    | '/events/$slug'
+    | '/fellowships/$slug'
+    | '/grants/$slug'
+    | '/internships/$slug'
+    | '/jobs/$slug'
+    | '/scholarships/$slug'
+    | '/blog/category/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin-dashboard'
+    | '/admin-login'
+    | '/blog'
+    | '/candidate-dashboard'
+    | '/choose-role'
+    | '/contact'
+    | '/edit-opportunity'
+    | '/employer-dashboard'
+    | '/employer-profile'
+    | '/employers'
+    | '/event-detail'
+    | '/events'
+    | '/fellowship-detail'
+    | '/fellowships'
+    | '/forgot-password'
+    | '/grant-detail'
+    | '/grants'
+    | '/internship-detail'
+    | '/internships'
+    | '/jobs'
+    | '/legal'
+    | '/post-opportunity'
+    | '/pricing'
+    | '/privacy-policy'
+    | '/reset-password'
+    | '/scholarship-detail'
+    | '/scholarships'
+    | '/sign-in'
+    | '/sign-up'
+    | '/sitemap'
+    | '/submit-event'
+    | '/submit-fellowship'
+    | '/submit-grant'
+    | '/submit-internship'
+    | '/submit-job'
+    | '/submit-scholarship'
+    | '/terms-of-use'
+    | '/verify-email'
+    | '/blog/$slug'
+    | '/events/$slug'
+    | '/fellowships/$slug'
+    | '/grants/$slug'
+    | '/internships/$slug'
+    | '/jobs/$slug'
+    | '/scholarships/$slug'
+    | '/blog/category/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin-dashboard'
+    | '/admin-login'
+    | '/blog'
+    | '/candidate-dashboard'
+    | '/choose-role'
+    | '/contact'
+    | '/edit-opportunity'
+    | '/employer-dashboard'
+    | '/employer-profile'
+    | '/employers'
+    | '/event-detail'
+    | '/events'
+    | '/fellowship-detail'
+    | '/fellowships'
+    | '/forgot-password'
+    | '/grant-detail'
+    | '/grants'
+    | '/internship-detail'
+    | '/internships'
+    | '/jobs'
+    | '/legal'
+    | '/post-opportunity'
+    | '/pricing'
+    | '/privacy-policy'
+    | '/reset-password'
+    | '/scholarship-detail'
+    | '/scholarships'
+    | '/sign-in'
+    | '/sign-up'
+    | '/sitemap'
+    | '/submit-event'
+    | '/submit-fellowship'
+    | '/submit-grant'
+    | '/submit-internship'
+    | '/submit-job'
+    | '/submit-scholarship'
+    | '/terms-of-use'
+    | '/verify-email'
+    | '/blog/$slug'
+    | '/events/$slug'
+    | '/fellowships/$slug'
+    | '/grants/$slug'
+    | '/internships/$slug'
+    | '/jobs/$slug'
+    | '/scholarships/$slug'
+    | '/blog/category/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  BlogRoute: typeof BlogRouteWithChildren
+  CandidateDashboardRoute: typeof CandidateDashboardRoute
+  ChooseRoleRoute: typeof ChooseRoleRoute
+  ContactRoute: typeof ContactRoute
+  EditOpportunityRoute: typeof EditOpportunityRoute
+  EmployerDashboardRoute: typeof EmployerDashboardRoute
+  EmployerProfileRoute: typeof EmployerProfileRoute
+  EmployersRoute: typeof EmployersRoute
+  EventDetailRoute: typeof EventDetailRoute
+  EventsRoute: typeof EventsRouteWithChildren
+  FellowshipDetailRoute: typeof FellowshipDetailRoute
+  FellowshipsRoute: typeof FellowshipsRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  GrantDetailRoute: typeof GrantDetailRoute
+  GrantsRoute: typeof GrantsRouteWithChildren
+  InternshipDetailRoute: typeof InternshipDetailRoute
+  InternshipsRoute: typeof InternshipsRouteWithChildren
+  JobsRoute: typeof JobsRouteWithChildren
+  LegalRoute: typeof LegalRoute
+  PostOpportunityRoute: typeof PostOpportunityRoute
+  PricingRoute: typeof PricingRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  ScholarshipDetailRoute: typeof ScholarshipDetailRoute
+  ScholarshipsRoute: typeof ScholarshipsRouteWithChildren
+  SignInRoute: typeof SignInRoute
+  SignUpRoute: typeof SignUpRoute
+  SitemapRoute: typeof SitemapRoute
+  SubmitEventRoute: typeof SubmitEventRoute
+  SubmitFellowshipRoute: typeof SubmitFellowshipRoute
+  SubmitGrantRoute: typeof SubmitGrantRoute
+  SubmitInternshipRoute: typeof SubmitInternshipRoute
+  SubmitJobRoute: typeof SubmitJobRoute
+  SubmitScholarshipRoute: typeof SubmitScholarshipRoute
+  TermsOfUseRoute: typeof TermsOfUseRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms-of-use': {
+      id: '/terms-of-use'
+      path: '/terms-of-use'
+      fullPath: '/terms-of-use'
+      preLoaderRoute: typeof TermsOfUseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submit-scholarship': {
+      id: '/submit-scholarship'
+      path: '/submit-scholarship'
+      fullPath: '/submit-scholarship'
+      preLoaderRoute: typeof SubmitScholarshipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submit-job': {
+      id: '/submit-job'
+      path: '/submit-job'
+      fullPath: '/submit-job'
+      preLoaderRoute: typeof SubmitJobRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submit-internship': {
+      id: '/submit-internship'
+      path: '/submit-internship'
+      fullPath: '/submit-internship'
+      preLoaderRoute: typeof SubmitInternshipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submit-grant': {
+      id: '/submit-grant'
+      path: '/submit-grant'
+      fullPath: '/submit-grant'
+      preLoaderRoute: typeof SubmitGrantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submit-fellowship': {
+      id: '/submit-fellowship'
+      path: '/submit-fellowship'
+      fullPath: '/submit-fellowship'
+      preLoaderRoute: typeof SubmitFellowshipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submit-event': {
+      id: '/submit-event'
+      path: '/submit-event'
+      fullPath: '/submit-event'
+      preLoaderRoute: typeof SubmitEventRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap': {
+      id: '/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SitemapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scholarships': {
+      id: '/scholarships'
+      path: '/scholarships'
+      fullPath: '/scholarships'
+      preLoaderRoute: typeof ScholarshipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scholarship-detail': {
+      id: '/scholarship-detail'
+      path: '/scholarship-detail'
+      fullPath: '/scholarship-detail'
+      preLoaderRoute: typeof ScholarshipDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/post-opportunity': {
+      id: '/post-opportunity'
+      path: '/post-opportunity'
+      fullPath: '/post-opportunity'
+      preLoaderRoute: typeof PostOpportunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs': {
+      id: '/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof JobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internships': {
+      id: '/internships'
+      path: '/internships'
+      fullPath: '/internships'
+      preLoaderRoute: typeof InternshipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internship-detail': {
+      id: '/internship-detail'
+      path: '/internship-detail'
+      fullPath: '/internship-detail'
+      preLoaderRoute: typeof InternshipDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grants': {
+      id: '/grants'
+      path: '/grants'
+      fullPath: '/grants'
+      preLoaderRoute: typeof GrantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grant-detail': {
+      id: '/grant-detail'
+      path: '/grant-detail'
+      fullPath: '/grant-detail'
+      preLoaderRoute: typeof GrantDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fellowships': {
+      id: '/fellowships'
+      path: '/fellowships'
+      fullPath: '/fellowships'
+      preLoaderRoute: typeof FellowshipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fellowship-detail': {
+      id: '/fellowship-detail'
+      path: '/fellowship-detail'
+      fullPath: '/fellowship-detail'
+      preLoaderRoute: typeof FellowshipDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/event-detail': {
+      id: '/event-detail'
+      path: '/event-detail'
+      fullPath: '/event-detail'
+      preLoaderRoute: typeof EventDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employers': {
+      id: '/employers'
+      path: '/employers'
+      fullPath: '/employers'
+      preLoaderRoute: typeof EmployersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employer-profile': {
+      id: '/employer-profile'
+      path: '/employer-profile'
+      fullPath: '/employer-profile'
+      preLoaderRoute: typeof EmployerProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employer-dashboard': {
+      id: '/employer-dashboard'
+      path: '/employer-dashboard'
+      fullPath: '/employer-dashboard'
+      preLoaderRoute: typeof EmployerDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/edit-opportunity': {
+      id: '/edit-opportunity'
+      path: '/edit-opportunity'
+      fullPath: '/edit-opportunity'
+      preLoaderRoute: typeof EditOpportunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/choose-role': {
+      id: '/choose-role'
+      path: '/choose-role'
+      fullPath: '/choose-role'
+      preLoaderRoute: typeof ChooseRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/candidate-dashboard': {
+      id: '/candidate-dashboard'
+      path: '/candidate-dashboard'
+      fullPath: '/candidate-dashboard'
+      preLoaderRoute: typeof CandidateDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-login': {
+      id: '/admin-login'
+      path: '/admin-login'
+      fullPath: '/admin-login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-dashboard': {
+      id: '/admin-dashboard'
+      path: '/admin-dashboard'
+      fullPath: '/admin-dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +908,185 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/scholarships/$slug': {
+      id: '/scholarships/$slug'
+      path: '/$slug'
+      fullPath: '/scholarships/$slug'
+      preLoaderRoute: typeof ScholarshipsSlugRouteImport
+      parentRoute: typeof ScholarshipsRoute
+    }
+    '/jobs/$slug': {
+      id: '/jobs/$slug'
+      path: '/$slug'
+      fullPath: '/jobs/$slug'
+      preLoaderRoute: typeof JobsSlugRouteImport
+      parentRoute: typeof JobsRoute
+    }
+    '/internships/$slug': {
+      id: '/internships/$slug'
+      path: '/$slug'
+      fullPath: '/internships/$slug'
+      preLoaderRoute: typeof InternshipsSlugRouteImport
+      parentRoute: typeof InternshipsRoute
+    }
+    '/grants/$slug': {
+      id: '/grants/$slug'
+      path: '/$slug'
+      fullPath: '/grants/$slug'
+      preLoaderRoute: typeof GrantsSlugRouteImport
+      parentRoute: typeof GrantsRoute
+    }
+    '/fellowships/$slug': {
+      id: '/fellowships/$slug'
+      path: '/$slug'
+      fullPath: '/fellowships/$slug'
+      preLoaderRoute: typeof FellowshipsSlugRouteImport
+      parentRoute: typeof FellowshipsRoute
+    }
+    '/events/$slug': {
+      id: '/events/$slug'
+      path: '/$slug'
+      fullPath: '/events/$slug'
+      preLoaderRoute: typeof EventsSlugRouteImport
+      parentRoute: typeof EventsRoute
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
+    '/blog/category/$slug': {
+      id: '/blog/category/$slug'
+      path: '/category/$slug'
+      fullPath: '/blog/category/$slug'
+      preLoaderRoute: typeof BlogCategorySlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
   }
 }
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+  BlogCategorySlugRoute: typeof BlogCategorySlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+  BlogCategorySlugRoute: BlogCategorySlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
+interface EventsRouteChildren {
+  EventsSlugRoute: typeof EventsSlugRoute
+}
+
+const EventsRouteChildren: EventsRouteChildren = {
+  EventsSlugRoute: EventsSlugRoute,
+}
+
+const EventsRouteWithChildren =
+  EventsRoute._addFileChildren(EventsRouteChildren)
+
+interface FellowshipsRouteChildren {
+  FellowshipsSlugRoute: typeof FellowshipsSlugRoute
+}
+
+const FellowshipsRouteChildren: FellowshipsRouteChildren = {
+  FellowshipsSlugRoute: FellowshipsSlugRoute,
+}
+
+const FellowshipsRouteWithChildren = FellowshipsRoute._addFileChildren(
+  FellowshipsRouteChildren,
+)
+
+interface GrantsRouteChildren {
+  GrantsSlugRoute: typeof GrantsSlugRoute
+}
+
+const GrantsRouteChildren: GrantsRouteChildren = {
+  GrantsSlugRoute: GrantsSlugRoute,
+}
+
+const GrantsRouteWithChildren =
+  GrantsRoute._addFileChildren(GrantsRouteChildren)
+
+interface InternshipsRouteChildren {
+  InternshipsSlugRoute: typeof InternshipsSlugRoute
+}
+
+const InternshipsRouteChildren: InternshipsRouteChildren = {
+  InternshipsSlugRoute: InternshipsSlugRoute,
+}
+
+const InternshipsRouteWithChildren = InternshipsRoute._addFileChildren(
+  InternshipsRouteChildren,
+)
+
+interface JobsRouteChildren {
+  JobsSlugRoute: typeof JobsSlugRoute
+}
+
+const JobsRouteChildren: JobsRouteChildren = {
+  JobsSlugRoute: JobsSlugRoute,
+}
+
+const JobsRouteWithChildren = JobsRoute._addFileChildren(JobsRouteChildren)
+
+interface ScholarshipsRouteChildren {
+  ScholarshipsSlugRoute: typeof ScholarshipsSlugRoute
+}
+
+const ScholarshipsRouteChildren: ScholarshipsRouteChildren = {
+  ScholarshipsSlugRoute: ScholarshipsSlugRoute,
+}
+
+const ScholarshipsRouteWithChildren = ScholarshipsRoute._addFileChildren(
+  ScholarshipsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  BlogRoute: BlogRouteWithChildren,
+  CandidateDashboardRoute: CandidateDashboardRoute,
+  ChooseRoleRoute: ChooseRoleRoute,
+  ContactRoute: ContactRoute,
+  EditOpportunityRoute: EditOpportunityRoute,
+  EmployerDashboardRoute: EmployerDashboardRoute,
+  EmployerProfileRoute: EmployerProfileRoute,
+  EmployersRoute: EmployersRoute,
+  EventDetailRoute: EventDetailRoute,
+  EventsRoute: EventsRouteWithChildren,
+  FellowshipDetailRoute: FellowshipDetailRoute,
+  FellowshipsRoute: FellowshipsRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  GrantDetailRoute: GrantDetailRoute,
+  GrantsRoute: GrantsRouteWithChildren,
+  InternshipDetailRoute: InternshipDetailRoute,
+  InternshipsRoute: InternshipsRouteWithChildren,
+  JobsRoute: JobsRouteWithChildren,
+  LegalRoute: LegalRoute,
+  PostOpportunityRoute: PostOpportunityRoute,
+  PricingRoute: PricingRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  ScholarshipDetailRoute: ScholarshipDetailRoute,
+  ScholarshipsRoute: ScholarshipsRouteWithChildren,
+  SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
+  SitemapRoute: SitemapRoute,
+  SubmitEventRoute: SubmitEventRoute,
+  SubmitFellowshipRoute: SubmitFellowshipRoute,
+  SubmitGrantRoute: SubmitGrantRoute,
+  SubmitInternshipRoute: SubmitInternshipRoute,
+  SubmitJobRoute: SubmitJobRoute,
+  SubmitScholarshipRoute: SubmitScholarshipRoute,
+  TermsOfUseRoute: TermsOfUseRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
