@@ -707,6 +707,105 @@ export type Database = {
         }
         Relationships: []
       }
+      internships: {
+        Row: {
+          application_process: string
+          apply_link: string | null
+          city: string | null
+          contact_email: string | null
+          contact_name: string | null
+          country: string | null
+          created_at: string | null
+          currency: string | null
+          deadline: string | null
+          description: string
+          duration: string
+          eligibility: string
+          employer_id: string | null
+          featured: boolean | null
+          field: string
+          id: number
+          internship_type: string
+          org_about: string | null
+          org_name: string
+          org_website: string | null
+          phone: string | null
+          remote: boolean | null
+          slug: string | null
+          start_date: string | null
+          state: string | null
+          status: string | null
+          stipend: number | null
+          stipend_unit: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          application_process: string
+          apply_link?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
+          deadline?: string | null
+          description: string
+          duration: string
+          eligibility: string
+          employer_id?: string | null
+          featured?: boolean | null
+          field: string
+          id: number
+          internship_type: string
+          org_about?: string | null
+          org_name: string
+          org_website?: string | null
+          phone?: string | null
+          remote?: boolean | null
+          slug?: string | null
+          start_date?: string | null
+          state?: string | null
+          status?: string | null
+          stipend?: number | null
+          stipend_unit?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          application_process?: string
+          apply_link?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
+          deadline?: string | null
+          description?: string
+          duration?: string
+          eligibility?: string
+          employer_id?: string | null
+          featured?: boolean | null
+          field?: string
+          id?: number
+          internship_type?: string
+          org_about?: string | null
+          org_name?: string
+          org_website?: string | null
+          phone?: string | null
+          remote?: boolean | null
+          slug?: string | null
+          start_date?: string | null
+          state?: string | null
+          status?: string | null
+          stipend?: number | null
+          stipend_unit?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       job_alerts: {
         Row: {
           created_at: string | null
