@@ -8,7 +8,7 @@ export const Route = createFileRoute("/candidate-dashboard")({
 
 function RouteComponent() {
   return (
-    <RequireAuth roles={'candidate'}>
+    <RequireAuth roles={['candidate']}>
       <CandidateDashboard />
     </RequireAuth>
   );

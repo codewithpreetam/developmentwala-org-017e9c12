@@ -8,7 +8,7 @@ export const Route = createFileRoute("/employer-dashboard")({
 
 function RouteComponent() {
   return (
-    <RequireAuth roles={'employer'}>
+    <RequireAuth roles={['employer']}>
       <EmployerDashboard />
     </RequireAuth>
   );

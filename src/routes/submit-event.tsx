@@ -8,7 +8,7 @@ export const Route = createFileRoute("/submit-event")({
 
 function RouteComponent() {
   return (
-    <RequireAuth roles={'employer', 'super_admin'}>
+    <RequireAuth roles={['employer', 'super_admin']}>
       <SubmitEvent />
     </RequireAuth>
   );
