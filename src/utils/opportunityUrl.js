@@ -38,12 +38,12 @@ export function legacyDetailUrl(opportunity, type = opportunity?.opportunity_typ
 
 export function listingUrl(type = 'job') {
   const map = {
-    job: 'Jobs',
-    internship: 'Internships',
-    fellowship: 'Fellowships',
-    scholarship: 'Scholarships',
-    grant: 'Grants',
-    event: 'Events',
+    job: 'jobs',
+    internship: 'internships',
+    fellowship: 'fellowships',
+    scholarship: 'scholarships',
+    grant: 'grants',
+    event: 'events',
   };
-  return `/${map[type] || 'Jobs'}`;
+  return `/${map[type] || 'jobs'}`;
 }
