@@ -1064,6 +1064,99 @@ export type Database = {
         }
         Relationships: []
       }
+      scholarships: {
+        Row: {
+          amount: number | null
+          application_process: string
+          benefits: string
+          city: string | null
+          contact_email: string | null
+          contact_name: string | null
+          country: string | null
+          created_at: string | null
+          currency: string | null
+          deadline: string | null
+          description: string
+          eligibility: string
+          employer_id: string | null
+          featured: boolean | null
+          field: string
+          id: number
+          level: string
+          org_about: string | null
+          org_name: string
+          org_website: string | null
+          phone: string | null
+          remote: boolean | null
+          scholarship_type: string
+          slug: string | null
+          state: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          amount?: number | null
+          application_process: string
+          benefits: string
+          city?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
+          deadline?: string | null
+          description: string
+          eligibility: string
+          employer_id?: string | null
+          featured?: boolean | null
+          field: string
+          id: number
+          level: string
+          org_about?: string | null
+          org_name: string
+          org_website?: string | null
+          phone?: string | null
+          remote?: boolean | null
+          scholarship_type: string
+          slug?: string | null
+          state?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number | null
+          application_process?: string
+          benefits?: string
+          city?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
+          deadline?: string | null
+          description?: string
+          eligibility?: string
+          employer_id?: string | null
+          featured?: boolean | null
+          field?: string
+          id?: number
+          level?: string
+          org_about?: string | null
+          org_name?: string
+          org_website?: string | null
+          phone?: string | null
+          remote?: boolean | null
+          scholarship_type?: string
+          slug?: string | null
+          state?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
