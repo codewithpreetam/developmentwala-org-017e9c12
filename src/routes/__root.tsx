@@ -6,11 +6,19 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useLocation,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AuthProvider } from "../components/auth/AuthContext";
+import { AdminAuthProvider } from "../components/auth/AdminAuthContext";
+import MobileBottomNav from "../components/MobileBottomNav";
+import SignupPopup from "../components/shared/SignupPopup";
+import ScrollToTop from "../components/ScrollToTop";
+
 
 function NotFoundComponent() {
   return (
