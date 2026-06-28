@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Home from "@/pages/Home";
+import Sitemap from "@/pages/Sitemap";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/sitemap")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <Home />;
+  return <Sitemap />;
 }

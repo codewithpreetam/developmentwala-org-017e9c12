@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Home from "@/pages/Home";
+import BlogPost from "@/pages/BlogPost";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/blog/$slug")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <Home />;
+  return <BlogPost />;
 }
