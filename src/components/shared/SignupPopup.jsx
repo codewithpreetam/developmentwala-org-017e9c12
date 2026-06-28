@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { X, Users, Building2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';

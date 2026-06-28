@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { orgProfileUrl } from '@/utils/orgProfileUrl';
 
 export default function OrgProfileLink({ orgData, orgName, className = 'text-blue-600 hover:underline font-medium' }) {

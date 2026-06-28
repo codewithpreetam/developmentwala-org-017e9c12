@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Search, SlidersHorizontal, X, Star, MapPin, Calendar, Globe, DollarSign, Clock, Building2, ArrowRight, Bookmark, BookmarkCheck } from 'lucide-react';
 import { base44 } from '@/api/base44Client';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { opportunityDetailUrl } from '@/utils/opportunityUrl';
 import { MapPin, Clock, Building2, ArrowRight, Calendar, Star, Globe, DollarSign, GraduationCap, Users } from 'lucide-react';

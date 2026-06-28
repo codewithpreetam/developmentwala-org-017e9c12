@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { useAdminAuth } from '../components/admin/AdminAuth';
 import { Shield, Eye, EyeOff, AlertCircle, LogIn, Loader2, ArrowLeft } from 'lucide-react';

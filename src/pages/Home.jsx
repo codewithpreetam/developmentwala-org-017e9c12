@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import {

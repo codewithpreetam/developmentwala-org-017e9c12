@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { MapPin, Clock, Building2, ArrowRight, Bookmark } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';

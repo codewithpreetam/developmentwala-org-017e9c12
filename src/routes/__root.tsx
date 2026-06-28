@@ -6,11 +6,18 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useLocation,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AuthProvider } from "../components/auth/AuthContext";
+import { AdminAuthProvider } from "../components/admin/AdminAuth";
+import MobileBottomNav from "../components/MobileBottomNav";
+import SignupPopup from "../components/shared/SignupPopup";
+import ScrollToTop from "../components/ScrollToTop";
 
 function NotFoundComponent() {
   return (
@@ -118,8 +125,17 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthProvider>
+        <AdminAuthProvider>
+          <ScrollToTop />
+          <div className="min-h-screen flex flex-col">
+            <Outlet />
+          </div>
+          <MobileBottomNav />
+          <SignupPopup />
+          <Toaster position="top-right" richColors />
+        </AdminAuthProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

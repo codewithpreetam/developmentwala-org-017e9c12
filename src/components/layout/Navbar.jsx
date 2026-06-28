@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Menu, X, ChevronDown, User, LogOut, LayoutDashboard, GraduationCap, Star, BookOpen, DollarSign, Calendar, Briefcase } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
