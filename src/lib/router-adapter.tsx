@@ -97,7 +97,7 @@ export function useNavigate() {
         search,
         hash,
         replace: options?.replace,
-        state: options?.state,
+        state: options?.state as never,
       });
     },
     [navigate]
