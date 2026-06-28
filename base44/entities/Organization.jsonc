@@ -1,0 +1,65 @@
+{
+  "name": "Organization",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "org_name": {
+      "type": "string"
+    },
+    "ngo_type": {
+      "type": "string",
+      "enum": [
+        "ngo",
+        "trust",
+        "society",
+        "section8",
+        "social_enterprise",
+        "foundation",
+        "un_agency",
+        "ingo",
+        "government",
+        "other"
+      ]
+    },
+    "website": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "about": {
+      "type": "string"
+    },
+    "logo_url": {
+      "type": "string"
+    },
+    "sector": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "linkedin_url": {
+      "type": "string",
+      "description": "LinkedIn profile URL"
+    },
+    "twitter_url": {
+      "type": "string",
+      "description": "Twitter/X profile URL"
+    },
+    "facebook_url": {
+      "type": "string",
+      "description": "Facebook page URL"
+    },
+    "instagram_url": {
+      "type": "string",
+      "description": "Instagram profile URL"
+    }
+  },
+  "required": [
+    "user_email",
+    "org_name"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "DevelopmentWala.org",
+  "short_name": "DevWala",
+  "description": "India's leading platform for NGO careers and social impact opportunities.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "https://media.base44.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "https://media.base44.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}

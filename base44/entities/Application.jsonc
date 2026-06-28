@@ -1,0 +1,71 @@
+{
+  "name": "Application",
+  "type": "object",
+  "properties": {
+    "opportunity_id": {
+      "type": "string"
+    },
+    "opportunity_title": {
+      "type": "string"
+    },
+    "opportunity_type": {
+      "type": "string"
+    },
+    "organization": {
+      "type": "string"
+    },
+    "applicant_email": {
+      "type": "string"
+    },
+    "applicant_name": {
+      "type": "string"
+    },
+    "cover_letter": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "applied",
+        "reviewing",
+        "shortlisted",
+        "interview",
+        "selected",
+        "rejected"
+      ],
+      "default": "applied"
+    },
+    "employer_email": {
+      "type": "string",
+      "description": "Email of employer who owns this job"
+    },
+    "status_history": {
+      "type": "array",
+      "description": "Log of status updates with messages",
+      "items": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "next_steps": {
+            "type": "string"
+          },
+          "updated_by": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "opportunity_id",
+    "applicant_email"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "name": "EmailSubscription",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "sector_interests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Sector interests to filter alerts"
+    },
+    "opportunity_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Types: job, internship, fellowship, scholarship, grant, event"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": [
+        "weekly",
+        "daily"
+      ],
+      "default": "weekly"
+    },
+    "last_sent_at": {
+      "type": "string",
+      "description": "ISO timestamp of last email sent"
+    }
+  },
+  "required": [
+    "user_email"
+  ]
+}
