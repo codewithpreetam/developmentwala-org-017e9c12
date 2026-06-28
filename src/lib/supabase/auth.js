@@ -1,20 +1,40 @@
-const SESSION_KEY = 'ngo_user';
+import { createClient } from '@/lib/supabase/client';
+
+const supabase = createClient();
+
+let currentSessionUser = null;
 
 export function getSessionUser() {
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
+  return currentSessionUser;
 }
 
 export function setSessionUser(user) {
-  if (user) localStorage.setItem(SESSION_KEY, JSON.stringify(user));
-  else localStorage.removeItem(SESSION_KEY);
+  currentSessionUser = user || null;
 }
 
-export function toAppUser(dbUser) {
+export function clearSessionUser() {
+  currentSessionUser = null;
+}
+
+export async function getCurrentUser() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) throw error;
+  return data.user;
+}
+
+export async function getCurrentProfile() {
+  const authUser = await getCurrentUser();
+  if (!authUser) return null;
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', authUser.id)
+    .maybeSingle();
+  if (error) throw error;
+  return toAppUser(data, authUser);
+}
+
+export function toAppUser(dbUser, authUser) {
   if (!dbUser) return null;
   const fullName = [dbUser.first_name, dbUser.last_name].filter(Boolean).join(' ').trim();
   return {
@@ -26,7 +46,7 @@ export function toAppUser(dbUser) {
     full_name: fullName || dbUser.email?.split('@')[0] || '',
     role: dbUser.role,
     profile_image: dbUser.profile_image,
-    email_verified: dbUser.email_verified !== false,
+    email_verified: authUser?.email_confirmed_at != null,
     employer_verified: !!dbUser.employer_verified,
     employer_verification_status: dbUser.employer_verification_status,
     created_at: dbUser.created_at,
