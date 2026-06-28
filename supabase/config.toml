@@ -1,0 +1,6 @@
+# Supabase local dev config — link with: supabase link --project-ref pnkqqggcwhhzzrjubctt
+project_id = "pnkqqggcwhhzzrjubctt"
+
+[db]
+port = 54322
+major_version = 15

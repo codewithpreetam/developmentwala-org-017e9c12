@@ -1,0 +1,37 @@
+import React from 'react';
+import { base44 } from '@/api/base44Client';
+import EntityListPage from '../components/opportunities/EntityListPage';
+import { countryOptions } from '../components/forms/formOptions';
+
+const filters = [
+  { key: 'level_of_study', label: 'Level', type: 'select', options: [
+    { value: 'undergraduate', label: 'Undergraduate' }, { value: 'postgraduate', label: 'Postgraduate' },
+    { value: 'phd', label: 'PhD' }, { value: 'diploma', label: 'Diploma' }, { value: 'all', label: 'All Levels' },
+  ]},
+  { key: 'funding_type', label: 'Funding', type: 'select', options: [
+    { value: 'fully_funded', label: 'Fully Funded' }, { value: 'partially_funded', label: 'Partially Funded' },
+    { value: 'tuition_only', label: 'Tuition Only' }, { value: 'living_allowance', label: 'Living Allowance' },
+  ]},
+  { key: 'scholarship_type', label: 'Type', type: 'select', options: [
+    { value: 'merit', label: 'Merit-based' }, { value: 'need_based', label: 'Need-based' },
+    { value: 'minority', label: 'Minority' }, { value: 'women', label: 'Women' }, { value: 'research', label: 'Research' },
+  ]},
+  { key: 'country', label: 'Country', type: 'select', options: countryOptions },
+];
+
+export default function Scholarships() {
+  return (
+    <EntityListPage
+      entity={base44.entities.Scholarship}
+      detailPageParam="ScholarshipDetail"
+      type="scholarship"
+      title="Scholarships for Social Sector"
+      description="Education scholarships and financial support for students pursuing social development careers."
+      metaTitle="Social Sector Scholarships — DevelopmentWala.org"
+      metaDesc="Find scholarships for NGO professionals and students in India. Fully funded and partial scholarships available."
+      canonical="https://developmentwala.org/scholarships"
+      accentColor="yellow"
+      extraFilters={filters}
+    />
+  );
+}

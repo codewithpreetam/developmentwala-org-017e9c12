@@ -1,0 +1,106 @@
+{
+  "name": "Interview",
+  "type": "object",
+  "properties": {
+    "employer_email": {
+      "type": "string"
+    },
+    "employer_org": {
+      "type": "string"
+    },
+    "candidate_email": {
+      "type": "string"
+    },
+    "candidate_name": {
+      "type": "string"
+    },
+    "application_id": {
+      "type": "string"
+    },
+    "job_title": {
+      "type": "string"
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "start_time": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Duration in minutes"
+    },
+    "interview_type": {
+      "type": "string",
+      "enum": [
+        "hr_round",
+        "technical_round",
+        "final_round",
+        "group_discussion",
+        "other"
+      ]
+    },
+    "meeting_link": {
+      "type": "string"
+    },
+    "meeting_platform": {
+      "type": "string",
+      "enum": [
+        "google_meet",
+        "microsoft_teams",
+        "zoom",
+        "custom"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "pending",
+        "cancelled",
+        "rescheduled",
+        "completed"
+      ],
+      "default": "confirmed"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "reschedule_reason": {
+      "type": "string"
+    },
+    "cancelled_by": {
+      "type": "string"
+    },
+    "audit_trail": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "by": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "employer_email",
+    "candidate_email",
+    "date",
+    "start_time"
+  ]
+}
