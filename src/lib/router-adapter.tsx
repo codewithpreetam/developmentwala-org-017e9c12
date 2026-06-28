@@ -18,7 +18,10 @@ export type RRLinkProps = {
   title?: string;
   target?: string;
   rel?: string;
-  [key: string]: unknown;
+  id?: string;
+  "aria-label"?: string;
+  "aria-current"?: string;
+  style?: React.CSSProperties;
 };
 
 function parseTo(
@@ -27,7 +30,6 @@ function parseTo(
   if (!to) return { to: "." };
 
   if (typeof to === "string") {
-    // strip leading/trailing whitespace
     const clean = to.trim();
     const [pathAndSearch, hash] = clean.split("#") as [string, string | undefined];
     const [pathname, search] = pathAndSearch.split("?") as [string, string | undefined];
@@ -59,8 +61,14 @@ function parseSearchString(search: string): Record<string, string> {
 export const Link = React.forwardRef<HTMLAnchorElement, RRLinkProps>(
   ({ to, children, ...props }, ref) => {
     const { to: tanstackTo, search, hash } = parseTo(to);
+    const tanstackProps: LinkProps = {
+      to: tanstackTo,
+      search,
+      hash,
+      ...props,
+    } as unknown as LinkProps;
     return (
-      <TanStackLink ref={ref} to={tanstackTo} search={search} hash={hash} {...props}>
+      <TanStackLink ref={ref} {...tanstackProps}>
         {children}
       </TanStackLink>
     );
@@ -80,7 +88,6 @@ export function useNavigate() {
     ) => {
       if (typeof to === "number") {
         if (to < 0) return navigate({ to: ".", replace: options?.replace });
-        // TanStack doesn't have a forward history helper; use `.` for no-op and document back fallback
         return navigate({ to: ".", replace: options?.replace });
       }
 
@@ -104,6 +111,7 @@ export function useParams() {
 export function useSearchParams() {
   const searchObj = useTanStackSearch({ strict: false });
   const navigate = useTanStackNavigate();
+
   const searchString = React.useMemo(() => {
     const params = new URLSearchParams();
     Object.entries(searchObj).forEach(([key, value]) => {
@@ -171,7 +179,6 @@ export function useLocation() {
 }
 
 export function useMatch(_pattern: string) {
-  // Not used in the project; return null to avoid crashes
   return null;
 }
 
@@ -183,3 +190,4 @@ export function Navigate({ to, replace }: { to: string; replace?: boolean }) {
   }, [navigate, to, replace]);
   return null;
 }
+
