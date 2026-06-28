@@ -36,7 +36,22 @@ export type Database = {
           job_id?: string
           status?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "applications_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       applied_jobs: {
         Row: {
@@ -55,7 +70,7 @@ export type Database = {
           application_date?: string | null
           cover_letter?: string | null
           created_at?: string | null
-          id: number
+          id?: number
           job_id: string
           notes?: string | null
           resume_url?: string | null
@@ -99,7 +114,7 @@ export type Database = {
           end_date?: string | null
           field_of_study?: string | null
           grade?: string | null
-          id: number
+          id?: number
           institution: string
           is_current?: boolean | null
           start_date: string
@@ -142,7 +157,7 @@ export type Database = {
           description?: string | null
           designation: string
           end_date?: string | null
-          id: number
+          id?: number
           is_current?: boolean | null
           organisation: string
           start_date: string
@@ -196,7 +211,7 @@ export type Database = {
           education_level?: string | null
           experience_level?: string | null
           gender?: string | null
-          id: number
+          id?: number
           languages?: string | null
           marital_status?: string | null
           personal_website?: string | null
@@ -252,7 +267,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "candidate_profiles_setup_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       candidate_social_media: {
         Row: {
@@ -303,7 +326,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "employer_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       employers: {
         Row: {
@@ -329,7 +360,7 @@ export type Database = {
           company_size?: string | null
           email?: string | null
           founded?: string | null
-          id: number
+          id?: number
           location?: string | null
           logo?: string | null
           name: string
@@ -572,7 +603,7 @@ export type Database = {
           featured?: boolean | null
           fellowship_type: string
           field: string
-          id: number
+          id?: number
           org_about?: string | null
           org_name: string
           org_website?: string | null
@@ -618,7 +649,15 @@ export type Database = {
           title?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fellowships_employer_id_fkey"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       following_employers: {
         Row: {
@@ -633,7 +672,7 @@ export type Database = {
           created_at?: string | null
           employer_id: number
           followed_at?: string | null
-          id: number
+          id?: number
           updated_at?: string | null
           user_id: string
         }
@@ -705,7 +744,15 @@ export type Database = {
           type?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "grants_employer_id_fkey"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       internships: {
         Row: {
@@ -756,7 +803,7 @@ export type Database = {
           employer_id?: string | null
           featured?: boolean | null
           field: string
-          id: number
+          id?: number
           internship_type: string
           org_about?: string | null
           org_name: string
@@ -804,7 +851,15 @@ export type Database = {
           title?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "internships_employer_id_fkey"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       job_alerts: {
         Row: {
@@ -826,7 +881,7 @@ export type Database = {
           created_at?: string | null
           experience_level?: string | null
           frequency?: string | null
-          id: number
+          id?: number
           is_active?: boolean | null
           job_type?: string | null
           keywords?: string | null
@@ -954,7 +1009,15 @@ export type Database = {
           user_id?: string | null
           valid_through?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_employer"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notifications: {
         Row: {
@@ -1048,7 +1111,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
-          id: number
+          id?: number
           job_id: string
           notes?: string | null
           saved_date?: string | null
@@ -1111,7 +1174,7 @@ export type Database = {
           employer_id?: string | null
           featured?: boolean | null
           field: string
-          id: number
+          id?: number
           level: string
           org_about?: string | null
           org_name: string
@@ -1155,7 +1218,15 @@ export type Database = {
           title?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "scholarships_employer_id_fkey"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shortlists: {
         Row: {
@@ -1179,7 +1250,29 @@ export type Database = {
           id?: string
           job_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_candidate"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_job"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_shortlist_employer"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
