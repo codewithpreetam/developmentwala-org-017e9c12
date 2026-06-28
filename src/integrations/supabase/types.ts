@@ -1157,6 +1157,30 @@ export type Database = {
         }
         Relationships: []
       }
+      shortlists: {
+        Row: {
+          candidate_id: string
+          created_at: string | null
+          employer_id: string
+          id: string
+          job_id: string | null
+        }
+        Insert: {
+          candidate_id: string
+          created_at?: string | null
+          employer_id: string
+          id?: string
+          job_id?: string | null
+        }
+        Update: {
+          candidate_id?: string
+          created_at?: string | null
+          employer_id?: string
+          id?: string
+          job_id?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
