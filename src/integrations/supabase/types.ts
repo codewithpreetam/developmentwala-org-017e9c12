@@ -707,6 +707,192 @@ export type Database = {
         }
         Relationships: []
       }
+      job_alerts: {
+        Row: {
+          created_at: string | null
+          experience_level: string | null
+          frequency: string | null
+          id: number
+          is_active: boolean | null
+          job_type: string | null
+          keywords: string | null
+          location: string | null
+          salary_max: number | null
+          salary_min: number | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          experience_level?: string | null
+          frequency?: string | null
+          id: number
+          is_active?: boolean | null
+          job_type?: string | null
+          keywords?: string | null
+          location?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          experience_level?: string | null
+          frequency?: string | null
+          id?: number
+          is_active?: boolean | null
+          job_type?: string | null
+          keywords?: string | null
+          location?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          applylink: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          date_posted: string
+          description: string
+          education_required: string | null
+          employer_id: string | null
+          employment_type: string
+          experience_min: number | null
+          featured: boolean | null
+          how_to_apply: string | null
+          id: string
+          is_active: boolean
+          location_id: string | null
+          organization: string | null
+          organization_logo: string | null
+          organization_type: string | null
+          pin_code: string | null
+          qualifications: string
+          role_category: string
+          salary_currency: string
+          salary_unit_text: string
+          salary_value: number | null
+          slug: string
+          state: string | null
+          street_address: string | null
+          title: string
+          updated_at: string
+          user_id: string | null
+          valid_through: string
+        }
+        Insert: {
+          applylink?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          date_posted: string
+          description: string
+          education_required?: string | null
+          employer_id?: string | null
+          employment_type: string
+          experience_min?: number | null
+          featured?: boolean | null
+          how_to_apply?: string | null
+          id?: string
+          is_active?: boolean
+          location_id?: string | null
+          organization?: string | null
+          organization_logo?: string | null
+          organization_type?: string | null
+          pin_code?: string | null
+          qualifications: string
+          role_category: string
+          salary_currency: string
+          salary_unit_text: string
+          salary_value?: number | null
+          slug: string
+          state?: string | null
+          street_address?: string | null
+          title: string
+          updated_at?: string
+          user_id?: string | null
+          valid_through: string
+        }
+        Update: {
+          applylink?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          date_posted?: string
+          description?: string
+          education_required?: string | null
+          employer_id?: string | null
+          employment_type?: string
+          experience_min?: number | null
+          featured?: boolean | null
+          how_to_apply?: string | null
+          id?: string
+          is_active?: boolean
+          location_id?: string | null
+          organization?: string | null
+          organization_logo?: string | null
+          organization_type?: string | null
+          pin_code?: string | null
+          qualifications?: string
+          role_category?: string
+          salary_currency?: string
+          salary_unit_text?: string
+          salary_value?: number | null
+          slug?: string
+          state?: string | null
+          street_address?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+          valid_through?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string | null
+          details: string | null
+          entity_id: string | null
+          entity_title: string | null
+          id: string
+          read: boolean | null
+          type: string | null
+          user_id: string | null
+          user_role: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          details?: string | null
+          entity_id?: string | null
+          entity_title?: string | null
+          id?: string
+          read?: boolean | null
+          type?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          details?: string | null
+          entity_id?: string | null
+          entity_title?: string | null
+          id?: string
+          read?: boolean | null
+          type?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
