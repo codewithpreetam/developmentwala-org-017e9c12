@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Mail, MessageCircle, Linkedin, Instagram, Youtube, Facebook, ArrowRight } from 'lucide-react';
 import { useSiteSettings } from '../../hooks/useSiteSettings';

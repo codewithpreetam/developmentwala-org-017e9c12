@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { Building2, MapPin, Search, Globe, Briefcase, ArrowRight, Loader2 } from 'lucide-react';

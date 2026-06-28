@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { useAuth } from './AuthContext';
 import { redirectToSignIn } from '@/lib/auth/redirect';

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from '@/lib/router-adapter';
 import { Home, Briefcase, LayoutDashboard } from 'lucide-react';
 import { useAuth } from './auth/AuthContext';
 import { createPageUrl } from '@/utils';

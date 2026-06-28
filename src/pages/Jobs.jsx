@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from '@/lib/router-adapter';
 import { Search, X, Briefcase, SlidersHorizontal, MapPin, Building2, ChevronDown, ChevronUp } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';

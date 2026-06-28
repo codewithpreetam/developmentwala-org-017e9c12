@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Briefcase, GraduationCap, Star, BookOpen, DollarSign, Calendar, ArrowRight } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { useAuth } from '../components/auth/AuthContext';
 import { dashboardForRole } from '@/lib/auth/roles';

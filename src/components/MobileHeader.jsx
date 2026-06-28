@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router-adapter';
 import { ArrowLeft } from 'lucide-react';
 
 export default function MobileHeader({ title }) {

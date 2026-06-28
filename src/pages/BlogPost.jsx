@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from '@/lib/router-adapter';
 import { base44 } from '@/api/base44Client';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';

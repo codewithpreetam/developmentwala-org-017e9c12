@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Check, Star, Zap } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';

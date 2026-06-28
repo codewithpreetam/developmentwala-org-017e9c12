@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
 import {

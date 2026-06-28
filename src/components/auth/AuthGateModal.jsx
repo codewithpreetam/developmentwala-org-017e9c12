@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router-adapter';
 import { X, Lock } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import { signInUrl, signUpUrl, setLoginRoleHint } from '@/lib/auth/redirect';
