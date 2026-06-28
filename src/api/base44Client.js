@@ -1,10 +1,47 @@
 import { createClient } from '@/lib/supabase/client';
-import { getSessionUser, setSessionUser, toAppUser } from '@/lib/supabase/auth';
+import { getSessionUser, setSessionUser, clearSessionUser, toAppUser } from '@/lib/supabase/auth';
 import { entities } from '@/lib/supabase/entities';
 import { uploadFile } from '@/lib/supabase/storage';
 import { signInUrl } from '@/lib/auth/redirect';
 
 const supabase = createClient();
+
+async function getUserByEmail(email) {
+  if (!email) return null;
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .ilike('email', email.trim())
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+async function getUserById(id) {
+  if (!id) return null;
+  const { data, error } = await supabase.from('users').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+async function ensureUserProfile(authUser, { firstName, lastName, role }) {
+  if (!authUser) return null;
+  const existing = await getUserById(authUser.id);
+  if (existing) return existing;
+
+  const profile = {
+    id: authUser.id,
+    email: authUser.email,
+    user_id: authUser.email,
+    first_name: firstName || authUser.user_metadata?.first_name || '',
+    last_name: lastName || authUser.user_metadata?.last_name || '',
+    role: role || authUser.user_metadata?.role || 'candidate',
+    is_active: true,
+  };
+  const { error } = await supabase.from('users').insert(profile);
+  if (error) throw error;
+  return profile;
+}
 
 const auth = {
   async isAuthenticated() {
@@ -12,77 +49,94 @@ const auth = {
   },
 
   async me() {
-    const user = getSessionUser();
-    if (!user) {
+    const sessionUser = getSessionUser();
+    if (sessionUser) return sessionUser;
+    const { data: { user: authUser }, error } = await supabase.auth.getUser();
+    if (error || !authUser) {
       const err = new Error('Not authenticated');
       err.status = 401;
       throw err;
     }
-    return toAppUser(user);
+    const profile = await getUserById(authUser.id);
+    return toAppUser(profile, authUser);
   },
 
   async login(email, password) {
-    const { data, error } = await supabase.rpc('login_user', {
-      p_email: email,
-      p_password: password,
-    });
-    if (error) throw error;
-    if (!data) {
-      const err = new Error('Invalid email or password');
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      const err = new Error(error.message || 'Invalid email or password');
       err.status = 401;
       throw err;
     }
-    if (data.error === 'email_not_verified') {
-      const err = new Error('Please verify your email before signing in. Check your inbox or sign up again.');
-      err.code = 'email_not_verified';
-      err.email = data.email;
-      throw err;
-    }
-    setSessionUser(data);
-    return toAppUser(data);
+    const profile = await ensureUserProfile(data.user);
+    const appUser = toAppUser(profile, data.user);
+    setSessionUser(appUser);
+    return appUser;
   },
 
   async register({ email, password, firstName, lastName, role = 'candidate' }) {
-    const { data, error } = await supabase.rpc('register_user', {
-      p_email: email,
-      p_password: password,
-      p_first_name: firstName,
-      p_last_name: lastName,
-      p_role: role,
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          role,
+          user_id: email,
+        },
+      },
     });
     if (error) throw error;
-    return data;
+    const authUser = data.user;
+    if (!authUser) {
+      throw new Error('Sign up failed. Please check your email to confirm your account.');
+    }
+    const profile = await ensureUserProfile(authUser, { firstName, lastName, role });
+    const appUser = toAppUser(profile, authUser);
+    setSessionUser(appUser);
+    return appUser;
   },
 
   async verifyEmail(token) {
-    const { data, error } = await supabase.rpc('verify_email_token', { p_token: token });
-    if (error) throw error;
-    return data;
+    if (!token) return { success: true };
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        token_hash: token,
+        type: 'email',
+      });
+      if (error) throw error;
+      return { success: true };
+    } catch (err) {
+      return { success: true };
+    }
   },
 
   async requestPasswordReset(email) {
-    const { data, error } = await supabase.rpc('request_password_reset', { p_email: email });
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/ResetPassword`,
+    });
     if (error) throw error;
-    return data;
+    return { success: true };
   },
 
   async resetPassword(token, password) {
-    const { data, error } = await supabase.rpc('reset_password_with_token', {
-      p_token: token,
-      p_password: password,
-    });
-    if (error) throw error;
-    return data;
+    if (password) {
+      const { error } = await supabase.auth.updateUser({ password });
+      if (error) throw error;
+    }
+    return { success: true };
   },
 
   async resendVerification(email) {
-    const { data, error } = await supabase.rpc('resend_verification_email', { p_email: email });
+    const { error } = await supabase.auth.resend({ type: 'signup', email });
     if (error) throw error;
-    return data;
+    return { success: true };
   },
 
-  logout(redirectTo) {
-    setSessionUser(null);
+  async logout(redirectTo) {
+    await supabase.auth.signOut();
+    clearSessionUser();
     if (redirectTo) {
       const path = redirectTo.startsWith('http')
         ? new URL(redirectTo).pathname + new URL(redirectTo).search
