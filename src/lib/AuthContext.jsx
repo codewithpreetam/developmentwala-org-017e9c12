@@ -1,6 +1,8 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { getSessionUser, toAppUser } from '@/lib/supabase/auth';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { getSessionUser, setSessionUser, clearSessionUser, toAppUser } from '@/lib/supabase/auth';
 
+const supabase = createClient();
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -11,17 +13,69 @@ export const AuthProvider = ({ children }) => {
   const [authError, setAuthError] = useState(null);
   const [appPublicSettings] = useState({ id: 'supabase' });
 
-  useEffect(() => {
+  const refresh = useCallback(async () => {
     const sessionUser = getSessionUser();
-    if (sessionUser) {
-      setUser(toAppUser(sessionUser));
-      setIsAuthenticated(true);
-    }
-    setIsLoadingAuth(false);
+    setUser(sessionUser ? toAppUser(sessionUser) : null);
+    setIsAuthenticated(!!sessionUser);
   }, []);
 
-  const logout = (shouldRedirect = true) => {
-    localStorage.removeItem('ngo_user');
+  useEffect(() => {
+    let mounted = true;
+    const init = async () => {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (authUser) {
+        const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', authUser.id)
+          .maybeSingle();
+        if (!error && data) {
+          const appUser = toAppUser(data, authUser);
+          setSessionUser(appUser);
+          if (mounted) {
+            setUser(appUser);
+            setIsAuthenticated(true);
+          }
+        }
+      }
+      if (mounted) setIsLoadingAuth(false);
+    };
+    init();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      const authUser = session?.user ?? null;
+      if (authUser) {
+        supabase
+          .from('users')
+          .select('*')
+          .eq('id', authUser.id)
+          .maybeSingle()
+          .then(({ data, error }) => {
+            if (!error && data) {
+              const appUser = toAppUser(data, authUser);
+              setSessionUser(appUser);
+              if (mounted) {
+                setUser(appUser);
+                setIsAuthenticated(true);
+              }
+            }
+          });
+      } else {
+        clearSessionUser();
+        if (mounted) {
+          setUser(null);
+          setIsAuthenticated(false);
+        }
+      }
+    });
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const logout = async (shouldRedirect = true) => {
+    await supabase.auth.signOut();
+    clearSessionUser();
     setUser(null);
     setIsAuthenticated(false);
     if (shouldRedirect) window.location.href = '/SignIn';
@@ -32,9 +86,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const checkAppState = async () => {
-    const sessionUser = getSessionUser();
-    setUser(sessionUser ? toAppUser(sessionUser) : null);
-    setIsAuthenticated(!!sessionUser);
+    await refresh();
     setAuthError(null);
   };
 
