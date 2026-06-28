@@ -14,7 +14,7 @@ import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "../components/auth/AuthContext";
-import { AdminAuthProvider } from "../components/auth/AdminAuthContext";
+import { AdminAuthProvider } from "../components/admin/AdminAuth";
 import MobileBottomNav from "../components/MobileBottomNav";
 import SignupPopup from "../components/shared/SignupPopup";
 import ScrollToTop from "../components/ScrollToTop";
