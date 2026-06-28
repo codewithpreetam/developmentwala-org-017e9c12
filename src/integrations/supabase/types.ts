@@ -1202,6 +1202,45 @@ export type Database = {
         }
         Relationships: []
       }
+      users: {
+        Row: {
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          is_active: boolean | null
+          last_name: string | null
+          profile_image: string | null
+          role: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_name?: string | null
+          profile_image?: string | null
+          role?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_name?: string | null
+          profile_image?: string | null
+          role?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
