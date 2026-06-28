@@ -8,12 +8,12 @@ const DETAIL_ROUTES = {
 };
 
 const LEGACY_DETAIL = {
-  job: 'JobDetail',
-  internship: 'InternshipDetail',
-  fellowship: 'FellowshipDetail',
-  scholarship: 'ScholarshipDetail',
-  grant: 'GrantDetail',
-  event: 'EventDetail',
+  job: 'job-detail',
+  internship: 'internship-detail',
+  fellowship: 'fellowship-detail',
+  scholarship: 'scholarship-detail',
+  grant: 'grant-detail',
+  event: 'event-detail',
 };
 
 /** SEO-friendly detail URL: /jobs/my-slug or /jobs?id=uuid fallback */
