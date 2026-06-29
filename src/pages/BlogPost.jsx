@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DOMPurify from 'isomorphic-dompurify';
 import { Link, useParams } from '@/lib/router-adapter';
 import { base44 } from '@/api/base44Client';
 import Navbar from '../components/layout/Navbar';
