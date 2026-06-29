@@ -124,7 +124,7 @@ export default function SEOHead({ title, description, canonical, job, structured
       if (o) o.remove();
     };
 
-  }, [title, description, canonical, job]);
+  }, [title, description, canonical, job, image, structuredData]);
 
   return null;
 }
