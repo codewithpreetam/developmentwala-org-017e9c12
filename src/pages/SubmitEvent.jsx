@@ -160,10 +160,10 @@ export default function SubmitEvent() {
             <Input value={form.tags} onChange={e => u('tags', e.target.value)} placeholder="e.g. climate, youth, webinar" className="h-11 rounded-xl" />
           </FormField>
         </div>
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+          Registrations are managed through DevelopmentWala.org. Track registrants from your Employer Dashboard.
+        </div>
 
-        <FormField label="Registration Link">
-          <Input type="url" value={form.registration_link} onChange={e => u('registration_link', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
-        </FormField>
 
         <ImageUploadField
           label="Event Header Image (optional)"
