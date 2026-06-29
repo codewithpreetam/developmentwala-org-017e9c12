@@ -1172,7 +1172,7 @@ export default function EmployerDashboard() {
                       </div>
                     )}
                     {viewingProfile.profile?.experience && <div className="bg-gray-50 rounded-xl p-4"><p className="text-xs font-bold text-gray-500 mb-1.5 flex items-center gap-1.5"><BriefcaseIcon className="w-3.5 h-3.5" /> Work Experience</p><p className="text-sm text-gray-800 whitespace-pre-line">{viewingProfile.profile.experience}</p></div>}
-                    {viewingProfile.app.cover_letter && <div className="bg-yellow-50 rounded-xl p-4 border border-yellow-100"><p className="text-xs font-bold text-yellow-700 mb-1.5 flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" /> Cover Letter for this role</p><div className="text-sm text-yellow-900 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: viewingProfile.app.cover_letter }} /></div>}
+                    {viewingProfile.app.cover_letter && <div className="bg-yellow-50 rounded-xl p-4 border border-yellow-100"><p className="text-xs font-bold text-yellow-700 mb-1.5 flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" /> Cover Letter for this role</p><div className="text-sm text-yellow-900 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(viewingProfile.app.cover_letter, { ALLOWED_TAGS: ['b','i','u','em','strong','p','br','ul','ol','li','a'], ALLOWED_ATTR: ['href','target','rel'] }) }} /></div>}
                     {viewingProfile.app.cv_url && (
                       <div className="border-2 border-indigo-200 rounded-xl overflow-hidden">
                         <div className="flex items-center justify-between px-4 py-2.5 bg-indigo-50 border-b border-indigo-200">
