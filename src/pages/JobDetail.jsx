@@ -152,17 +152,59 @@ export default function JobDetail() {
   const listingPage = opType === 'job' ? 'Jobs' : opType.charAt(0).toUpperCase() + opType.slice(1) + 's';
 
   // Build structured data for SEO / Google Jobs
-  const cleanDesc = (text) => text ? text.replace(/[#*_[\]`>]/g, '').replace(/\n{3,}/g, '\n\n').trim() : '';
+  // Google requires the description to be HTML (with <p>, <ul>, <li>, <br>, <b>, <strong>, <i>, <em>, <h1>-<h6>).
+  // We render Markdown -> HTML with a tiny converter that emits only those safe tags.
+  const markdownToHtml = (text) => {
+    if (!text) return '';
+    const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const lines = text.split(/\r?\n/);
+    const out = [];
+    let inList = false;
+    const flushList = () => { if (inList) { out.push('</ul>'); inList = false; } };
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) { flushList(); continue; }
+      const h = line.match(/^(#{1,6})\s+(.*)$/);
+      const li = line.match(/^[-*]\s+(.*)$/);
+      if (h) {
+        flushList();
+        const lvl = h[1].length;
+        out.push(`<h${lvl}>${inlineFmt(esc(h[2]))}</h${lvl}>`);
+      } else if (li) {
+        if (!inList) { out.push('<ul>'); inList = true; }
+        out.push(`<li>${inlineFmt(esc(li[1]))}</li>`);
+      } else {
+        flushList();
+        out.push(`<p>${inlineFmt(esc(line))}</p>`);
+      }
+    }
+    flushList();
+    return out.join('').slice(0, 9500);
+  };
+  function inlineFmt(s) {
+    return s
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/__(.+?)__/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/_(.+?)_/g, '<em>$1</em>');
+  }
 
   const getStructuredData = () => {
-    const pageUrl = `https://developmentwala.org/JobDetail?id=${job.id}`;
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://developmentwala.org';
+    const seg = opType === 'job' ? 'jobs'
+      : opType === 'internship' ? 'internships'
+      : opType === 'fellowship' ? 'fellowships'
+      : opType === 'scholarship' ? 'scholarships'
+      : opType === 'grant' ? 'grants'
+      : opType === 'event' ? 'events' : 'jobs';
+    const pageUrl = job.slug ? `${origin}/${seg}/${job.slug}` : `${origin}/${seg}?id=${job.id}`;
 
     if (opType === 'event') {
       return {
         '@context': 'https://schema.org',
         '@type': 'Event',
         name: job.title,
-        description: cleanDesc(job.description).substring(0, 5000),
+        description: markdownToHtml(job.description),
         startDate: job.event_date,
         endDate: job.event_date,
         eventStatus: 'https://schema.org/EventScheduled',
@@ -185,7 +227,7 @@ export default function JobDetail() {
         '@context': 'https://schema.org',
         '@type': 'EducationalOccupationalProgram',
         name: job.title,
-        description: cleanDesc(job.description).substring(0, 5000),
+        description: markdownToHtml(job.description),
         provider: { '@type': 'Organization', name: orgName || 'DevelopmentWala.org', url: 'https://developmentwala.org' },
         applicationDeadline: deadline,
         url: pageUrl,
@@ -194,60 +236,103 @@ export default function JobDetail() {
       };
     }
 
-    // Full Google Jobs compliant JobPosting schema
+    // Google Jobs compliant JobPosting schema (covers job + internship)
     const employmentTypeMap = {
       full_time: 'FULL_TIME', part_time: 'PART_TIME', contract: 'CONTRACTOR',
       internship: 'INTERN', volunteer: 'VOLUNTEER', consultant: 'CONTRACTOR',
     };
-    const salary = job.salary || job.stipend_amount || job.grant_amount;
+    const salary = job.salary || job.salary_value || job.stipend_amount || job.stipend;
+    const datePosted = job.created_date
+      ? new Date(job.created_date).toISOString()
+      : new Date().toISOString();
+    // Google REQUIRES validThrough. Default to 30 days after posting when none provided.
+    const validThrough = deadline
+      ? new Date(deadline).toISOString()
+      : new Date(new Date(datePosted).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
+    const isRemote = job.location_type === 'online' || /remote|work\s*from\s*home/i.test(job.location || '');
+    const locality = job.location || job.city || '';
+    const region = job.state || job.region || '';
+    const country = job.country || 'India';
+
     const schema = {
-      '@context': 'https://schema.org',
+      '@context': 'https://schema.org/',
       '@type': 'JobPosting',
       title: job.title,
-      description: cleanDesc(job.description).substring(0, 5000),
-      datePosted: job.created_date ? new Date(job.created_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-      validThrough: deadline ? new Date(deadline).toISOString() : undefined,
-      employmentType: employmentTypeMap[job.job_type] || 'FULL_TIME',
+      description: markdownToHtml(job.description),
+      datePosted,
+      validThrough,
+      employmentType: employmentTypeMap[job.job_type] || (opType === 'internship' ? 'INTERN' : 'FULL_TIME'),
       hiringOrganization: {
         '@type': 'Organization',
         name: orgName || 'DevelopmentWala.org',
-        sameAs: 'https://developmentwala.org',
-        logo: job.logo_url || 'https://developmentwala.org/logo.png',
+        sameAs: orgData?.website || 'https://developmentwala.org',
+        logo: job.logo_url || orgData?.logo_url || 'https://media.base44.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp',
       },
-      jobLocation: job.location
-        ? { '@type': 'Place', address: { '@type': 'PostalAddress', streetAddress: job.location, addressLocality: job.location, addressRegion: job.country || 'India', postalCode: '', addressCountry: 'IN' } }
+      jobLocation: !isRemote && (locality || region)
+        ? {
+            '@type': 'Place',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: locality || undefined,
+              addressRegion: region || undefined,
+              addressCountry: country === 'India' ? 'IN' : country,
+            },
+          }
         : undefined,
-      applicantLocationRequirements: !job.location ? { '@type': 'Country', name: job.country || 'India' } : undefined,
-      jobLocationType: job.location_type === 'online' ? 'TELECOMMUTE' : undefined,
+      jobLocationType: isRemote ? 'TELECOMMUTE' : undefined,
+      applicantLocationRequirements: isRemote
+        ? { '@type': 'Country', name: country }
+        : undefined,
       url: pageUrl,
-      identifier: { '@type': 'PropertyValue', name: orgName || 'DevelopmentWala.org', value: job.id },
+      identifier: { '@type': 'PropertyValue', name: orgName || 'DevelopmentWala.org', value: String(job.id) },
       directApply: !!applyUrl,
-      industry: job.sector ? job.sector.replace(/_/g, ' ') : 'Non-Profit',
+      industry: job.sector ? String(job.sector).replace(/_/g, ' ') : 'Non-Profit',
       occupationalCategory: 'Social Services',
     };
 
-    // Add salary info if available (required by Google for rich results)
     if (salary) {
-      schema.baseSalary = {
-        '@type': 'MonetaryAmount',
-        currency: 'INR',
-        value: { '@type': 'QuantitativeValue', value: salary, unitText: 'YEAR' },
-      };
+      const num = typeof salary === 'string' ? Number(String(salary).replace(/[^\d.]/g, '')) : Number(salary);
+      if (!Number.isNaN(num) && num > 0) {
+        schema.baseSalary = {
+          '@type': 'MonetaryAmount',
+          currency: job.salary_currency || 'INR',
+          value: { '@type': 'QuantitativeValue', value: num, unitText: job.salary_unit_text || 'MONTH' },
+        };
+      }
     }
 
     if (job.eligibility) schema.qualifications = job.eligibility;
-    if (job.experience_required) schema.experienceRequirements = job.experience_required;
-    if (job.education_requirement) schema.educationRequirements = { '@type': 'EducationalOccupationalCredential', credentialCategory: job.education_requirement };
+    if (job.experience_required || job.experience_min) {
+      schema.experienceRequirements = {
+        '@type': 'OccupationalExperienceRequirements',
+        monthsOfExperience: Number(job.experience_min || 0) * 12 || undefined,
+      };
+    }
+    if (job.education_requirement || job.education_required) {
+      schema.educationRequirements = {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: job.education_requirement || job.education_required,
+      };
+    }
 
     return schema;
   };
+
+  const canonicalSeg = opType === 'job' ? 'jobs'
+    : opType === 'internship' ? 'internships'
+    : opType === 'fellowship' ? 'fellowships'
+    : opType === 'scholarship' ? 'scholarships'
+    : opType === 'grant' ? 'grants'
+    : opType === 'event' ? 'events' : 'jobs';
+  const canonicalUrl = `https://developmentwala.org/${canonicalSeg}/${job.slug || job.id}`;
 
   return (
     <div>
       <SEOHead
         title={`${job.title}${orgName ? ` — ${orgName}` : ''} | DevelopmentWala.org`}
         description={job.description?.replace(/[#*_[\]]/g, '').substring(0, 160)}
-        canonical={`https://developmentwala.org/opportunity/${job.id}`}
+        canonical={canonicalUrl}
         structuredData={getStructuredData()}
       />
       <Navbar />
