@@ -66,6 +66,7 @@ export function toJobInsert(payload, { employerId, organizationEmployerId } = {}
     state: state || null,
     applylink: payload.apply_url || payload.applylink || null,
     employer_id: employerId || payload.employer_id || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
     education_required: payload.education_requirement || payload.education_required || null,
     featured: !!payload.featured,
   };
