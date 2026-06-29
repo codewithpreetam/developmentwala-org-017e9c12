@@ -6,15 +6,17 @@ import { format } from 'date-fns';
 import {
   ArrowLeft, MapPin, Calendar, Building2, Briefcase,
   Mail, ExternalLink, Clock, Share2, CheckCircle2, Send, X, Loader2,
-  Globe, DollarSign, GraduationCap, Tag, Users, FileText, Video
+  Globe, DollarSign, GraduationCap, Tag, Users, FileText, Video, AlertCircle
 } from 'lucide-react';
+import { toast } from 'sonner';
+import { z } from 'zod';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import SEOHead from '../components/shared/SEOHead';
 import MobileHeader from '../components/MobileHeader';
 import ReactMarkdown from 'react-markdown';
 import { useAuth } from '../components/auth/AuthContext';
-import { Textarea } from '@/components/ui/textarea';
+import CoverLetterField from '../components/opportunities/CoverLetterField';
 import { typeLabels, typeColors, sectorLabels } from '../components/opportunities/OpportunityCard';
 import OrgProfileLink from '../components/opportunities/OrgProfileLink';
 
