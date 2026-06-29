@@ -12,7 +12,7 @@ import {
   LayoutDashboard, Plus, Inbox, List, LogOut, Briefcase,
   Clock, CheckCircle2, XCircle, Trash2, Eye, EyeOff,
   Building2, GraduationCap, Star, DollarSign, Calendar, Pencil, Archive,
-  Users, Download, FileText, MessageSquare, Mail, ChevronRight, Settings, User
+  Users, Download, FileText, MessageSquare, Mail, ChevronRight, Settings, User, Bell
 } from 'lucide-react';
 import SiteSettingsPanel from '../components/admin/SiteSettingsPanel';
 import { DEFAULT_LOGO } from '@/lib/brand';
