@@ -19,7 +19,7 @@ export default function EmployerProfileSection({ user, ACCENT, onProfilePicChang
   const [uploadingPic, setUploadingPic] = useState(false);
   const [picError, setPicError] = useState('');
 
-  useEffect(() => { if (user) loadProfile(); }, [user]);
+  useEffect(() => { if (user) loadProfile(); }, [user?.id]);
 
   const loadProfile = async () => {
     const profiles = await base44.entities.UserProfile.filter({ user_email: user.email, user_type: 'employer' });

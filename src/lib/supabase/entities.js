@@ -310,17 +310,33 @@ async function fetchOrganizationsForUser(email, limit = 200) {
   if (!user) {
     const session = getSessionUser();
     if (session?.email?.toLowerCase() === trimmed.toLowerCase()) user = session;
-    else return [];
+    else return { rows: [], userEmail: trimmed, ngo_type: '' };
   }
 
-  const { data: byEmail, error: emailError } = await supabase
-    .from('employers')
-    .select('*')
-    .ilike('email', trimmed)
-    .limit(limit);
-  if (emailError) throw emailError;
+  // Prefer lookup by owner_user_id so changing the contact email later cannot
+  // orphan the org row (which previously caused saveOrg → reload to spawn a
+  // duplicate org and make existing data appear to "reset").
+  let rows = [];
+  if (user.id) {
+    const { data: owned, error: ownedErr } = await supabase
+      .from('employers')
+      .select('*')
+      .eq('owner_user_id', user.id)
+      .limit(limit);
+    if (ownedErr) throw ownedErr;
+    rows = owned || [];
+  }
 
-  let rows = byEmail || [];
+  if (!rows.length) {
+    const { data: byEmail, error: emailError } = await supabase
+      .from('employers')
+      .select('*')
+      .ilike('email', trimmed)
+      .limit(limit);
+    if (emailError) throw emailError;
+    rows = byEmail || [];
+  }
+
   const { data: employerProfile } = await supabase
     .from('employer_profiles')
     .select('data')
@@ -336,6 +352,18 @@ async function fetchOrganizationsForUser(email, limit = 200) {
       .limit(limit);
     if (nameError) throw nameError;
     rows = byName || [];
+  }
+
+  // Backfill owner_user_id on legacy rows so future lookups stay stable.
+  if (user.id) {
+    const orphans = rows.filter((r) => !r.owner_user_id);
+    if (orphans.length) {
+      await supabase
+        .from('employers')
+        .update({ owner_user_id: user.id })
+        .in('id', orphans.map((r) => r.id));
+      orphans.forEach((r) => { r.owner_user_id = user.id; });
+    }
   }
 
   return { rows, userEmail: trimmed, ngo_type: profileData.organizationType || '' };

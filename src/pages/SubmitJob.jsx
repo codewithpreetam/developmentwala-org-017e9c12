@@ -97,7 +97,7 @@ export default function SubmitJob() {
     loadEmployerContactDefaults(user).then((contact) => {
       setForm((f) => applyEmployerContactFields(f, user, contact));
     });
-  }, [user]);
+  }, [user?.id]);
 
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
   const type = form.opportunity_type;

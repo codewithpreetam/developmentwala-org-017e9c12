@@ -83,8 +83,11 @@ export default function EmployerDashboard() {
   const [savedItems, setSavedItems] = useState([]);
 
   useEffect(() => {
-    if (user) loadData();
-  }, [user]);
+    if (user?.id) loadData();
+    // Depend only on the user id — re-running on every `user` reference change
+    // (e.g. token refresh) would wipe the org form while the user was typing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   const loadData = async () => {
     const fetchMine = async (entity, type) => {
@@ -108,8 +111,10 @@ export default function EmployerDashboard() {
     if (orgs.length > 0) {
       const o = orgs[0];
       setOrg(o);
+      // IMPORTANT: prefer the saved org row over signup metadata so an employer
+      // edit + save isn't silently reverted on the next reload.
       setOrgForm({
-        org_name: signupOrgName || o.org_name || defaultOrgName,
+        org_name: o.org_name || signupOrgName || defaultOrgName,
         ngo_type: o.ngo_type || '',
         website: o.website || '',
         location: o.location || '',
@@ -292,7 +297,8 @@ export default function EmployerDashboard() {
       }));
       setSavedMsg('Organization profile saved!');
       setTimeout(() => setSavedMsg(''), 3000);
-      await loadData();
+      // Do NOT call loadData() here — saved state is already reflected above and
+      // a reload would race against any further edits the user starts typing.
     } catch (err) {
       setSavedMsg(err.message || 'Failed to save organization profile.');
       setTimeout(() => setSavedMsg(''), 4000);

@@ -47,13 +47,24 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     let mounted = true;
+    let lastUserId = null;
     const init = async () => {
       const { data: { user: authUser } } = await supabase.auth.getUser();
-      if (mounted) await loadProfile(authUser);
+      if (!mounted) return;
+      lastUserId = authUser?.id || null;
+      await loadProfile(authUser);
     };
     init();
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (mounted) loadProfile(session?.user ?? null);
+      if (!mounted) return;
+      // Only react to true identity changes. TOKEN_REFRESHED / INITIAL_SESSION
+      // re-emits would otherwise rebuild the `user` object on a timer and reset
+      // dashboard form state while the employer was still typing.
+      if (event !== 'SIGNED_IN' && event !== 'SIGNED_OUT' && event !== 'USER_UPDATED') return;
+      const nextId = session?.user?.id || null;
+      if (event !== 'SIGNED_OUT' && nextId === lastUserId) return;
+      lastUserId = nextId;
+      loadProfile(session?.user ?? null);
     });
     return () => {
       mounted = false;
