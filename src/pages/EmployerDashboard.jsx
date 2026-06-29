@@ -83,8 +83,11 @@ export default function EmployerDashboard() {
   const [savedItems, setSavedItems] = useState([]);
 
   useEffect(() => {
-    if (user) loadData();
-  }, [user]);
+    if (user?.id) loadData();
+    // Depend only on the user id — re-running on every `user` reference change
+    // (e.g. token refresh) would wipe the org form while the user was typing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   const loadData = async () => {
     const fetchMine = async (entity, type) => {
