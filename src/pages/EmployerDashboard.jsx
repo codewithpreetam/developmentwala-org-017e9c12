@@ -529,11 +529,11 @@ export default function EmployerDashboard() {
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">Organization Name</label>
                       <Input
                         value={orgForm.org_name}
-                        readOnly
-                        disabled
-                        className="h-11 rounded-xl bg-gray-50 text-gray-700 cursor-not-allowed"
+                        onChange={(e) => uo('org_name', e.target.value)}
+                        placeholder="Your organization's display name"
+                        className="h-11 rounded-xl"
                       />
-                      <p className="text-xs text-gray-400 mt-1">Set from your registration and cannot be changed.</p>
+                      <p className="text-xs text-gray-500 mt-1">Shown on every opportunity you post. Updates sync everywhere automatically.</p>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">NGO Type</label>
