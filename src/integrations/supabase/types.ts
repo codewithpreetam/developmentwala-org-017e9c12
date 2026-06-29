@@ -16,25 +16,43 @@ export type Database = {
     Tables: {
       applications: {
         Row: {
+          applicant_name: string | null
           applied_at: string | null
           candidate_id: string
+          cover_letter: string | null
+          cv_url: string | null
           id: string
-          job_id: string
+          job_id: string | null
+          opportunity_id: string | null
+          opportunity_type: string
           status: string
+          updated_at: string
         }
         Insert: {
+          applicant_name?: string | null
           applied_at?: string | null
           candidate_id: string
+          cover_letter?: string | null
+          cv_url?: string | null
           id?: string
-          job_id: string
+          job_id?: string | null
+          opportunity_id?: string | null
+          opportunity_type?: string
           status: string
+          updated_at?: string
         }
         Update: {
+          applicant_name?: string | null
           applied_at?: string | null
           candidate_id?: string
+          cover_letter?: string | null
+          cv_url?: string | null
           id?: string
-          job_id?: string
+          job_id?: string | null
+          opportunity_id?: string | null
+          opportunity_type?: string
           status?: string
+          updated_at?: string
         }
         Relationships: [
           {
