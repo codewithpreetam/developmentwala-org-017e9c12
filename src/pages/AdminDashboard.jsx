@@ -19,6 +19,7 @@ import { format } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
 import NotificationBell from '../components/shared/NotificationBell';
 import AdminMessagesPanel from '../components/messaging/AdminMessagesPanel';
+import NewsletterPanel from '../components/admin/NewsletterPanel';
 
 const ACCENT = '#4F46E5';
 
@@ -192,6 +193,7 @@ export default function AdminDashboard() {
     { id: 'users', label: `Users (${allUsers.length})`, icon: Users },
     { id: 'blog', label: 'Blog', icon: FileText },
     { id: 'contacts', label: `Messages${unreadContacts > 0 ? ` (${unreadContacts})` : ''}`, icon: MessageSquare },
+    { id: 'newsletter', label: 'Newsletter', icon: Mail },
   ];
 
   if (authLoading) return null;
@@ -660,6 +662,9 @@ export default function AdminDashboard() {
                   onChanged={loadAll}
                 />
               )}
+
+              {/* NEWSLETTER */}
+              {tab === 'newsletter' && <NewsletterPanel />}
             </>
           )}
         </main>

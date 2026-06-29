@@ -155,17 +155,26 @@ const auth = {
 
 async function invokeFunction(name, payload) {
   if (name === 'subscribeToMailchimp') {
-    const result = await entities.EmailSubscription.create({
-      email: payload.email,
-      full_name: payload.full_name,
-      source: 'footer',
-    });
-    return {
-      data: {
-        success: result.success || result.active,
-        already_subscribed: result.already_subscribed,
-      },
-    };
+    try {
+      const { subscribeNewsletter } = await import('@/lib/mailchimp.functions');
+      const result = await subscribeNewsletter({
+        data: {
+          email: payload.email,
+          firstName: payload.first_name || payload.full_name?.split(' ')[0],
+          lastName: payload.last_name,
+          source: payload.source || 'DevelopmentWala.org footer',
+        },
+      });
+      // Mirror to local table for analytics / backup (best-effort)
+      entities.EmailSubscription.create({
+        email: payload.email,
+        full_name: payload.full_name,
+        source: payload.source || 'footer',
+      }).catch(() => {});
+      return { data: result };
+    } catch (e) {
+      return { data: { success: false, error: e?.message || 'Subscription failed' } };
+    }
   }
   if (name === 'sendContactEmail') {
     await entities.ContactMessage.create({

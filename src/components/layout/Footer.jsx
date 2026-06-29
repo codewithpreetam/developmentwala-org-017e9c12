@@ -27,10 +27,13 @@ export default function Footer() {
       if (data?.success) {
         setSubscribed(true);
         setEmail('');
-        setStatusMsg('Successfully subscribed to Premium Opportunity Alerts.');
-      } else if (data?.already_subscribed) {
-        setSubscribed(true);
-        setStatusMsg('You are already subscribed.');
+        if (data?.already_subscribed) {
+          setStatusMsg('You are already subscribed. Thanks for being with us!');
+        } else if (data?.pending) {
+          setStatusMsg('Almost there! Check your inbox to confirm your subscription.');
+        } else {
+          setStatusMsg('Successfully subscribed to our weekly opportunity alerts.');
+        }
       } else {
         setIsError(true);
         setStatusMsg(data?.error || 'Something went wrong. Please try again.');
