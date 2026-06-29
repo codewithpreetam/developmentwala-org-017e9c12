@@ -23,6 +23,7 @@ import NotificationBell from '../components/shared/NotificationBell';
 import NotificationsPanel from '../components/shared/NotificationsPanel';
 import AdminMessagesPanel from '../components/messaging/AdminMessagesPanel';
 import NewsletterPanel from '../components/admin/NewsletterPanel';
+import AdminProfileSection from '../components/admin/AdminProfileSection';
 
 const ACCENT = '#4F46E5';
 
