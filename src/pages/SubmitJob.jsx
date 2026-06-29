@@ -232,9 +232,22 @@ export default function SubmitJob() {
                         <Input type="date" value={form.deadline} onChange={(e) => update('deadline', e.target.value)}
                           required className="h-11 rounded-xl border-gray-200" />
                       </FormField>
+                      {type === 'job' && (
+                        <>
+                          <FormField label="Experience Required" required>
+                            <Input value={form.experience_required} onChange={(e) => update('experience_required', e.target.value)}
+                              placeholder="e.g. 2+ years or Fresher" required className="h-11 rounded-xl border-gray-200" />
+                          </FormField>
+                          <FormField label="State" required>
+                            <Input value={form.state} onChange={(e) => update('state', e.target.value)}
+                              placeholder="e.g. Maharashtra" required className="h-11 rounded-xl border-gray-200" />
+                          </FormField>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
+
 
                 <hr className="border-gray-100" />
 
