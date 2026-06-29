@@ -11,6 +11,7 @@ import AuthShell, { RoleToggle } from '../components/auth/AuthShell';
 import { roleConfig, dashboardForRole } from '@/lib/auth/roles';
 import { consumeLoginRoleHint, signUpUrl } from '@/lib/auth/redirect';
 import ResendVerification from '../components/auth/ResendVerification';
+import SocialAuthButtons from '../components/auth/SocialAuthButtons';
 import { getLogoUrl, SITE_NAME } from '@/lib/brand';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 
