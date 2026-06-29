@@ -16,10 +16,10 @@ export default function SubmitInternship() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', organization_name: '', organization_type: '', sector: '',
+    title: '', description: '', organization_type: '', sector: '',
     location: '', location_type: '', country: DEFAULT_COUNTRY, duration: '', stipend_type: '',
     stipend_amount: '', responsibilities: '', required_skills: '',
-    application_deadline: '', application_link: '', application_email: '', tags: '',
+    application_deadline: '', tags: '',
     submitted_by_name: '', submitted_by_email: '',
   });
   const [submitting, setSubmitting] = useState(false);
