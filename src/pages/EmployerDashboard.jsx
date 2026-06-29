@@ -973,7 +973,15 @@ export default function EmployerDashboard() {
           )}
 
           {/* INTERVIEWS */}
-          {tab === 'interviews' && <EmployerInterviewPanel employerEmail={user.email} orgName={orgForm.org_name} allApplicants={allApplicants} />}
+          {tab === 'interviews' && (
+            <EmployerInterviewPanel
+              employerEmail={user.email}
+              orgName={orgForm.org_name}
+              allApplicants={allApplicants}
+              prefillApp={prefillInterviewApp}
+              onPrefillConsumed={() => setPrefillInterviewApp(null)}
+            />
+          )}
 
           {/* ANALYTICS */}
           {tab === 'analytics' && <EmployerAnalytics myJobs={myJobs} applicants={allApplicants} />}
