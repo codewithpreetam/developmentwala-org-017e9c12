@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useLocation } from '@/lib/router-adapter';
+import { useLocation, Link } from '@/lib/router-adapter';
+import dwHireAd from '@/assets/dw-hire-ad.png.asset.json';
+
 import { redirectToSignIn } from '@/lib/auth/redirect';
 import { Search, X, Briefcase, SlidersHorizontal, MapPin, Building2, ChevronDown, ChevronUp } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
@@ -592,7 +594,25 @@ export default function Jobs() {
                 </div>
               ) : filtered.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {paginated.map(job => <OpportunityCard key={job.id} opportunity={job} isSaved={!!savedMap[job.id]} onToggleSave={() => handleToggleSave(job)} />)}
+                  {paginated.map((job, idx) => (
+                    <React.Fragment key={job.id}>
+                      <OpportunityCard opportunity={job} isSaved={!!savedMap[job.id]} onToggleSave={() => handleToggleSave(job)} />
+                      {idx === Math.min(3, paginated.length - 1) && (
+                        <Link
+                          to="/post-opportunity"
+                          className="col-span-full block rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                          aria-label="Looking to hire development professionals? Partner with Development Wala"
+                        >
+                          <img
+                            src={dwHireAd.url}
+                            alt="Looking to hire development professionals? Partner with Development Wala and connect with talent that genuinely cares about your mission."
+                            className="w-full h-auto block"
+                            loading="lazy"
+                          />
+                        </Link>
+                      )}
+                    </React.Fragment>
+                  ))}
                   {totalPages > 1 && (
                     <div className="flex items-center justify-center gap-3 pt-6 col-span-full">
                       <button type="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}
@@ -603,6 +623,7 @@ export default function Jobs() {
                     </div>
                   )}
                 </div>
+
               ) : (
                 <div className="text-center py-20">
                   <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-4" />
