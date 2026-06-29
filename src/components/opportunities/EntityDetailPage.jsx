@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import {
   ArrowLeft, MapPin, Calendar, CalendarPlus, Building2, ExternalLink, Mail,
-  Clock, Share2, CheckCircle2, Globe, DollarSign, GraduationCap,
+  Clock, Share2, CheckCircle2, Globe, IndianRupee, GraduationCap,
   FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle, Bookmark, BookmarkCheck
 } from 'lucide-react';
 import EmployerCard from './EmployerCard';
@@ -604,7 +604,7 @@ export default function EntityDetailPage({
                 <DetailRow icon={MapPin} label="Location" value={item.location} />
                 <DetailRow icon={Globe} label="Country" value={item.country || item.eligible_countries} />
                 <DetailRow icon={Clock} label="Duration" value={item.duration} />
-                <DetailRow icon={DollarSign} label="Amount" value={item.grant_amount || item.scholarship_amount || item.stipend_amount} />
+                <DetailRow icon={IndianRupee} label="Amount" value={item.grant_amount || item.scholarship_amount || item.stipend_amount} />
                 <DetailRow icon={Calendar} label="Deadline" value={deadline ? format(new Date(deadline), 'dd MMM yyyy') : null} />
                 <DetailRow icon={Calendar} label="Event Date" value={item.event_date ? format(new Date(item.event_date), 'dd MMM yyyy') : null} />
                 <DetailRow icon={GraduationCap} label="Level of Study" value={item.level_of_study} />

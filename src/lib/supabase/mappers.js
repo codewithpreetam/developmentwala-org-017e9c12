@@ -47,10 +47,12 @@ function formatSalary(row) {
   const val = Number(row.salary_value);
   if (Number.isNaN(val)) return null;
   const currency = row.salary_currency || 'INR';
-  if (val >= 100000) return `${currency} ${(val / 100000).toFixed(1)}L`;
-  if (val >= 1000) return `${currency} ${Math.round(val / 1000)}K`;
-  return `${currency} ${val}`;
+  const symbol = currency === 'INR' ? '₹' : `${currency} `;
+  if (val >= 100000) return `${symbol}${(val / 100000).toFixed(1)}L`;
+  if (val >= 1000) return `${symbol}${Math.round(val / 1000)}K`;
+  return `${symbol}${val}`;
 }
+
 
 function normalizeEmploymentType(value) {
   if (!value) return 'full_time';
@@ -59,19 +61,23 @@ function normalizeEmploymentType(value) {
 
 export function mapJob(row, extra = {}) {
   const employerEmail = extra.submitted_by_email || extra.created_by || null;
+  const expMin = row.experience_min;
   return baseOpportunity(row, 'job', {
     qualifications: row.qualifications,
     employment_type: row.employment_type,
     job_type: normalizeEmploymentType(row.employment_type),
-    experience_min: row.experience_min,
+    experience_min: expMin,
+    experience_required: expMin != null ? (expMin > 0 ? `${expMin}+ years` : 'Fresher / Entry level') : null,
     salary_currency: row.salary_currency,
     salary_value: row.salary_value,
     salary: formatSalary(row),
     salary_unit_text: row.salary_unit_text,
     how_to_apply: row.how_to_apply,
     applylink: row.applylink,
+    apply_url: row.applylink,
     organization_type: row.organization_type,
     education_required: row.education_required,
+    education_requirement: row.education_required,
     employer_id: row.employer_id,
     location_type: 'offline',
     submitted_by_email: employerEmail,
@@ -79,6 +85,7 @@ export function mapJob(row, extra = {}) {
     ...extra,
   });
 }
+
 
 function deriveLocationType(row) {
   if (row.remote === true) return 'online';

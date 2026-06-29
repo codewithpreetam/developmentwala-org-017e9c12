@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import {
   Search, ArrowRight, Briefcase, Users, Heart,
   BookOpen, TreePine, Shield, Zap, ChevronRight, TrendingUp,
-  GraduationCap, DollarSign, Calendar, Star, Building2, MapPin, Clock, ArrowUpRight
+  GraduationCap, IndianRupee, Calendar, Star, Building2, MapPin, Clock, ArrowUpRight
 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -29,7 +29,7 @@ const opportunitySections = [
   { type: 'fellowship', title: 'Fellowships', icon: Star, page: 'Fellowships', detailParam: 'FellowshipDetail', tint: 'bg-indigo-50 text-indigo-600 ring-indigo-100' },
   { type: 'internship', title: 'Internships', icon: GraduationCap, page: 'Internships', detailParam: 'InternshipDetail', tint: 'bg-violet-50 text-violet-600 ring-violet-100' },
   { type: 'scholarship', title: 'Scholarships', icon: BookOpen, page: 'Scholarships', detailParam: 'ScholarshipDetail', tint: 'bg-amber-50 text-amber-600 ring-amber-100' },
-  { type: 'grant', title: 'Grants', icon: DollarSign, page: 'Grants', detailParam: 'GrantDetail', tint: 'bg-emerald-50 text-emerald-600 ring-emerald-100' },
+  { type: 'grant', title: 'Grants', icon: IndianRupee, page: 'Grants', detailParam: 'GrantDetail', tint: 'bg-emerald-50 text-emerald-600 ring-emerald-100' },
   { type: 'event', title: 'Events', icon: Calendar, page: 'Events', detailParam: 'EventDetail', tint: 'bg-pink-50 text-pink-600 ring-pink-100' },
 ];
 
@@ -38,7 +38,7 @@ const typeLinks = [
   { label: 'Fellowships', page: 'Fellowships', icon: Star },
   { label: 'Internships', page: 'Internships', icon: GraduationCap },
   { label: 'Scholarships', page: 'Scholarships', icon: BookOpen },
-  { label: 'Grants', page: 'Grants', icon: DollarSign },
+  { label: 'Grants', page: 'Grants', icon: IndianRupee },
   { label: 'Events', page: 'Events', icon: Calendar },
 ];
 

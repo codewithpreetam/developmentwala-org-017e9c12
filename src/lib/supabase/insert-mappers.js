@@ -36,6 +36,25 @@ function isPending(payload) {
   return payload.status === 'pending' || payload.is_active === false;
 }
 
+function parseSalaryToValue(raw) {
+  if (raw == null || raw === '') return null;
+  if (typeof raw === 'number') return raw;
+  const s = String(raw).toLowerCase().replace(/,/g, '').trim();
+  const num = parseFloat(s.replace(/[^\d.]/g, ''));
+  if (Number.isNaN(num)) return null;
+  if (/lpa|lakh|l\b/.test(s)) return Math.round(num * 100000);
+  if (/k\b|thousand/.test(s)) return Math.round(num * 1000);
+  if (/cr|crore/.test(s)) return Math.round(num * 10000000);
+  return Math.round(num);
+}
+
+function parseExperienceToMin(raw) {
+  if (raw == null || raw === '') return 0;
+  if (typeof raw === 'number') return raw;
+  const m = String(raw).match(/\d+/);
+  return m ? parseInt(m[0], 10) : 0;
+}
+
 export function toJobInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const today = new Date().toISOString().split('T')[0];
@@ -48,12 +67,12 @@ export function toJobInsert(payload, { employerId, organizationEmployerId } = {}
     title: payload.title?.trim(),
     slug: payload.slug || slugify(payload.title),
     description: payload.description?.trim(),
-    qualifications: payload.qualifications || payload.eligibility || payload.education_requirement || 'See job description for requirements.',
+    qualifications: payload.qualifications || payload.eligibility || payload.education_requirement || payload.experience_required || 'See job description for requirements.',
     role_category: payload.sector || payload.role_category || 'other',
     employment_type: EMPLOYMENT_LABELS[payload.job_type] || payload.employment_type || 'Full-time',
-    experience_min: payload.experience_min ?? 0,
+    experience_min: payload.experience_min ?? parseExperienceToMin(payload.experience_required),
     salary_currency: 'INR',
-    salary_value: payload.salary_value ?? null,
+    salary_value: payload.salary_value ?? parseSalaryToValue(payload.salary),
     salary_unit_text: 'YEAR',
     date_posted: today,
     valid_through: validThrough,
@@ -63,7 +82,7 @@ export function toJobInsert(payload, { employerId, organizationEmployerId } = {}
     organization_type: payload.organization_type || null,
     country: payload.country || 'India',
     city: city || payload.city || null,
-    state: state || null,
+    state: payload.state || state || null,
     applylink: payload.apply_url || payload.applylink || null,
     employer_id: employerId || payload.employer_id || null,
     organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
@@ -71,6 +90,7 @@ export function toJobInsert(payload, { employerId, organizationEmployerId } = {}
     featured: !!payload.featured,
   };
 }
+
 
 export function toInternshipInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);

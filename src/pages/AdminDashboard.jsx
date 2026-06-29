@@ -11,7 +11,7 @@ import UserAvatar from '../components/shared/UserAvatar';
 import {
   LayoutDashboard, Plus, Inbox, List, LogOut, Briefcase,
   Clock, CheckCircle2, XCircle, Trash2, Eye, EyeOff,
-  Building2, GraduationCap, Star, DollarSign, Calendar, Pencil, Archive,
+  Building2, GraduationCap, Star, IndianRupee, Calendar, Pencil, Archive,
   Users, Download, FileText, MessageSquare, Mail, ChevronRight, Settings, User, Bell
 } from 'lucide-react';
 import SiteSettingsPanel from '../components/admin/SiteSettingsPanel';
@@ -39,7 +39,7 @@ const typeConfig = {
   internship:  { label: 'Internship',  color: 'bg-purple-100 text-purple-700',icon: GraduationCap, entity: 'Internship',  detailPage: 'InternshipDetail' },
   fellowship:  { label: 'Fellowship',  color: 'bg-indigo-100 text-indigo-700',icon: Star,          entity: 'Fellowship',  detailPage: 'FellowshipDetail' },
   scholarship: { label: 'Scholarship', color: 'bg-yellow-100 text-yellow-700',icon: GraduationCap, entity: 'Scholarship', detailPage: 'ScholarshipDetail' },
-  grant:       { label: 'Grant',       color: 'bg-green-100 text-green-700',  icon: DollarSign,    entity: 'Grant',       detailPage: 'GrantDetail' },
+  grant:       { label: 'Grant',       color: 'bg-green-100 text-green-700',  icon: IndianRupee,    entity: 'Grant',       detailPage: 'GrantDetail' },
   event:       { label: 'Event',       color: 'bg-pink-100 text-pink-700',    icon: Calendar,      entity: 'Event',       detailPage: 'EventDetail' },
 };
 

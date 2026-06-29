@@ -6,8 +6,9 @@ import { format } from 'date-fns';
 import {
   ArrowLeft, MapPin, Calendar, Building2, Briefcase,
   Mail, ExternalLink, Clock, Share2, CheckCircle2, Send, X, Loader2,
-  Globe, DollarSign, GraduationCap, Tag, Users, FileText, Video, AlertCircle
+  Globe, IndianRupee, GraduationCap, Tag, Users, FileText, Video, AlertCircle
 } from 'lucide-react';
+
 import { toast } from 'sonner';
 import { z } from 'zod';
 import Navbar from '../components/layout/Navbar';
@@ -462,7 +463,7 @@ export default function JobDetail() {
                     {job.location_type && <span className="flex items-center gap-1.5"><Globe className="w-4 h-4 text-gray-400" />{locationTypeLabels[job.location_type]}</span>}
                     {(job.salary || job.stipend_amount || job.grant_amount || job.scholarship_amount) && (
                       <span className="flex items-center gap-1.5 text-emerald-700 font-semibold">
-                        <DollarSign className="w-4 h-4" />
+                        <IndianRupee className="w-4 h-4" />
                         {job.salary || job.stipend_amount || job.grant_amount || job.scholarship_amount}
                       </span>
                     )}
@@ -572,11 +573,13 @@ export default function JobDetail() {
                   ) : null}
                 />
                 <DetailRow icon={MapPin} label="Location" value={job.location || (job.location_type === 'online' ? 'Online' : null)} />
+                <DetailRow icon={MapPin} label="State" value={job.state} />
                 <DetailRow icon={Globe} label="Country" value={job.country || job.eligible_countries} />
+
                 <DetailRow icon={Briefcase} label="Job Type" value={jobTypeLabels[job.job_type]} />
                 <DetailRow icon={Clock} label="Duration" value={job.duration} />
-                <DetailRow icon={DollarSign} label="Salary / Stipend" value={job.salary || job.stipend_amount} />
-                <DetailRow icon={DollarSign} label="Grant Amount" value={job.grant_amount} />
+                <DetailRow icon={IndianRupee} label="Salary / Stipend" value={job.salary || job.stipend_amount} />
+                <DetailRow icon={IndianRupee} label="Grant Amount" value={job.grant_amount} />
                 <DetailRow icon={Calendar} label="Deadline" value={deadline ? format(new Date(deadline), 'dd MMM yyyy') : null} />
                 <DetailRow icon={Calendar} label="Event Date" value={opType === 'event' && job.event_date ? `${format(new Date(job.event_date), 'dd MMM yyyy')}${job.event_time ? ` at ${job.event_time}` : ''}` : null} />
                 <DetailRow icon={GraduationCap} label="Education Requirement" value={job.education_requirement} />

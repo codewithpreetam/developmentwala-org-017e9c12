@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { Menu, X, ChevronDown, User, LogOut, LayoutDashboard, GraduationCap, Star, BookOpen, DollarSign, Calendar, Briefcase } from 'lucide-react';
+import { Menu, X, ChevronDown, User, LogOut, LayoutDashboard, GraduationCap, Star, BookOpen, IndianRupee, Calendar, Briefcase } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { useSiteSettings } from '../../hooks/useSiteSettings';
@@ -14,7 +14,7 @@ const opportunityLinks = [
   { label: 'Scholarships', page: 'Scholarships', icon: BookOpen, desc: 'Education funding' },
   { label: 'Fellowships', page: 'Fellowships', icon: Star, desc: 'Leadership programmes' },
   { label: 'Events', page: 'Events', icon: Calendar, desc: 'Conferences & webinars' },
-  { label: 'Grants', page: 'Grants', icon: DollarSign, desc: 'Funding for NGOs' },
+  { label: 'Grants', page: 'Grants', icon: IndianRupee, desc: 'Funding for NGOs' },
 ];
 
 export default function Navbar() {

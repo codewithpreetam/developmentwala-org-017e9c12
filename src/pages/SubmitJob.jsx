@@ -78,7 +78,7 @@ export default function SubmitJob() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', location: '', country: DEFAULT_COUNTRY,
+    title: '', description: '', location: '', state: '', country: DEFAULT_COUNTRY,
     opportunity_type: 'job', job_type: '', sector: '', salary: '', deadline: '',
     location_type: '', funding_type: '', duration: '', stipend_amount: '', grant_amount: '',
     eligible_countries: '', scholarship_level: '', field_of_study: '', education_requirement: '',
@@ -87,6 +87,7 @@ export default function SubmitJob() {
     organization: '',
     tags: '', submitted_by_name: '', submitted_by_email: '',
   });
+
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
@@ -231,9 +232,22 @@ export default function SubmitJob() {
                         <Input type="date" value={form.deadline} onChange={(e) => update('deadline', e.target.value)}
                           required className="h-11 rounded-xl border-gray-200" />
                       </FormField>
+                      {type === 'job' && (
+                        <>
+                          <FormField label="Experience Required" required>
+                            <Input value={form.experience_required} onChange={(e) => update('experience_required', e.target.value)}
+                              placeholder="e.g. 2+ years or Fresher" required className="h-11 rounded-xl border-gray-200" />
+                          </FormField>
+                          <FormField label="State" required>
+                            <Input value={form.state} onChange={(e) => update('state', e.target.value)}
+                              placeholder="e.g. Maharashtra" required className="h-11 rounded-xl border-gray-200" />
+                          </FormField>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
+
 
                 <hr className="border-gray-100" />
 
@@ -389,7 +403,7 @@ export default function SubmitJob() {
                 )}
 
                 <button type="submit"
-                  disabled={submitting || !form.title.trim() || !form.description.trim() || !form.deadline || (type === 'job' && !form.salary.trim()) || ((type === 'fellowship' || type === 'internship') && !form.stipend_amount.trim()) || (type === 'grant' && !form.grant_amount.trim())}
+                  disabled={submitting || !form.title.trim() || !form.description.trim() || !form.deadline || (type === 'job' && (!form.salary.trim() || !form.experience_required.trim() || !form.state.trim())) || ((type === 'fellowship' || type === 'internship') && !form.stipend_amount.trim()) || (type === 'grant' && !form.grant_amount.trim())}
                   className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl text-base transition-colors flex items-center justify-center gap-2">
                   {submitting ? <><Loader2 className="w-5 h-5 animate-spin" /> Submitting...</> : adminPost ? 'Publish Now' : 'Submit for Review'}
                 </button>

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@/lib/router-adapter';
 import { base44 } from '@/api/base44Client';
 import {
-  Star, Briefcase, GraduationCap, BookOpen, DollarSign, Calendar,
+  Star, Briefcase, GraduationCap, BookOpen, IndianRupee, Calendar,
   Building2, Clock, ArrowRight, ArrowLeft,
 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
@@ -16,7 +16,7 @@ const TYPE_META = {
   fellowship:  { title: 'Fellowships',  icon: Star,         tint: 'bg-indigo-50 text-indigo-600 ring-indigo-100',   badge: 'bg-indigo-50 text-indigo-600' },
   internship:  { title: 'Internships',  icon: GraduationCap, tint: 'bg-violet-50 text-violet-600 ring-violet-100',  badge: 'bg-violet-50 text-violet-600' },
   scholarship: { title: 'Scholarships', icon: BookOpen,     tint: 'bg-amber-50 text-amber-600 ring-amber-100',      badge: 'bg-amber-50 text-amber-600' },
-  grant:       { title: 'Grants',       icon: DollarSign,   tint: 'bg-emerald-50 text-emerald-600 ring-emerald-100', badge: 'bg-emerald-50 text-emerald-600' },
+  grant:       { title: 'Grants',       icon: IndianRupee,   tint: 'bg-emerald-50 text-emerald-600 ring-emerald-100', badge: 'bg-emerald-50 text-emerald-600' },
   event:       { title: 'Events',       icon: Calendar,     tint: 'bg-pink-50 text-pink-600 ring-pink-100',         badge: 'bg-pink-50 text-pink-600' },
 };
 

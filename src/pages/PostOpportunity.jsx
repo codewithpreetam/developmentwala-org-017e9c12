@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { Briefcase, GraduationCap, Star, BookOpen, DollarSign, Calendar, ArrowRight } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, BookOpen, IndianRupee, Calendar, ArrowRight } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import SEOHead from '../components/shared/SEOHead';
@@ -31,7 +31,7 @@ const types = [
     page: 'SubmitScholarship',
   },
   {
-    icon: DollarSign, color: 'bg-green-50 text-green-600 border-green-200', btnColor: 'bg-green-600 hover:bg-green-700',
+    icon: IndianRupee, color: 'bg-green-50 text-green-600 border-green-200', btnColor: 'bg-green-600 hover:bg-green-700',
     label: 'Grant', desc: 'Funding opportunities for NGOs, nonprofits, and social enterprises.',
     page: 'SubmitGrant',
   },
