@@ -618,6 +618,11 @@ export default function EntityDetailPage({
               </Link>
             </aside>
           </div>
+
+          {/* Organization Information — synced from the employer's Organization Profile */}
+          <div className="mt-10">
+            <OrganizationInfoSection orgData={orgData} fallbackOrgName={orgName} />
+          </div>
         </div>
       </main>
       <Footer />
