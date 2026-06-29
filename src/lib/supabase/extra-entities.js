@@ -41,7 +41,7 @@ function mapBlogCategory(row) {
 
 export const BlogPost = {
   async list(sort = '-created_at', limit = 100) {
-    const { data, error } = await supabase.from('blog_posts').select('*').limit(limit);
+    const { data, error } = await supabase.from('blog_posts').select('*').order('created_at', { ascending: false }).limit(limit);
     if (error) throw error;
     return sortRows((data || []).map(mapBlogPost), sort === '-created_date' ? '-created_at' : sort);
   },
@@ -50,7 +50,8 @@ export const BlogPost = {
     if (criteria.status) query = query.eq('status', criteria.status);
     if (criteria.slug) query = query.eq('slug', criteria.slug);
     if (criteria.id) query = query.eq('id', criteria.id);
-    const { data, error } = await query.limit(limit);
+    const { data, error } = await query.order('created_at', { ascending: false }).limit(limit);
+
     if (error) throw error;
     let rows = (data || []).map(mapBlogPost);
     if (criteria.categories?.length) {
