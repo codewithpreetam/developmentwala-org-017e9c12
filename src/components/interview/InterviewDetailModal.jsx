@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { X, Video, Calendar, Clock, User, AlertCircle, CheckCircle2, RotateCcw, ExternalLink } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -24,6 +25,28 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
   const [action, setAction] = useState(null); // 'cancel' | 'reschedule' | 'complete'
   const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
+  const [candidate, setCandidate] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadCandidate() {
+      if (!interview?.candidate_email) return;
+      const { data } = await supabase
+        .from('users')
+        .select('first_name,last_name,email,profile_image_url,phone')
+        .eq('email', interview.candidate_email)
+        .maybeSingle();
+      if (!cancelled && data) setCandidate(data);
+    }
+    loadCandidate();
+    return () => { cancelled = true; };
+  }, [interview?.candidate_email]);
+
+  const candidateName = (
+    [candidate?.first_name, candidate?.last_name].filter(Boolean).join(' ').trim()
+    || interview.candidate_name
+    || (interview.candidate_email ? interview.candidate_email.split('@')[0] : 'Candidate')
+  );
 
   const handleAction = async () => {
     setSaving(true);
@@ -74,12 +97,17 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
         <div className="p-6 space-y-4">
           {/* Candidate */}
           <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
-              <User className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <div className="font-semibold text-gray-900">{interview.candidate_name || 'Candidate'}</div>
-              <div className="text-sm text-gray-500">{interview.candidate_email}</div>
+            {candidate?.profile_image_url ? (
+              <img src={candidate.profile_image_url} alt={candidateName} className="w-10 h-10 rounded-xl object-cover shrink-0" />
+            ) : (
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+                <User className="w-5 h-5 text-blue-600" />
+              </div>
+            )}
+            <div className="min-w-0">
+              <div className="font-semibold text-gray-900 truncate">{candidateName}</div>
+              <div className="text-sm text-gray-500 truncate">{interview.candidate_email}</div>
+              {candidate?.phone && <div className="text-xs text-gray-500 truncate">{candidate.phone}</div>}
             </div>
           </div>
 
@@ -109,8 +137,8 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-semibold text-green-700 mb-0.5">{platformLabels[interview.meeting_platform] || 'Meeting'}</div>
                 <a href={interview.meeting_link} target="_blank" rel="noopener noreferrer"
-                  className="text-xs text-green-800 truncate hover:underline flex items-center gap-1">
-                  {interview.meeting_link} <ExternalLink className="w-3 h-3 shrink-0" />
+                  className="text-xs text-green-800 hover:underline inline-flex items-center gap-1 max-w-full">
+                  <span className="truncate">{interview.meeting_link}</span> <ExternalLink className="w-3 h-3 shrink-0" />
                 </a>
               </div>
               {canJoin && (
@@ -124,7 +152,7 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
 
           {/* Notes */}
           {interview.notes && (
-            <div className="text-sm text-gray-600 bg-yellow-50 rounded-xl p-3 border border-yellow-100">
+            <div className="text-sm text-gray-600 bg-yellow-50 rounded-xl p-3 border border-yellow-100 break-words whitespace-pre-wrap">
               <span className="font-semibold">Notes:</span> {interview.notes}
             </div>
           )}
