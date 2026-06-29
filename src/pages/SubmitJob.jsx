@@ -128,7 +128,6 @@ export default function SubmitJob() {
   if (submitted) {
     return (
       <div>
-        <Navbar />
         <div className="max-w-xl mx-auto px-4 py-24 text-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-10 h-10 text-green-600" />
@@ -140,7 +139,7 @@ export default function SubmitJob() {
               : 'Your listing has been submitted for review. Our team will publish it within 24-48 hours. Thank you!'}
           </p>
         </div>
-        <Footer />
+
       </div>
     );
   }
