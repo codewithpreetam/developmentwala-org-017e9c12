@@ -426,6 +426,30 @@ export default function EmployerDashboard() {
 
   const typeBadge = { job: 'bg-blue-50 text-blue-700', internship: 'bg-purple-50 text-purple-700', fellowship: 'bg-indigo-50 text-indigo-700', scholarship: 'bg-yellow-50 text-yellow-700', grant: 'bg-green-50 text-green-700', event: 'bg-pink-50 text-pink-700' };
   const detailPageMap = { job: 'JobDetail', internship: 'InternshipDetail', fellowship: 'FellowshipDetail', scholarship: 'ScholarshipDetail', grant: 'GrantDetail', event: 'EventDetail' };
+  const entityByType = {
+    job: base44.entities.Job,
+    internship: base44.entities.Internship,
+    fellowship: base44.entities.Fellowship,
+    scholarship: base44.entities.Scholarship,
+    grant: base44.entities.Grant,
+    event: base44.entities.Event,
+  };
+  const [deletingPostId, setDeletingPostId] = useState(null);
+  const handleDeletePost = async (post) => {
+    const ent = entityByType[post._type];
+    if (!ent?.delete) return;
+    if (!window.confirm(`Delete "${post.title}"? This cannot be undone.`)) return;
+    try {
+      setDeletingPostId(post.id);
+      await ent.delete(post.id);
+      setMyJobs((prev) => prev.filter((j) => !(j.id === post.id && j._type === post._type)));
+      if (selectedJobId === post.id) setSelectedJobId('');
+    } catch (err) {
+      window.alert(err?.message || 'Could not delete this post.');
+    } finally {
+      setDeletingPostId(null);
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-[#f4f6fb]">
@@ -824,6 +848,7 @@ export default function EmployerDashboard() {
                         <button onClick={() => { setSelectedJobId(job.id); setTab('applicants'); }} className="flex items-center gap-1.5 text-xs text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 font-medium"><Users className="w-3.5 h-3.5" /> Applicants</button>
                         <Link to={createPageUrl(`EditOpportunity?id=${job.id}&type=${job._type}`)} className="flex items-center gap-1.5 text-xs text-orange-600 bg-orange-50 px-3 py-1.5 rounded-lg hover:bg-orange-100 font-medium"><Pencil className="w-3.5 h-3.5" /> Edit</Link>
                         <Link to={createPageUrl(`${detailPageMap[job._type] || 'JobDetail'}?id=${job.id}`)} className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg hover:bg-gray-100 font-medium"><Eye className="w-3.5 h-3.5" /> View</Link>
+                        <button onClick={() => handleDeletePost(job)} disabled={deletingPostId === job.id} className="flex items-center gap-1.5 text-xs text-red-600 bg-red-50 px-3 py-1.5 rounded-lg hover:bg-red-100 font-medium disabled:opacity-60"><Trash2 className="w-3.5 h-3.5" /> {deletingPostId === job.id ? 'Deleting…' : 'Delete'}</button>
                       </div>
                     </div>
                   ))}
