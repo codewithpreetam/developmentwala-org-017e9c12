@@ -6,6 +6,8 @@ import { createClient } from '@/lib/supabase/client';
 
 const supabase = createClient();
 import { useAdminAuth } from '../components/admin/AdminAuth';
+import { useAuth } from '../components/auth/AuthContext';
+import UserAvatar from '../components/shared/UserAvatar';
 import {
   LayoutDashboard, Plus, Inbox, List, LogOut, Briefcase,
   Clock, CheckCircle2, XCircle, Trash2, Eye, EyeOff,
