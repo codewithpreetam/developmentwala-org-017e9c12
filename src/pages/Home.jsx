@@ -133,8 +133,8 @@ async function fetchHomeData() {
 
   const featuredItems = allForStats
     .filter((i) => i.featured)
-    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
-    .slice(0, 8);
+    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+
 
   const orgCount = {};
   const orgSectors = {};
