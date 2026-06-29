@@ -240,20 +240,13 @@ export default function SubmitJob() {
 
                   {showOptional && (
                     <div className="space-y-5">
-                      {/* Organization */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <FormField label={type === 'grant' ? 'Funding Agency' : 'Organization Name'}>
-                          <Input value={form.organization} onChange={(e) => update('organization', e.target.value)}
-                            placeholder={type === 'grant' ? 'e.g. Ford Foundation' : 'Your NGO name'}
-                            className="h-11 rounded-xl border-gray-200" />
-                        </FormField>
-                        <FormField label="Sector">
-                          <Select value={form.sector} onValueChange={v => update('sector', v)}>
-                            <SelectTrigger className="h-11 rounded-xl border-gray-200"><SelectValue placeholder="Select sector" /></SelectTrigger>
-                            <SelectContent>{sectorOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
-                          </Select>
-                        </FormField>
-                      </div>
+                      {/* Sector */}
+                      <FormField label="Sector">
+                        <Select value={form.sector} onValueChange={v => update('sector', v)}>
+                          <SelectTrigger className="h-11 rounded-xl border-gray-200"><SelectValue placeholder="Select sector" /></SelectTrigger>
+                          <SelectContent>{sectorOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+                        </Select>
+                      </FormField>
 
                       {/* Location */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
