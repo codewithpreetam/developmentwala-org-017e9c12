@@ -73,8 +73,8 @@ export default function CreateInterviewModal({ onClose, onCreated, employerEmail
       const interview = await base44.entities.Interview.create({
         ...form,
         employer_email: employerEmail,
+        employer_id: employerId,
         employer_org: orgName,
-        audit_trail: [{ action: 'scheduled', by: employerEmail, at: new Date().toISOString(), note: 'Interview scheduled by employer' }],
       });
 
       await base44.entities.Notification.create({
