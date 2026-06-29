@@ -118,23 +118,61 @@ export default function JobDetail() {
     if (existing.length > 0) setApplied(true);
   };
 
+  const handleCvUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast.error('CV must be 5 MB or smaller.'); return; }
+    const allowed = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (file.type && !allowed.includes(file.type)) { toast.error('Please upload a PDF or Word document.'); return; }
+    setUploadingCv(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setNewCvUrl(file_url);
+      setFormErrors((p) => ({ ...p, cvUrl: undefined }));
+      toast.success('CV uploaded.');
+    } catch (err) {
+      toast.error(err?.message || 'Could not upload your CV.');
+    } finally {
+      setUploadingCv(false);
+    }
+  };
+
   const handleApply = async () => {
     if (!user) { base44.auth.redirectToLogin(window.location.href); return; }
+    const cvUrl = cvChoice === 'profile' ? (userProfile?.cv_url || '') : newCvUrl;
+    const errs = {};
+    if (coverLetter.trim().length > 0 && coverLetter.trim().length < 30) {
+      errs.coverLetter = 'If you include a cover letter, write at least 30 characters.';
+    }
+    if (coverLetter.length > 2000) errs.coverLetter = 'Cover letter must be 2000 characters or fewer.';
+    if (!cvUrl) errs.cvUrl = 'Please attach a CV before submitting.';
+    setFormErrors(errs);
+    if (Object.keys(errs).length) return;
     setApplying(true);
-    await base44.entities.Application.create({
-      opportunity_id: job.id,
-      opportunity_title: job.title,
-      opportunity_type: job.opportunity_type || 'job',
-      organization: job.organization || job.funding_agency || '',
-      applicant_email: user.email,
-      applicant_name: user.full_name || '',
-      cover_letter: coverLetter,
-      employer_email: job.submitted_by_email || '',
-      status: 'applied',
-    });
-    setApplied(true);
-    setApplying(false);
-    setShowApplyModal(false);
+    try {
+      if (cvChoice === 'new' && newCvUrl && userProfile?.id) {
+        base44.entities.UserProfile.update(userProfile.id, { cv_url: userProfile.cv_url || newCvUrl }).catch(() => {});
+      }
+      await base44.entities.Application.create({
+        opportunity_id: job.id,
+        opportunity_title: job.title,
+        opportunity_type: job.opportunity_type || 'job',
+        organization: job.organization || job.funding_agency || '',
+        applicant_email: user.email,
+        applicant_name: user.full_name || '',
+        cover_letter: coverLetter,
+        cv_url: cvUrl,
+        employer_email: job.submitted_by_email || '',
+        status: 'applied',
+      });
+      setApplied(true);
+      setShowApplyModal(false);
+      toast.success('Application submitted!');
+    } catch (err) {
+      toast.error(err?.message || 'Could not submit application.');
+    } finally {
+      setApplying(false);
+    }
   };
 
   const handleShare = () => {
