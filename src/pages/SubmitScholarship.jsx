@@ -87,10 +87,7 @@ export default function SubmitScholarship() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="About the scholarship, benefits, selection process..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Provider / Donor Name">
-            <Input value={form.provider_name} onChange={e => u('provider_name', e.target.value)} placeholder="e.g. Tata Trusts, Ford Foundation" className="h-11 rounded-xl" />
-          </FormField>
+        <div>
           <FormField label="Provider Type">
             <Select value={form.provider_type} onValueChange={v => u('provider_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
