@@ -45,8 +45,10 @@ export default function SignUp() {
       setError('Passwords do not match.');
       return;
     }
-    if (form.password.length < 8) {
-      setError('Password must be at least 8 characters.');
+    const pw = form.password;
+    const pwOk = pw.length >= 8 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw) && /[^A-Za-z0-9]/.test(pw);
+    if (!pwOk) {
+      setError('Password must be at least 8 characters and include an uppercase letter, a lowercase letter, a number, and a symbol.');
       return;
     }
     setSubmitting(true);
