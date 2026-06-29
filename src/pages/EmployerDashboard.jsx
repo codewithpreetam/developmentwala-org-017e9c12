@@ -835,11 +835,16 @@ export default function EmployerDashboard() {
           {/* APPLICANTS */}
           {tab === 'applicants' && (
             <div>
-              <div className="flex items-center gap-4 mb-5 flex-wrap">
-                <h2 className="text-lg font-bold text-gray-900">Applicants</h2>
+              <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900">Applicants</h2>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {filteredApplicants.length} of {applicants.length} candidate{applicants.length === 1 ? '' : 's'} shown
+                  </p>
+                </div>
                 {myJobs.length > 0 && (
                   <Select value={selectedJobId} onValueChange={(v) => setSelectedJobId(v)}>
-                    <SelectTrigger className="w-72 rounded-xl"><SelectValue placeholder="Select opportunity" /></SelectTrigger>
+                    <SelectTrigger className="w-full sm:w-72 rounded-xl"><SelectValue placeholder="Select opportunity" /></SelectTrigger>
                     <SelectContent>
                       {myJobs.map((j) => (
                         <SelectItem key={`${j._type}-${j.id}`} value={j.id}>{j.title}</SelectItem>
@@ -848,33 +853,109 @@ export default function EmployerDashboard() {
                   </Select>
                 )}
               </div>
+
+              {/* Filters bar */}
+              {applicants.length > 0 && (
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 mb-4 flex flex-col lg:flex-row gap-2 lg:items-center">
+                  <div className="relative flex-1 min-w-[200px]">
+                    <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Input
+                      placeholder="Search by name or email…"
+                      value={applicantSearch}
+                      onChange={(e) => setApplicantSearch(e.target.value)}
+                      className="h-10 pl-9 rounded-xl border-gray-200"
+                    />
+                  </div>
+                  <Select value={applicantFilter} onValueChange={setApplicantFilter}>
+                    <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl">
+                      <Filter className="w-3.5 h-3.5 text-gray-400 mr-1" />
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All statuses ({applicants.length})</SelectItem>
+                      {statusOptions.map(s => {
+                        const count = applicants.filter(a => a.status === s.value).length;
+                        return <SelectItem key={s.value} value={s.value}>{s.label} ({count})</SelectItem>;
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <Select value={applicantSort} onValueChange={setApplicantSort}>
+                    <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl">
+                      <SlidersHorizontal className="w-3.5 h-3.5 text-gray-400 mr-1" />
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="recent">Newest first</SelectItem>
+                      <SelectItem value="oldest">Oldest first</SelectItem>
+                      <SelectItem value="name">Name (A–Z)</SelectItem>
+                      <SelectItem value="status">Status</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
               {applicants.length === 0 ? (
                 <div className="bg-white rounded-2xl shadow-sm p-10 text-center"><Users className="w-10 h-10 text-gray-200 mx-auto mb-3" /><p className="text-gray-500">No applicants yet for this opportunity.</p></div>
+              ) : filteredApplicants.length === 0 ? (
+                <div className="bg-white rounded-2xl shadow-sm p-10 text-center"><Search className="w-10 h-10 text-gray-200 mx-auto mb-3" /><p className="text-gray-500">No applicants match your filters.</p></div>
               ) : (
                 <div className="space-y-3">
-                  {applicants.map(app => {
+                  {filteredApplicants.map(app => {
                     const currentStatus = statusOptions.find(s => s.value === app.status);
                     const historyCount = Array.isArray(app.status_history) ? app.status_history.length : 0;
+                    const isShortlisted = ['shortlisted', 'interview', 'selected'].includes(app.status);
+                    const isRejected = app.status === 'rejected';
+                    const cvLink = app.cv_url;
                     return (
-                      <div key={app.id} className="bg-white rounded-xl shadow-sm p-5">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900">{app.applicant_name || app.applicant_email}</h3>
-                            <p className="text-sm text-gray-500">{app.applicant_email}</p>
-                            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                              {currentStatus && <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${currentStatus.color}`}>{currentStatus.label}</span>}
-                              {historyCount > 0 && <span className="text-xs text-gray-400 flex items-center gap-1"><History className="w-3 h-3" /> {historyCount} update{historyCount !== 1 ? 's' : ''}</span>}
+                      <div key={app.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+                        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                          <div className="flex items-start gap-3 flex-1 min-w-0">
+                            <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-white text-base font-bold" style={{ background: ACCENT }}>
+                              {(app.applicant_name || app.applicant_email || 'A').charAt(0).toUpperCase()}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <h3 className="font-semibold text-gray-900 truncate">{app.applicant_name || app.applicant_email}</h3>
+                              <p className="text-xs text-gray-500 truncate">{app.applicant_email}</p>
+                              <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                                {currentStatus && <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${currentStatus.color}`}>{currentStatus.label}</span>}
+                                {app.opportunity_title && <span className="text-[11px] text-gray-500 flex items-center gap-1"><Briefcase className="w-3 h-3" />{app.opportunity_title}</span>}
+                                {app.created_date && <span className="text-[11px] text-gray-400 flex items-center gap-1"><Clock className="w-3 h-3" />{new Date(app.created_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
+                                {historyCount > 0 && <span className="text-[11px] text-gray-400 flex items-center gap-1"><History className="w-3 h-3" /> {historyCount} update{historyCount !== 1 ? 's' : ''}</span>}
+                              </div>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <button onClick={() => openApplicantProfile(app)} className="flex items-center gap-1.5 text-xs text-green-700 bg-green-50 px-3 py-1.5 rounded-lg hover:bg-green-100 font-medium border border-green-200"><User className="w-3.5 h-3.5" /> View Profile</button>
-                            <button onClick={() => setStatusModalApp(app)} className="flex items-center gap-1.5 text-xs text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 font-medium border border-blue-200"><Mail className="w-3.5 h-3.5" /> Update Status</button>
+                          <div className="flex items-center gap-2 flex-wrap shrink-0">
+                            <button onClick={() => openApplicantProfile(app)} className="flex items-center gap-1.5 text-xs text-gray-700 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-lg font-medium border border-gray-200"><User className="w-3.5 h-3.5" /> Profile</button>
+                            {cvLink && (
+                              <a href={cvLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg font-medium border border-indigo-200"><Download className="w-3.5 h-3.5" /> CV</a>
+                            )}
+                            {!isShortlisted && !isRejected && (
+                              <button
+                                onClick={() => quickUpdateStatus(app, 'shortlisted', 'Congratulations! Your application has been shortlisted.')}
+                                disabled={quickActionLoading === `${app.id}:shortlisted`}
+                                className="flex items-center gap-1.5 text-xs text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg font-medium border border-indigo-200 disabled:opacity-60"
+                              ><Star className="w-3.5 h-3.5" /> Shortlist</button>
+                            )}
+                            {isShortlisted && app.status !== 'interview' && (
+                              <button
+                                onClick={() => scheduleInterviewFor(app)}
+                                className="flex items-center gap-1.5 text-xs text-purple-700 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-lg font-medium border border-purple-200"
+                              ><CalendarPlus className="w-3.5 h-3.5" /> Schedule Interview</button>
+                            )}
+                            {!isRejected && (
+                              <button
+                                onClick={() => quickUpdateStatus(app, 'rejected', 'Thank you for your interest. After careful review, we have decided to move forward with other candidates.')}
+                                disabled={quickActionLoading === `${app.id}:rejected`}
+                                className="flex items-center gap-1.5 text-xs text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg font-medium border border-red-200 disabled:opacity-60"
+                              ><XCircle className="w-3.5 h-3.5" /> Reject</button>
+                            )}
+                            <button onClick={() => setStatusModalApp(app)} className="flex items-center gap-1.5 text-xs text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg font-medium border border-blue-200"><Mail className="w-3.5 h-3.5" /> Update Status</button>
                           </div>
                         </div>
                         {historyCount > 0 && (
                           <div className="mt-3 pt-3 border-t border-gray-100">
-                            <p className="text-xs text-gray-400 mb-1">Last update:</p>
-                            <p className="text-xs text-gray-600 line-clamp-1">{app.status_history[historyCount - 1]?.message}</p>
+                            <p className="text-xs text-gray-400 mb-1">Last update from {app.status_history[historyCount - 1]?.updated_by || 'employer'}:</p>
+                            <p className="text-xs text-gray-600 line-clamp-2">{app.status_history[historyCount - 1]?.message}</p>
                           </div>
                         )}
                       </div>
@@ -884,6 +965,7 @@ export default function EmployerDashboard() {
               )}
             </div>
           )}
+
 
           {/* EMPLOYER PROFILE */}
           {tab === 'employer_profile' && (
