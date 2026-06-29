@@ -229,13 +229,18 @@ export function mapApplication(row, candidateEmail, jobTitle, candidateUser, ext
   const rawStatus = row.status || 'applied';
   const status = APP_STATUS_MAP[rawStatus] || String(rawStatus).toLowerCase().replace(/\s+/g, '_');
   const oppId = row.opportunity_id || row.job_id;
+  const oppType = row.opportunity_type || 'job';
   const fullName = candidateUser
     ? [candidateUser.first_name, candidateUser.last_name].filter(Boolean).join(' ').trim()
     : '';
+  const slug = extra.opportunity_slug || null;
   return {
     id: row.id,
     opportunity_id: oppId,
-    opportunity_type: row.opportunity_type || 'job',
+    opportunity_type: oppType,
+    opportunity_slug: slug,
+    detail_page: TYPE_SEGMENT[oppType] || 'jobs',
+    detail_url: buildDetailUrl(oppType, { slug }, oppId),
     job_id: row.job_id,
     applicant_email: candidateEmail,
     applicant_name: extra.applicant_name || fullName || null,
@@ -247,9 +252,11 @@ export function mapApplication(row, candidateEmail, jobTitle, candidateUser, ext
     applied_at: row.applied_at,
     opportunity_title: jobTitle || extra.opportunity_title || null,
     title: jobTitle || extra.opportunity_title || null,
+    organization: extra.organization || null,
     employer_email: extra.employer_email || null,
   };
 }
+
 
 const TYPE_SEGMENT = {
   job: 'jobs', internship: 'internships', fellowship: 'fellowships',

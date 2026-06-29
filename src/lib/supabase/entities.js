@@ -613,9 +613,14 @@ const UserProfile = {
 
 async function getOpportunityMeta(type, id) {
   const meta = OPPORTUNITY_TABLES[type] || OPPORTUNITY_TABLES.job;
-  const { data } = await supabase.from(meta.table).select(`${meta.titleCol}, ${meta.employerCol}`).eq('id', id).maybeSingle();
+  const { data } = await supabase
+    .from(meta.table)
+    .select(`${meta.titleCol}, ${meta.employerCol}, slug`)
+    .eq('id', id)
+    .maybeSingle();
   return data;
 }
+
 
 const Application = {
   async filter(criteria = {}, sort = '-applied_at', limit = 200) {
@@ -651,7 +656,9 @@ const Application = {
       }
       return mapApplication(row, email, opp?.title, candidate, {
         opportunity_title: opp?.title,
+        opportunity_slug: opp?.slug || null,
       });
+
     }));
 
     return sortRows(enriched.filter(Boolean), sort === '-created_date' ? '-applied_at' : sort);
