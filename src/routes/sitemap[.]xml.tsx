@@ -32,13 +32,15 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const [jobs, internships, fellowships, scholarships, grants, events] = await Promise.all([
+        const [jobs, internships, fellowships, scholarships, grants, events, blogPosts, blogCategories] = await Promise.all([
           fetchTable("jobs"),
           fetchTable("internships"),
           fetchTable("fellowships"),
           fetchTable("scholarships"),
           fetchTable("grants"),
           fetchTable("events"),
+          fetchTable("blog_posts?status=eq.published"),
+          fetchTable("blog_categories"),
         ]);
 
         const parts: string[] = [];
@@ -56,6 +58,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           ["scholarships", scholarships],
           ["grants", grants],
           ["events", events],
+          ["blog", blogPosts],
+          ["blog/category", blogCategories],
         ];
         for (const [seg, rows] of sections) {
           for (const row of rows) {
@@ -63,6 +67,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             parts.push(urlEntry(`${SITE}/${seg}/${slug}`, row.updated_at || row.created_at, "daily", "0.9"));
           }
         }
+
 
         parts.push("</urlset>");
         return new Response(parts.join(""), {
