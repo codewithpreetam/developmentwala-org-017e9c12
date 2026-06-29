@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Briefcase, GraduationCap, Star, BookOpen, IndianRupee, Calendar, ArrowRight } from 'lucide-react';
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+// Navbar/Footer provided by DashboardShell wrapper route
+
 import SEOHead from '../components/shared/SEOHead';
 import AuthGateModal from '../components/auth/AuthGateModal';
 import { useAuth } from '../components/auth/AuthContext';
@@ -74,7 +74,7 @@ export default function PostOpportunity() {
           description="Post jobs, internships, fellowships, scholarships, grants or events on DevelopmentWala. Reach thousands of social sector professionals for free."
           canonical="https://developmentwala.org/post"
         />
-        <Navbar />
+        
         <main>
           <section className="bg-gradient-to-br from-indigo-600 to-indigo-800 py-16 px-4 text-white text-center">
             <h1 className="text-3xl md:text-4xl font-bold mb-3">Post an Opportunity</h1>
@@ -107,7 +107,7 @@ export default function PostOpportunity() {
             </div>
           </section>
         </main>
-        <Footer />
+
       </div>
     </div>
   );

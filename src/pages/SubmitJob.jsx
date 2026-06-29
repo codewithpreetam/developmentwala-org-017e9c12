@@ -7,8 +7,6 @@ import { CheckCircle2, Loader2, ChevronDown, AlertCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
 import SEOHead from '../components/shared/SEOHead';
 import CountrySelect from '../components/forms/CountrySelect';
 import CountryMultiSelect from '../components/forms/CountryMultiSelect';
@@ -130,7 +128,6 @@ export default function SubmitJob() {
   if (submitted) {
     return (
       <div>
-        <Navbar />
         <div className="max-w-xl mx-auto px-4 py-24 text-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-10 h-10 text-green-600" />
@@ -142,7 +139,7 @@ export default function SubmitJob() {
               : 'Your listing has been submitted for review. Our team will publish it within 24-48 hours. Thank you!'}
           </p>
         </div>
-        <Footer />
+
       </div>
     );
   }
@@ -154,7 +151,8 @@ export default function SubmitJob() {
         description="Post jobs, internships, fellowships, scholarships, grants or events on DevelopmentWala.org. Reach thousands of social sector professionals."
         canonical="https://developmentwala.org/submit-job"
       />
-      <Navbar />
+
+
 
       <main>
         <section className="bg-gray-50 border-b border-gray-200 py-10 px-4">
@@ -413,7 +411,7 @@ export default function SubmitJob() {
         </section>
       </main>
 
-      <Footer />
+
     </div>
   );
 }

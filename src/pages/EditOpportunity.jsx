@@ -6,7 +6,7 @@ import { Save, ArrowLeft, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import Navbar from '../components/layout/Navbar';
+// Navbar provided by DashboardShell wrapper route
 import SEOHead from '../components/shared/SEOHead';
 import CountrySelect from '../components/forms/CountrySelect';
 import { DEFAULT_COUNTRY } from '../components/forms/formOptions';
@@ -97,7 +97,8 @@ export default function EditOpportunity() {
   return (
     <div className="min-h-screen bg-gray-50">
       <SEOHead title={`Edit ${cfg?.label} — DevelopmentWala.org`} description="Edit your opportunity listing." />
-      <Navbar />
+
+
 
       <div className="max-w-3xl mx-auto px-4 py-8">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6">
