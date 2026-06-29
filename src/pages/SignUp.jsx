@@ -133,6 +133,8 @@ export default function SignUp() {
 
           <RoleToggle role={role} onChange={(id) => { setRole(id); setError(''); }} roles={[roleConfig.job_seeker, roleConfig.employer]} />
 
+          <SocialAuthButtons next={next} mode="signup" />
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
