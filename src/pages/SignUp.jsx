@@ -12,6 +12,7 @@ import { roleConfig } from '@/lib/auth/roles';
 import { consumeLoginRoleHint } from '@/lib/auth/redirect';
 import { getLogoUrl, SITE_NAME } from '@/lib/brand';
 import ResendVerification from '../components/auth/ResendVerification';
+import SocialAuthButtons from '../components/auth/SocialAuthButtons';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 
 export default function SignUp() {
