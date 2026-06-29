@@ -10,7 +10,7 @@ export const Route = createFileRoute("/submit-internship")({
 function RouteComponent() {
   return (
     <RequireAuth roles={['employer', 'super_admin']}>
-      <SubmitInternship />
+      <DashboardShell title="Post Opportunity"><SubmitInternship /></DashboardShell>
     </RequireAuth>
   );
 }

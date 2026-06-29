@@ -10,7 +10,7 @@ export const Route = createFileRoute("/submit-grant")({
 function RouteComponent() {
   return (
     <RequireAuth roles={['employer', 'super_admin']}>
-      <SubmitGrant />
+      <DashboardShell title="Post Opportunity"><SubmitGrant /></DashboardShell>
     </RequireAuth>
   );
 }
