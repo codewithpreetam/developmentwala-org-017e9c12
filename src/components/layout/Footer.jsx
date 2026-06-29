@@ -128,9 +128,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Platform */}
+          {/* Opportunity */}
           <div className="col-span-1">
-            <h3 className="font-semibold text-sm text-gray-900 mb-4">Platform</h3>
+            <h3 className="font-semibold text-sm text-gray-900 mb-4">Opportunity</h3>
             <ul className="space-y-3">
               {[
               { label: 'Jobs', to: '/jobs' },
