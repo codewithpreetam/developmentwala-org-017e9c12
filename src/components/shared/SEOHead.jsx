@@ -9,8 +9,9 @@ import React, { useEffect } from 'react';
  * @property {Record<string, unknown>} [structuredData]
  */
 
-/** @param {SEOHeadProps} [props] */
-export default function SEOHead({ title, description, canonical, job, structuredData } = {}) {
+/** @param {SEOHeadProps & { image?: string }} [props] */
+export default function SEOHead({ title, description, canonical, job, structuredData, image } = {}) {
+
   useEffect(() => {
     // Title
     document.title = title || 'DevelopmentWala.org — Find NGO & Social Impact Jobs in India';
