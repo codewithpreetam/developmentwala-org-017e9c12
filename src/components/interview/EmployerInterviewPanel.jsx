@@ -164,13 +164,15 @@ export default function EmployerInterviewPanel({ employerEmail, orgName, allAppl
 
       {showCreate && (
         <CreateInterviewModal
-          onClose={() => setShowCreate(false)}
+          onClose={() => { setShowCreate(false); setPendingPrefill(null); }}
           onCreated={() => loadInterviews()}
           employerEmail={employerEmail}
           orgName={orgName}
-          shortlistedApplicants={shortlistedApplicants}
+          shortlistedApplicants={shortlistedApplicants.length > 0 ? shortlistedApplicants : (pendingPrefill ? [pendingPrefill] : [])}
+          prefillApp={pendingPrefill}
         />
       )}
+
 
       {selectedInterview && (
         <InterviewDetailModal
