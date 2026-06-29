@@ -246,6 +246,18 @@ export function mapApplication(row, candidateEmail, jobTitle, candidateUser, ext
   };
 }
 
+const TYPE_SEGMENT = {
+  job: 'jobs', internship: 'internships', fellowship: 'fellowships',
+  scholarship: 'scholarships', grant: 'grants', event: 'events',
+};
+
+function buildDetailUrl(type, opp, fallbackId) {
+  const seg = TYPE_SEGMENT[type] || 'jobs';
+  if (opp?.slug) return `/${seg}/${opp.slug}`;
+  if (fallbackId) return `/${seg}?id=${fallbackId}`;
+  return `/${seg}`;
+}
+
 export function mapSavedJob(row, job) {
   return {
     id: String(row.id),
@@ -253,7 +265,13 @@ export function mapSavedJob(row, job) {
     opportunity_id: row.job_id,
     opportunity_type: 'job',
     title: job?.title,
+    opportunity_title: job?.title,
     slug: job?.slug,
+    organization: job?.organization || null,
+    deadline: job?.deadline || null,
+    banner_image: job?.banner_image || null,
+    detail_page: 'jobs',
+    detail_url: buildDetailUrl('job', job, row.job_id),
     created_date: row.saved_date || row.created_at,
   };
 }
@@ -265,7 +283,13 @@ export function mapSavedOpportunity(row, opp, type) {
     opportunity_id: row.opportunity_id,
     opportunity_type: type,
     title: opp?.title,
+    opportunity_title: opp?.title,
     slug: opp?.slug,
+    organization: opp?.organization || opp?.organization_name || opp?.funding_agency || opp?.organizer_name || opp?.provider_name || null,
+    deadline: opp?.deadline || opp?.application_deadline || opp?.event_date || null,
+    banner_image: opp?.banner_image || null,
+    detail_page: TYPE_SEGMENT[type] || 'jobs',
+    detail_url: buildDetailUrl(type, opp, row.opportunity_id),
     created_date: row.created_at,
   };
 }
