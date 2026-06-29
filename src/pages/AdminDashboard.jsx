@@ -6,6 +6,8 @@ import { createClient } from '@/lib/supabase/client';
 
 const supabase = createClient();
 import { useAdminAuth } from '../components/admin/AdminAuth';
+import { useAuth } from '../components/auth/AuthContext';
+import UserAvatar from '../components/shared/UserAvatar';
 import {
   LayoutDashboard, Plus, Inbox, List, LogOut, Briefcase,
   Clock, CheckCircle2, XCircle, Trash2, Eye, EyeOff,
@@ -61,6 +63,7 @@ function downloadCSV(data, filename) {
 
 export default function AdminDashboard() {
   const { isAdmin, logout, loading: authLoading } = useAdminAuth();
+  const { user: authUser } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [tab, setTabState] = useState(searchParams.get('tab') || 'overview');
@@ -251,7 +254,7 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center gap-3">
             <NotificationBell userEmail="admin" />
-            <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: ACCENT }}>A</div>
+            <UserAvatar user={authUser} size="sm" background={ACCENT} />
           </div>
         </header>
 
