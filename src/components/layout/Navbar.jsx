@@ -6,6 +6,7 @@ import { useAuth } from '../auth/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { useSiteSettings } from '../../hooks/useSiteSettings';
 import { getLogoUrl, getSiteName } from '@/lib/brand';
+import UserAvatar from '@/components/shared/UserAvatar';
 
 const opportunityLinks = [
   { label: 'Jobs', page: 'Jobs', icon: Briefcase, desc: 'Full-time & contract roles' },
@@ -112,9 +113,7 @@ export default function Navbar() {
                   onBlur={() => setTimeout(() => setUserMenuOpen(false), 150)}
                   className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-black/10 text-sm font-medium text-gray-700 hover:bg-black/5 transition-colors"
                 >
-                  <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <User className="w-3.5 h-3.5 text-gray-600" />
-                  </div>
+                  <UserAvatar user={user} size="xs" background="#111827" />
                   <span className="max-w-24 truncate">{user.full_name || user.email.split('@')[0]}</span>
                   <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -171,6 +170,13 @@ export default function Navbar() {
             <Link to="/blog" onClick={() => setOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-black/5 rounded-xl">Blog</Link>
             {user ? (
               <>
+                <div className="flex items-center gap-3 px-4 py-3 mt-1 border-t border-black/5">
+                  <UserAvatar user={user} size="md" background="#111827" />
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-gray-900 truncate">{user.full_name || user.email?.split('@')[0]}</p>
+                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                  </div>
+                </div>
                 {getDashboardLink() && <Link to={getDashboardLink()} onClick={() => setOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-black/5 rounded-xl">Dashboard</Link>}
                 <button onClick={logout} className="w-full text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 rounded-xl">Sign Out</button>
               </>
