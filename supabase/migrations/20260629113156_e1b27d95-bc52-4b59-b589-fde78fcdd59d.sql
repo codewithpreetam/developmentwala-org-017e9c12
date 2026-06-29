@@ -1,0 +1,15 @@
+
+ALTER TABLE public.employers
+  ALTER COLUMN logo TYPE TEXT,
+  ALTER COLUMN name TYPE TEXT,
+  ALTER COLUMN location TYPE TEXT,
+  ALTER COLUMN tags TYPE TEXT,
+  ALTER COLUMN website TYPE TEXT,
+  ALTER COLUMN email TYPE TEXT,
+  ALTER COLUMN phone TYPE TEXT,
+  ALTER COLUMN social_facebook TYPE TEXT,
+  ALTER COLUMN social_twitter TYPE TEXT,
+  ALTER COLUMN social_linkedin TYPE TEXT,
+  ALTER COLUMN social_instagram TYPE TEXT,
+  ALTER COLUMN company_size TYPE TEXT,
+  ALTER COLUMN founded TYPE TEXT;
