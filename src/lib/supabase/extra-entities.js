@@ -41,7 +41,7 @@ function mapBlogCategory(row) {
 
 export const BlogPost = {
   async list(sort = '-created_at', limit = 100) {
-    const { data, error } = await supabase.from('blog_posts').select('*').limit(limit);
+    const { data, error } = await supabase.from('blog_posts').select('*').order('created_at', { ascending: false }).limit(limit);
     if (error) throw error;
     return sortRows((data || []).map(mapBlogPost), sort === '-created_date' ? '-created_at' : sort);
   },
