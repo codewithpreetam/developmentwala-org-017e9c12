@@ -18,6 +18,7 @@ import BlogManager from '../components/admin/BlogManager';
 import { format } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
 import NotificationBell from '../components/shared/NotificationBell';
+import AdminMessagesPanel from '../components/messaging/AdminMessagesPanel';
 
 const ACCENT = '#4F46E5';
 
