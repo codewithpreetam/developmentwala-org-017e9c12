@@ -135,47 +135,82 @@ export default function EntityDetailPage({
   const handleCvUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('CV must be 5 MB or smaller.');
+      return;
+    }
+    const allowed = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (file.type && !allowed.includes(file.type)) {
+      toast.error('Please upload a PDF or Word document.');
+      return;
+    }
     setUploadingCv(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setNewCvUrl(file_url);
-    setUploadingCv(false);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setNewCvUrl(file_url);
+      setFormErrors((prev) => ({ ...prev, cvUrl: undefined }));
+      toast.success('CV uploaded.');
+    } catch (err) {
+      toast.error(err?.message || 'Could not upload your CV.');
+    } finally {
+      setUploadingCv(false);
+    }
   };
 
   const handleApply = async () => {
     if (!user) {
       setLoginRoleHint('job_seeker');
-      redirectToSignIn(window.location.href);
+      redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '');
       return;
     }
+
+    const cvUrl = cvChoice === 'profile' ? (userProfile?.cv_url || '') : newCvUrl;
+    const parsed = applySchema.safeParse({ coverLetter, cvUrl });
+    if (!parsed.success) {
+      const errors = {};
+      for (const issue of parsed.error.issues) {
+        errors[issue.path[0]] = issue.message;
+      }
+      setFormErrors(errors);
+      toast.error('Please fix the highlighted fields.');
+      return;
+    }
+    setFormErrors({});
     setApplying(true);
-    // Determine which CV URL to attach
-    let cvUrl = '';
-    if (cvChoice === 'profile') {
-      cvUrl = userProfile?.cv_url || '';
-    } else {
-      cvUrl = newCvUrl;
-      // Also update profile CV if user uploaded a new one
-      if (newCvUrl && userProfile?.id) {
+    try {
+      if (cvChoice === 'new' && newCvUrl && userProfile?.id) {
         await base44.entities.UserProfile.update(userProfile.id, { cv_url: newCvUrl }).catch(() => {});
       }
+      const orgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name || '';
+      await base44.entities.Application.create({
+        opportunity_id: item.id,
+        opportunity_title: item.title,
+        opportunity_type: resolvedType,
+        organization: orgName,
+        applicant_email: user.email,
+        applicant_name: user.full_name || '',
+        cover_letter: parsed.data.coverLetter,
+        cv_url: parsed.data.cvUrl,
+        employer_email: item.submitted_by_email || '',
+        status: 'applied',
+      });
+      setApplied(true);
+      setShowApplyModal(false);
+      setCoverLetter('');
+      toast.success('Application submitted! The employer has been notified.');
+    } catch (err) {
+      if (err?.code === 'ALREADY_APPLIED') {
+        setApplied(true);
+        setShowApplyModal(false);
+        toast.info('You have already applied to this opportunity.');
+      } else {
+        toast.error(err?.message || 'Could not submit your application. Please try again.');
+      }
+    } finally {
+      setApplying(false);
     }
-    const orgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name || '';
-    await base44.entities.Application.create({
-      opportunity_id: item.id,
-      opportunity_title: item.title,
-      opportunity_type: resolvedType,
-      organization: orgName,
-      applicant_email: user.email,
-      applicant_name: user.full_name || '',
-      cover_letter: coverLetter,
-      cv_url: cvUrl || null,
-      employer_email: item.submitted_by_email || '',
-      status: 'applied',
-    });
-    setApplied(true);
-    setApplying(false);
-    setShowApplyModal(false);
   };
+
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
