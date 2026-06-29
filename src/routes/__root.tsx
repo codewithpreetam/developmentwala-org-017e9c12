@@ -90,6 +90,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "DevelopmentWala.org" },
+      { property: "og:title", content: "DevelopmentWala.org — NGO & Social Sector Jobs, Internships, Fellowships, Scholarships in India" },
+      { name: "twitter:title", content: "DevelopmentWala.org — NGO & Social Sector Jobs, Internships, Fellowships, Scholarships in India" },
+      { property: "og:description", content: "India's dedicated platform for NGO, CSR and social sector careers. Find jobs, internships, fellowships, scholarships, grants and events from leading NGOs and development organisations." },
+      { name: "twitter:description", content: "India's dedicated platform for NGO, CSR and social sector careers. Find jobs, internships, fellowships, scholarships, grants and events from leading NGOs and development organisations." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ca07a508-6890-46ca-9335-583d53ce05f9/id-preview-65dbd284--dc561459-630b-4294-ade1-8769095cc7b5.lovable.app-1782714640390.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ca07a508-6890-46ca-9335-583d53ce05f9/id-preview-65dbd284--dc561459-630b-4294-ade1-8769095cc7b5.lovable.app-1782714640390.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
