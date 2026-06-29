@@ -162,8 +162,14 @@ export default function EditOpportunity() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Location */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Location</label>
-                <Input value={form.location || ''} onChange={e => u('location', e.target.value)} placeholder="City, State" className="h-11 rounded-xl" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Location / City</label>
+                <Input value={form.location || form.city || ''} onChange={e => u('location', e.target.value)} placeholder="City" className="h-11 rounded-xl" />
+              </div>
+
+              {/* State */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">State</label>
+                <Input value={form.state || ''} onChange={e => u('state', e.target.value)} placeholder="e.g. Maharashtra" className="h-11 rounded-xl" />
               </div>
 
               {/* Location type */}
@@ -203,6 +209,20 @@ export default function EditOpportunity() {
                 </>
               )}
 
+              {/* Job-specific: Salary + Experience */}
+              {type === 'job' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Salary (₹)</label>
+                    <Input value={form.salary || ''} onChange={e => u('salary', e.target.value)} placeholder="e.g. ₹5-8 LPA" className="h-11 rounded-xl" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Experience Required</label>
+                    <Input value={form.experience_required || ''} onChange={e => u('experience_required', e.target.value)} placeholder="e.g. 2+ years or Fresher" className="h-11 rounded-xl" />
+                  </div>
+                </>
+              )}
+
               {/* Sector */}
               {form.sector !== undefined && (
                 <div>
@@ -214,16 +234,17 @@ export default function EditOpportunity() {
                 </div>
               )}
 
-              {/* Apply URL */}
-              {(type === 'job') && (
+              {/* Apply URL / Application Link — admin only.
+                  Employers' applicants apply directly through the website. */}
+              {isAdmin && (type === 'job') && (
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Apply URL</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Apply URL <span className="text-xs font-normal text-gray-400">(admin)</span></label>
                   <Input value={form.apply_url || ''} onChange={e => u('apply_url', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
                 </div>
               )}
-              {(type === 'internship' || type === 'fellowship' || type === 'scholarship' || type === 'grant') && (
+              {isAdmin && (type === 'internship' || type === 'fellowship' || type === 'scholarship' || type === 'grant') && (
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Application Link</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Application Link <span className="text-xs font-normal text-gray-400">(admin)</span></label>
                   <Input value={form.application_link || ''} onChange={e => u('application_link', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
                 </div>
               )}
@@ -240,54 +261,17 @@ export default function EditOpportunity() {
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Tags (comma-separated)</label>
               <Input value={form.tags || ''} onChange={e => u('tags', e.target.value)} placeholder="education, youth, NGO" className="h-11 rounded-xl" />
             </div>
-
-            {/* Banner Image */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Banner Image</label>
-              {form.banner_image && (
-                <div className="relative mb-3 rounded-xl overflow-hidden aspect-video w-full max-w-sm">
-                  <img src={form.banner_image} alt="Banner" className="w-full h-full object-cover" />
-                  <button onClick={() => u('banner_image', '')} className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              )}
-              <label className="cursor-pointer flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
-                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                {uploading ? 'Uploading...' : 'Upload Banner Image'}
-                <input type="file" accept="image/*" onChange={handleBannerUpload} className="hidden" disabled={uploading} />
-              </label>
-            </div>
-
-            {/* Logo */}
-            {(type === 'job') && (
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Organization Logo</label>
-                {form.logo_url && (
-                  <div className="relative mb-3 w-20 h-20 rounded-xl overflow-hidden border border-gray-200">
-                    <img src={form.logo_url} alt="Logo" className="w-full h-full object-contain" />
-                    <button onClick={() => u('logo_url', '')} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600">
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-                )}
-                <label className="cursor-pointer flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
-                  {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                  {uploading ? 'Uploading...' : 'Upload Logo'}
-                  <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" disabled={uploading} />
-                </label>
-              </div>
-            )}
           </div>
 
           <div className="flex gap-3 mt-8">
-            <button onClick={save} disabled={saving || uploading}
+            <button onClick={save} disabled={saving}
               className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold px-8 py-3 rounded-xl text-sm flex items-center gap-2">
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {saving ? 'Saving...' : 'Save Changes'}
             </button>
             <button onClick={() => navigate(-1)} className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-6 py-3 rounded-xl text-sm">
               Cancel
+
             </button>
           </div>
         </div>
