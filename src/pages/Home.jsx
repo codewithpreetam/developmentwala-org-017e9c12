@@ -115,9 +115,13 @@ async function fetchHomeData() {
   ];
 
   const sectorSet = new Set();
+  const sectorCounts = {};
   allForStats.forEach((item) => {
-    const sector = item.sector || item.role_category || item.field || item.tags;
-    if (sector) sectorSet.add(String(sector).toLowerCase());
+    const raw = item.sector || item.role_category || item.field;
+    if (!raw) return;
+    const key = String(raw).toLowerCase();
+    sectorSet.add(key);
+    sectorCounts[key] = (sectorCounts[key] || 0) + 1;
   });
 
   const stats = {
@@ -133,9 +137,15 @@ async function fetchHomeData() {
     .slice(0, 8);
 
   const orgCount = {};
+  const orgSectors = {};
   allForStats.forEach((item) => {
     const name = orgNameFromItem(item);
-    if (name) orgCount[name] = (orgCount[name] || 0) + 1;
+    if (!name) return;
+    orgCount[name] = (orgCount[name] || 0) + 1;
+    if (item.sector) {
+      orgSectors[name] = orgSectors[name] || new Set();
+      orgSectors[name].add(String(item.sector).toLowerCase());
+    }
   });
   const sortedOrgs = Object.entries(orgCount).sort((a, b) => b[1] - a[1]).slice(0, 9);
   const orgMap = {};
@@ -143,6 +153,7 @@ async function fetchHomeData() {
   const topOrgs = sortedOrgs.map(([name, count]) => ({
     name,
     count,
+    sectors: Array.from(orgSectors[name] || []).slice(0, 2),
     org: orgMap[name.toLowerCase()] || null,
   }));
 
@@ -152,6 +163,7 @@ async function fetchHomeData() {
     publishedByType,
     featuredItems,
     topOrgs,
+    sectorCounts,
     testimonials: testimonials || [],
     blogPosts: blogPosts || [],
     stats,
