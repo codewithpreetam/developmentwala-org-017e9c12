@@ -6,6 +6,7 @@ import {
   BarChart2, Archive, Bookmark, MessageSquare, Home, LogOut, Save, Bell,
   Mail, MessageCircle, BookmarkCheck, Settings, Inbox, Star, List, FileText,
 } from 'lucide-react';
+import UserAvatar from '@/components/shared/UserAvatar';
 
 const ACCENT = '#4F46E5';
 
