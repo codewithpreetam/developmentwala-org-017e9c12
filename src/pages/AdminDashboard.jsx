@@ -118,11 +118,10 @@ export default function AdminDashboard() {
 
   const toggleFeatured = async (item) => {
     setProcessing(true);
-    const featuredCount = allItems.filter(i => i.featured).length;
-    if (!item.featured && featuredCount >= 8) { alert('Maximum 8 featured opportunities allowed.'); setProcessing(false); return; }
     await getEntity(item._type).update(item.id, { featured: !item.featured });
     await loadAll(); setProcessing(false);
   };
+
 
   const deleteUser = async (userId) => {
     if (!confirm('Delete this user and their profile?')) return;
@@ -185,7 +184,7 @@ export default function AdminDashboard() {
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'settings', label: 'Site Settings', icon: Settings },
     { id: 'pending', label: `Pending${pending.length > 0 ? ` (${pending.length})` : ''}`, icon: Inbox },
-    { id: 'featured', label: `Featured (${featured.length}/8)`, icon: Star },
+    { id: 'featured', label: `Featured (${featured.length})`, icon: Star },
     { id: 'post', label: 'Post New', icon: Plus },
     { id: 'my-posts', label: `My Posts${adminPosts.length ? ` (${adminPosts.length})` : ''}`, icon: User },
     { id: 'all', label: 'All Opportunities', icon: List },
@@ -362,7 +361,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between mb-5">
                     <h2 className="font-bold text-xl text-gray-900 flex items-center gap-2">
                       <Star className="w-5 h-5 text-yellow-500" /> Featured Opportunities
-                      <span className="text-sm font-normal text-gray-500">({featured.length}/8 slots used)</span>
+                      <span className="text-sm font-normal text-gray-500">({featured.length} featured)</span>
                     </h2>
                   </div>
                   {featured.length === 0 ? (
@@ -398,13 +397,9 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                   )}
-                  {featured.length >= 8 && (
-                    <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-xl px-5 py-3 text-sm text-yellow-800 font-medium">
-                      Maximum 8 featured slots reached. Unfeature an existing opportunity to add a new one.
-                    </div>
-                  )}
                 </div>
               )}
+
 
               {/* POST NEW */}
               {tab === 'post' && (

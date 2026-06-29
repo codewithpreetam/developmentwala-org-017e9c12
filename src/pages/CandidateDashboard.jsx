@@ -234,8 +234,8 @@ export default function CandidateDashboard() {
     { id: 'saved', label: 'Saved', icon: Save, badge: savedItems.length },
     { id: 'notifications', label: 'Notifications', icon: Bell, badge: unreadCount },
     { id: 'alerts', label: 'Email Alerts', icon: Mail },
-    { id: 'contact', label: 'Contact Us', icon: MessageCircle },
   ];
+
 
   const statsCards = [
     { label: 'Applications Sent', value: applications.length, color: ACCENT },
@@ -749,37 +749,8 @@ export default function CandidateDashboard() {
             </div>
           )}
 
-          {tab === 'contact' && (
-            <div className="max-w-xl">
-              <div className="bg-white rounded-2xl shadow-sm p-7">
-                <h2 className="text-lg font-bold text-gray-900 mb-1">Contact Us</h2>
-                <p className="text-gray-500 text-sm mb-6">Have a question or need help?</p>
-                {contactSent ? (
-                  <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center">
-                    <CheckCircle2 className="w-10 h-10 text-green-500 mx-auto mb-3" />
-                    <p className="font-semibold text-green-800">Message sent!</p>
-                    <button onClick={() => setContactSent(false)} className="mt-4 text-sm text-green-700 underline">Send another</button>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Subject</label>
-                      <Input value={contactForm.subject} onChange={(e) => setContactForm(f => ({ ...f, subject: e.target.value }))} placeholder="What can we help you with?" className="h-11 rounded-xl" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Message</label>
-                      <Textarea value={contactForm.message} onChange={(e) => setContactForm(f => ({ ...f, message: e.target.value }))} placeholder="Describe your issue or question..." className="min-h-[120px] rounded-xl" />
-                    </div>
-                    <button onClick={submitContact} disabled={contactSending || !contactForm.subject || !contactForm.message}
-                      className="text-white font-bold px-8 py-3 rounded-xl text-sm flex items-center gap-2 disabled:opacity-50"
-                      style={{ background: ACCENT }}>
-                      <MessageCircle className="w-4 h-4" /> {contactSending ? 'Sending...' : 'Send Message'}
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+
+
         </main>
         </PullToRefresh>
       </div>

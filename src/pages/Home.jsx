@@ -133,8 +133,8 @@ async function fetchHomeData() {
 
   const featuredItems = allForStats
     .filter((i) => i.featured)
-    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
-    .slice(0, 8);
+    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+
 
   const orgCount = {};
   const orgSectors = {};
@@ -394,21 +394,15 @@ export default function Home() {
                       to={opportunityDetailUrl(item, item._type)}
                       className="group relative bg-white border border-gray-100 hover:border-transparent rounded-2xl overflow-hidden hover:shadow-[0_20px_50px_-20px_rgba(0,0,0,0.18)] hover:-translate-y-1 transition-all duration-300 flex flex-col"
                     >
-                      <div className="relative h-40 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
-                        {item.banner_image ? (
-                          <img src={item.banner_image} alt={item.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Building2 className="w-10 h-10 text-gray-300" />
-                          </div>
-                        )}
-                        <div className="absolute top-3 left-3">
-                          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full capitalize backdrop-blur bg-white/90 shadow-sm ${typeBadgeColor[item._type] || 'text-gray-700'}`}>
+                      <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full capitalize ${typeBadgeColor[item._type] || 'bg-gray-50 text-gray-700'}`}>
                             {item._type}
                           </span>
+                          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded-full">
+                            <Star className="w-3 h-3 fill-amber-500 text-amber-500" /> Featured
+                          </span>
                         </div>
-                      </div>
-                      <div className="p-4 sm:p-5 flex-1 flex flex-col">
                         <h3 className="font-semibold text-gray-900 text-sm leading-snug group-hover:text-blue-600 transition-colors line-clamp-2 mb-3">{item.title}</h3>
                         <div className="mt-auto space-y-1.5 text-xs text-gray-500">
                           {orgName && (
@@ -433,6 +427,7 @@ export default function Home() {
                     </Link>
                   );
                 })}
+
               </div>
             </div>
           </section>
