@@ -683,6 +683,11 @@ export default function AdminDashboard() {
                   <NotificationsPanel userEmail={authUser.email} role="admin" />
                 </div>
               )}
+
+              {/* PROFILE */}
+              {tab === 'profile' && authUser && (
+                <AdminProfileSection user={authUser} ACCENT={ACCENT} />
+              )}
             </>
           )}
         </main>
