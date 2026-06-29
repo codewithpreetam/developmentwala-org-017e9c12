@@ -41,8 +41,9 @@ export const Route = createFileRoute("/sitemap.xml")({
           fetchTable("scholarships"),
           fetchTable("grants"),
           fetchTable("events"),
-          fetchTable("blog_posts?status=eq.published"),
+          fetchTable("blog_posts", "status=eq.published"),
           fetchTable("blog_categories"),
+
         ]);
 
         const parts: string[] = [];
