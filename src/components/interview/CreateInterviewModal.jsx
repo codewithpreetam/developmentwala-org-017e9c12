@@ -67,25 +67,30 @@ export default function CreateInterviewModal({ onClose, onCreated, employerEmail
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
-    const interview = await base44.entities.Interview.create({
-      ...form,
-      employer_email: employerEmail,
-      employer_org: orgName,
-      audit_trail: [{ action: 'scheduled', by: employerEmail, at: new Date().toISOString(), note: 'Interview scheduled by employer' }],
-    });
+    try {
+      const interview = await base44.entities.Interview.create({
+        ...form,
+        employer_email: employerEmail,
+        employer_org: orgName,
+        audit_trail: [{ action: 'scheduled', by: employerEmail, at: new Date().toISOString(), note: 'Interview scheduled by employer' }],
+      });
 
-    // Notify candidate
-    await base44.entities.Notification.create({
-      user_email: form.candidate_email,
-      title: 'Interview Scheduled',
-      message: `Your interview for "${form.job_title}" has been scheduled on ${form.date} at ${form.start_time}.\n\nType: ${form.interview_type.replace(/_/g, ' ')}\n\nMeeting Link: ${form.meeting_link || 'To be shared'}`,
-      type: 'interview_scheduled',
-      read: false,
-    }).catch(() => {});
+      await base44.entities.Notification.create({
+        user_email: form.candidate_email,
+        title: 'Interview Scheduled',
+        message: `Your interview for "${form.job_title}" has been scheduled on ${form.date} at ${form.start_time}.\n\nType: ${form.interview_type.replace(/_/g, ' ')}\n\nMeeting Link: ${form.meeting_link || 'To be shared'}`,
+        type: 'interview_scheduled',
+        read: false,
+      }).catch(() => {});
 
-    setSaving(false);
-    onCreated(interview);
-    onClose();
+      onCreated(interview);
+      onClose();
+    } catch (err) {
+      console.error('Failed to schedule interview:', err);
+      alert(`Failed to schedule interview: ${err?.message || 'Unknown error'}`);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
