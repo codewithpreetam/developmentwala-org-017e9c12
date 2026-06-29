@@ -403,7 +403,7 @@ export default function SubmitJob() {
                 )}
 
                 <button type="submit"
-                  disabled={submitting || !form.title.trim() || !form.description.trim() || !form.deadline || (type === 'job' && !form.salary.trim()) || ((type === 'fellowship' || type === 'internship') && !form.stipend_amount.trim()) || (type === 'grant' && !form.grant_amount.trim())}
+                  disabled={submitting || !form.title.trim() || !form.description.trim() || !form.deadline || (type === 'job' && (!form.salary.trim() || !form.experience_required.trim() || !form.state.trim())) || ((type === 'fellowship' || type === 'internship') && !form.stipend_amount.trim()) || (type === 'grant' && !form.grant_amount.trim())}
                   className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl text-base transition-colors flex items-center justify-center gap-2">
                   {submitting ? <><Loader2 className="w-5 h-5 animate-spin" /> Submitting...</> : adminPost ? 'Publish Now' : 'Submit for Review'}
                 </button>
