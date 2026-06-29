@@ -506,8 +506,9 @@ export default function EntityDetailPage({
                 <p className="text-gray-600 mb-5">Please sign in to apply for this opportunity.</p>
                 <button onClick={() => {
                   setLoginRoleHint('job_seeker');
-                  redirectToSignIn(window.location.href);
+                  redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '');
                 }}
+
                   className="bg-blue-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-blue-700">Sign In to Apply</button>
               </div>
             ) : (
