@@ -18,6 +18,8 @@ import SEOHead from '../components/shared/SEOHead';
 import { getProfileCompletion } from '@/lib/supabase/extra-entities';
 import { Progress } from '@/components/ui/progress';
 import NotificationBell from '../components/shared/NotificationBell';
+import NotificationsPanel from '../components/shared/NotificationsPanel';
+
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line
 } from 'recharts';
