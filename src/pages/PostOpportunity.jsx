@@ -74,7 +74,7 @@ export default function PostOpportunity() {
           description="Post jobs, internships, fellowships, scholarships, grants or events on DevelopmentWala. Reach thousands of social sector professionals for free."
           canonical="https://developmentwala.org/post"
         />
-        <Navbar />
+        
         <main>
           <section className="bg-gradient-to-br from-indigo-600 to-indigo-800 py-16 px-4 text-white text-center">
             <h1 className="text-3xl md:text-4xl font-bold mb-3">Post an Opportunity</h1>
