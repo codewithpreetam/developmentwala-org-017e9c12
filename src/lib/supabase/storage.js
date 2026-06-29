@@ -21,10 +21,18 @@ export async function uploadFile(file, folder = 'files') {
   });
   if (error) {
     if (error.message?.includes('Bucket not found') || error.message?.includes('not found')) {
-      throw new Error('File storage is not configured. Create a public "uploads" bucket in Supabase Storage.');
+      throw new Error('File storage is not configured. Create an "uploads" bucket in Supabase Storage.');
     }
     throw error;
   }
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-  return { file_url: data.publicUrl, path };
+  // Bucket is private — use a long-lived signed URL so files render in the app.
+  const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrl(path, 60 * 60 * 24 * 365);
+  return { file_url: signed?.signedUrl || '', path };
+}
+
+export async function getSignedUrl(path, expiresInSeconds = 60 * 60 * 24 * 365) {
+  if (!path) return '';
+  const supabase = createClient();
+  const { data } = await supabase.storage.from(BUCKET).createSignedUrl(path, expiresInSeconds);
+  return data?.signedUrl || '';
 }
