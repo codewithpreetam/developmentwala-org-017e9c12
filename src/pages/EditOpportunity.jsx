@@ -38,13 +38,15 @@ const locationTypeOptions = [
 
 export default function EditOpportunity() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const isAdmin = isPlatformAdmin(user);
   const [item, setItem] = useState(null);
   const [type, setType] = useState('');
   const [form, setForm] = useState({});
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [savedMsg, setSavedMsg] = useState('');
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
