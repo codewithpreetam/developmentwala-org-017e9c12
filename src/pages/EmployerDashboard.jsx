@@ -330,11 +330,72 @@ export default function EmployerDashboard() {
     loadApplicants(selectedJobId);
   };
 
+  // Quick status update (used by Shortlist / Reject / Mark Reviewing buttons in the list)
+  const quickUpdateStatus = async (app, newStatus, message) => {
+    if (!app?.id || app.status === newStatus) return;
+    setQuickActionLoading(`${app.id}:${newStatus}`);
+    try {
+      const historyEntry = {
+        status: newStatus,
+        message: message || '',
+        updated_by: orgForm.org_name || 'Employer',
+        updated_at: new Date().toISOString(),
+      };
+      const prevHistory = Array.isArray(app.status_history) ? app.status_history : [];
+      await base44.entities.Application.update(app.id, {
+        status: newStatus,
+        status_history: [...prevHistory, historyEntry],
+      });
+      const statusLabel = statusOptions.find(s => s.value === newStatus)?.label || newStatus;
+      await base44.entities.Notification.create({
+        user_email: app.applicant_email,
+        title: `Application Update: ${statusLabel}`,
+        message: message || `Your application for "${app.opportunity_title}" at ${orgForm.org_name || 'the organization'} has been marked as ${statusLabel}.`,
+        type: `status_${newStatus}`,
+        read: false,
+      }).catch(() => {});
+      const patch = (a) => a.id === app.id ? { ...a, status: newStatus, status_history: [...prevHistory, historyEntry] } : a;
+      setApplicants(prev => prev.map(patch));
+      setAllApplicants(prev => prev.map(patch));
+    } finally {
+      setQuickActionLoading(null);
+    }
+  };
+
+  // Navigate to Interviews tab and prefill the Schedule modal with this candidate
+  const scheduleInterviewFor = async (app) => {
+    // Make sure the candidate is at least shortlisted before scheduling
+    if (!['shortlisted', 'interview', 'selected'].includes(app.status)) {
+      await quickUpdateStatus(app, 'shortlisted', 'Your application has been shortlisted. We will be in touch shortly to schedule an interview.');
+    }
+    setPrefillInterviewApp({ ...app, status: 'shortlisted' });
+    setTab('interviews');
+  };
+
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-[#f4f6fb]"><div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin" /></div>;
 
   const oneMonthAgo = new Date(); oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
   const archivedJobs = myJobs.filter(j => { const dl = j.deadline || j.application_deadline; return dl && new Date(dl) < oneMonthAgo; });
   const publishedJobs = myJobs.filter(j => j.status === 'published');
+
+  // Derive filtered/sorted applicants list for the Applicants tab
+  const searchLower = applicantSearch.trim().toLowerCase();
+  const filteredApplicants = applicants
+    .filter(a => applicantFilter === 'all' || a.status === applicantFilter)
+    .filter(a => {
+      if (!searchLower) return true;
+      return (
+        (a.applicant_name || '').toLowerCase().includes(searchLower) ||
+        (a.applicant_email || '').toLowerCase().includes(searchLower)
+      );
+    })
+    .sort((a, b) => {
+      if (applicantSort === 'name') return (a.applicant_name || a.applicant_email || '').localeCompare(b.applicant_name || b.applicant_email || '');
+      if (applicantSort === 'status') return (a.status || '').localeCompare(b.status || '');
+      if (applicantSort === 'oldest') return new Date(a.created_date || 0) - new Date(b.created_date || 0);
+      return new Date(b.created_date || 0) - new Date(a.created_date || 0); // recent
+    });
+
 
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const chartData = months.map((month, idx) => {
