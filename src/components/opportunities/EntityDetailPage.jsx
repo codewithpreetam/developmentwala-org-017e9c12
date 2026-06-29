@@ -575,8 +575,19 @@ export default function EntityDetailPage({
                   {!applyUrl && !applyEmail && typeLabel === 'Event' && (
                     <p className="text-white/70 text-sm text-center">Check description for registration details.</p>
                   )}
+                  {typeLabel === 'Event' && item.event_date && (
+                    <button
+                      onClick={handleAddToGoogleCalendar}
+                      className="flex items-center justify-center gap-2 w-full bg-white text-gray-800 font-semibold px-5 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+                      title={user ? 'Add this event to your Google Calendar' : 'Sign in to add this event to your Google Calendar'}
+                    >
+                      <CalendarPlus className="w-4 h-4" />
+                      {user ? 'Add to Google Calendar' : 'Sign in to add to Google Calendar'}
+                    </button>
+                  )}
                 </div>
               </div>
+
 
               <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
                 <h3 className="font-bold text-gray-900">Details</h3>
