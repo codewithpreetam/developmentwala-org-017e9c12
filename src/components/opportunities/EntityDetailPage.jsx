@@ -73,6 +73,8 @@ export default function EntityDetailPage({
   const [applied, setApplied] = useState(false);
   const [orgData, setOrgData] = useState(null);
   const [shareMsg, setShareMsg] = useState('');
+  const [formErrors, setFormErrors] = useState({});
+
 
   useEffect(() => {
     base44.auth.me().then(u => {
