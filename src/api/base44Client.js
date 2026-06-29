@@ -24,7 +24,7 @@ async function getUserById(id) {
   return data;
 }
 
-async function ensureUserProfile(authUser, { firstName, lastName, role }) {
+async function ensureUserProfile(authUser, { firstName, lastName, role } = {}) {
   if (!authUser) return null;
   const existing = await getUserById(authUser.id);
   if (existing) return existing;
