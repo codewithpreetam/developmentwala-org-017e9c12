@@ -460,6 +460,12 @@ export default function JobDetail() {
                     {job.location && <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-gray-400" />{job.location}</span>}
                     {job.country && !job.location && <span className="flex items-center gap-1.5"><Globe className="w-4 h-4 text-gray-400" />{job.country}</span>}
                     {job.location_type && <span className="flex items-center gap-1.5"><Globe className="w-4 h-4 text-gray-400" />{locationTypeLabels[job.location_type]}</span>}
+                    {(job.salary || job.stipend_amount || job.grant_amount || job.scholarship_amount) && (
+                      <span className="flex items-center gap-1.5 text-emerald-700 font-semibold">
+                        <DollarSign className="w-4 h-4" />
+                        {job.salary || job.stipend_amount || job.grant_amount || job.scholarship_amount}
+                      </span>
+                    )}
                     {job.created_date && <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-gray-400" />Posted {format(new Date(job.created_date), 'dd MMM yyyy')}</span>}
                     {deadline && <span className="flex items-center gap-1.5 text-red-500 font-medium"><Calendar className="w-4 h-4" />Deadline {format(new Date(deadline), 'dd MMM yyyy')}</span>}
                     {opType === 'event' && job.event_date && <span className="flex items-center gap-1.5 text-pink-600 font-medium"><Calendar className="w-4 h-4" />Event Date {format(new Date(job.event_date), 'dd MMM yyyy')}{job.event_time ? `, ${job.event_time}` : ''}</span>}

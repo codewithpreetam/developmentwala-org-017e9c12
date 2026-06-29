@@ -16,7 +16,7 @@ export default function SubmitInternship() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', organization_type: '', sector: '',
+    title: '', description: '', organization: '', organization_type: '', sector: '',
     location: '', location_type: '', country: DEFAULT_COUNTRY, duration: '', stipend_type: '',
     stipend_amount: '', responsibilities: '', required_skills: '',
     application_deadline: '', tags: '',
@@ -62,6 +62,10 @@ export default function SubmitInternship() {
         </FormField>
         <FormField label="Description" required hint="Markdown supported: **bold**, - bullets">
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="Roles, responsibilities, what the intern will learn..." required className="min-h-[160px] rounded-xl" />
+        </FormField>
+
+        <FormField label="Organization Name" required={adminPost} hint={adminPost ? 'Name of the host organization for this internship.' : 'Auto-filled from your organization profile.'}>
+          <Input value={form.organization} onChange={e => u('organization', e.target.value)} placeholder="e.g. Mary Foundation" required={adminPost} className="h-11 rounded-xl" />
         </FormField>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

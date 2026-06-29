@@ -24,7 +24,7 @@ export default function SubmitEvent() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', organizer_type: '', event_category: '',
+    title: '', description: '', organizer_name: '', organizer_type: '', event_category: '',
     sector: '', event_date: '', event_end_date: '', event_time: '', location: '',
     location_type: '', country: DEFAULT_COUNTRY, registration_deadline: '',
     is_free: true, registration_fee: '', banner_image: '', tags: '', submitted_by_name: '', submitted_by_email: '',
@@ -79,6 +79,10 @@ export default function SubmitEvent() {
         </FormField>
         <FormField label="Event Description" required hint="Markdown supported">
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="What is this event about? Who should attend? Key speakers..." required className="min-h-[160px] rounded-xl" />
+        </FormField>
+
+        <FormField label="Organizer Name" required={adminPost} hint={adminPost ? 'Name of the organization hosting this event.' : 'Auto-filled from your organization profile.'}>
+          <Input value={form.organizer_name} onChange={e => u('organizer_name', e.target.value)} placeholder="e.g. Mary Foundation" required={adminPost} className="h-11 rounded-xl" />
         </FormField>
 
         <div>

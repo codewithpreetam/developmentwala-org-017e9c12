@@ -259,11 +259,11 @@ export default function CandidateDashboard() {
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#1a1c23] flex flex-col transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:flex`}>
         <div className="px-6 py-5 border-b border-white/10">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: ACCENT }}>
+          <Link to="/" className="flex items-center gap-2 min-w-0">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: ACCENT }}>
               <Briefcase className="w-4 h-4 text-white" />
             </div>
-            <span className="text-white font-bold text-lg">DevelopmentWala.org</span>
+            <span className="text-white font-bold text-base truncate">DevelopmentWala.org</span>
           </Link>
         </div>
         <div className="px-5 py-4 border-b border-white/10">

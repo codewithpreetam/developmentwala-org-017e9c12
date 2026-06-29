@@ -40,7 +40,7 @@ export default function SubmitScholarship() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', provider_type: '', university_name: '',
+    title: '', description: '', provider_name: '', provider_type: '', university_name: '',
     country: DEFAULT_COUNTRY, level_of_study: '', scholarship_type: '', funding_type: '', eligible_countries: '',
     field_of_study: '', scholarship_amount: '', application_deadline: '', tags: '',
     submitted_by_name: '', submitted_by_email: '',
@@ -85,6 +85,10 @@ export default function SubmitScholarship() {
         </FormField>
         <FormField label="Description" required hint="Markdown supported">
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="About the scholarship, benefits, selection process..." required className="min-h-[160px] rounded-xl" />
+        </FormField>
+
+        <FormField label="Provider / Organization Name" required={adminPost} hint={adminPost ? 'Name of the organization offering this scholarship.' : 'Auto-filled from your organization profile.'}>
+          <Input value={form.provider_name} onChange={e => u('provider_name', e.target.value)} placeholder="e.g. Mary Foundation" required={adminPost} className="h-11 rounded-xl" />
         </FormField>
 
         <div>

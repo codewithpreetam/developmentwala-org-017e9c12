@@ -84,6 +84,7 @@ export default function SubmitJob() {
     eligible_countries: '', scholarship_level: '', field_of_study: '', education_requirement: '',
     experience_required: '', application_process: '',
     event_date: '', event_time: '', event_category: '',
+    organization: '',
     tags: '', submitted_by_name: '', submitted_by_email: '',
   });
   const [submitting, setSubmitting] = useState(false);
@@ -198,6 +199,13 @@ export default function SubmitJob() {
                         placeholder="Full description. Markdown formatting supported (**bold**, *italic*, - bullets)"
                         required className="min-h-[180px] rounded-xl border-gray-200 leading-relaxed" />
                       <p className="text-xs text-gray-400 mt-1">Markdown supported</p>
+                    </FormField>
+
+                    <FormField label="Organization Name" required={adminPost} hint={adminPost ? 'Name of the hiring organization this opportunity is for.' : 'Auto-filled from your organization profile.'}>
+                      <Input value={form.organization} onChange={(e) => update('organization', e.target.value)}
+                        placeholder="e.g. Mary Foundation"
+                        required={adminPost}
+                        className="h-11 rounded-xl border-gray-200" />
                     </FormField>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
