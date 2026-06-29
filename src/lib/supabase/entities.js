@@ -169,7 +169,8 @@ function createTableEntity(table, mapFn, type = 'job') {
       if (criteria.id) query = query.eq('id', criteria.id);
       if (criteria.slug) query = query.eq('slug', criteria.slug);
 
-      const { data, error } = await query.limit(limit);
+      const { data, error } = await query.order('created_at', { ascending: false }).limit(limit);
+
       if (error) throw error;
 
       let rows = data || [];
