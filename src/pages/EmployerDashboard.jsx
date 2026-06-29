@@ -55,7 +55,10 @@ const miniSparkData = Array.from({ length: 7 }, (_, i) => ({ v: Math.floor(Math.
 
 export default function EmployerDashboard() {
   const { user, loading, logout } = useAuth();
-  const [tab, setTab] = useState('overview');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [tab, setTabState] = useState(searchParams.get('tab') || 'overview');
+  const setTab = (next) => { setTabState(next); setSearchParams({ tab: next }, { replace: true }); };
+  useEffect(() => { const t = searchParams.get('tab'); if (t && t !== tab) setTabState(t); }, [searchParams]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [org, setOrg] = useState(null);
   const [myJobs, setMyJobs] = useState([]);
