@@ -152,10 +152,11 @@ export function toScholarshipInsert(payload, { employerId, organizationEmployerI
     featured: false,
     status: pending ? 'Inactive' : 'Active',
     employer_id: employerId || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
   };
 }
 
-export function toGrantInsert(payload, { employerId } = {}) {
+export function toGrantInsert(payload, { employerId, organizationEmployerId } = {}) {
   const pending = isPending(payload);
   return {
     title: payload.title?.trim(),
