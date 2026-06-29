@@ -81,6 +81,10 @@ export default function SubmitEvent() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="What is this event about? Who should attend? Key speakers..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
+        <FormField label="Organizer Name" required={adminPost} hint={adminPost ? 'Name of the organization hosting this event.' : 'Auto-filled from your organization profile.'}>
+          <Input value={form.organizer_name} onChange={e => u('organizer_name', e.target.value)} placeholder="e.g. Mary Foundation" required={adminPost} className="h-11 rounded-xl" />
+        </FormField>
+
         <div>
           <FormField label="Organizer Type">
             <Select value={form.organizer_type} onValueChange={v => u('organizer_type', v)}>
