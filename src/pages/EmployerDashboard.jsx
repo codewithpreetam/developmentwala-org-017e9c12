@@ -1119,28 +1119,46 @@ export default function EmployerDashboard() {
                       </div>
                     </div>
                   </div>
-                  {!viewingProfile.profile ? (
-                    <div className="bg-gray-50 rounded-xl p-5 text-center text-gray-400 text-sm">This applicant has not set up a full profile yet.</div>
-                  ) : (
-                    <div className="space-y-4">
-                      {viewingProfile.profile.summary && <div className="bg-blue-50 rounded-xl p-4"><p className="text-xs font-bold text-blue-700 mb-1.5">Profile Summary</p><p className="text-sm text-blue-900">{viewingProfile.profile.summary}</p></div>}
+                  <div className="space-y-4">
+                    {!viewingProfile.profile && (
+                      <div className="bg-gray-50 rounded-xl p-5 text-center text-gray-400 text-sm">This applicant has not set up a full profile yet.</div>
+                    )}
+                    {viewingProfile.profile?.summary && <div className="bg-blue-50 rounded-xl p-4"><p className="text-xs font-bold text-blue-700 mb-1.5">Profile Summary</p><p className="text-sm text-blue-900">{viewingProfile.profile.summary}</p></div>}
+                    {(viewingProfile.profile?.education || viewingProfile.profile?.skills) && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {viewingProfile.profile.education && <div className="bg-gray-50 rounded-xl p-4"><p className="text-xs font-bold text-gray-500 mb-1.5 flex items-center gap-1.5"><GraduationCap className="w-3.5 h-3.5" /> Education</p><p className="text-sm text-gray-800">{viewingProfile.profile.education}</p></div>}
                         {viewingProfile.profile.skills && <div className="bg-gray-50 rounded-xl p-4"><p className="text-xs font-bold text-gray-500 mb-1.5 flex items-center gap-1.5"><Star className="w-3.5 h-3.5" /> Skills</p><div className="flex flex-wrap gap-1.5">{viewingProfile.profile.skills.split(',').map(s => s.trim()).filter(Boolean).map(skill => <span key={skill} className="text-xs bg-white border border-gray-200 text-gray-700 px-2.5 py-1 rounded-full">{skill}</span>)}</div></div>}
                       </div>
-                      {viewingProfile.profile.experience && <div className="bg-gray-50 rounded-xl p-4"><p className="text-xs font-bold text-gray-500 mb-1.5 flex items-center gap-1.5"><BriefcaseIcon className="w-3.5 h-3.5" /> Work Experience</p><p className="text-sm text-gray-800 whitespace-pre-line">{viewingProfile.profile.experience}</p></div>}
-                      {viewingProfile.app.cover_letter && <div className="bg-yellow-50 rounded-xl p-4 border border-yellow-100"><p className="text-xs font-bold text-yellow-700 mb-1.5 flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" /> Cover Letter</p><p className="text-sm text-yellow-900">{viewingProfile.app.cover_letter}</p></div>}
-                      {viewingProfile.profile.cv_url && (
-                        <div className="border border-gray-200 rounded-xl overflow-hidden">
-                          <div className="flex items-center justify-between px-4 py-2.5 bg-gray-50 border-b border-gray-200">
-                            <span className="text-xs font-semibold text-gray-600 flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" /> Resume / CV</span>
-                            <a href={viewingProfile.profile.cv_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-blue-600 font-semibold"><Download className="w-3.5 h-3.5" /> Download</a>
-                          </div>
-                          <iframe src={`https://docs.google.com/viewer?url=${encodeURIComponent(viewingProfile.profile.cv_url)}&embedded=true`} className="w-full h-[420px] bg-gray-50" title="Resume Preview" />
+                    )}
+                    {viewingProfile.profile?.experience && <div className="bg-gray-50 rounded-xl p-4"><p className="text-xs font-bold text-gray-500 mb-1.5 flex items-center gap-1.5"><BriefcaseIcon className="w-3.5 h-3.5" /> Work Experience</p><p className="text-sm text-gray-800 whitespace-pre-line">{viewingProfile.profile.experience}</p></div>}
+                    {viewingProfile.app.cover_letter && <div className="bg-yellow-50 rounded-xl p-4 border border-yellow-100"><p className="text-xs font-bold text-yellow-700 mb-1.5 flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" /> Cover Letter for this role</p><div className="text-sm text-yellow-900 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: viewingProfile.app.cover_letter }} /></div>}
+                    {viewingProfile.app.cv_url && (
+                      <div className="border-2 border-indigo-200 rounded-xl overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-2.5 bg-indigo-50 border-b border-indigo-200">
+                          <span className="text-xs font-semibold text-indigo-700 flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" /> CV submitted with this application</span>
+                          <a href={viewingProfile.app.cv_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-indigo-700 font-semibold hover:underline"><Download className="w-3.5 h-3.5" /> Download</a>
                         </div>
+                        <iframe src={`https://docs.google.com/viewer?url=${encodeURIComponent(viewingProfile.app.cv_url)}&embedded=true`} className="w-full h-[420px] bg-gray-50" title="Application CV" />
+                      </div>
+                    )}
+                    {viewingProfile.profile?.cv_url && viewingProfile.profile.cv_url !== viewingProfile.app.cv_url && (
+                      <div className="border border-gray-200 rounded-xl overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-2.5 bg-gray-50 border-b border-gray-200">
+                          <span className="text-xs font-semibold text-gray-600 flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" /> Default Resume / CV on profile</span>
+                          <a href={viewingProfile.profile.cv_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-blue-600 font-semibold"><Download className="w-3.5 h-3.5" /> Download</a>
+                        </div>
+                        <iframe src={`https://docs.google.com/viewer?url=${encodeURIComponent(viewingProfile.profile.cv_url)}&embedded=true`} className="w-full h-[420px] bg-gray-50" title="Profile CV" />
+                      </div>
+                    )}
+                    <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
+                      <button onClick={() => { const a = viewingProfile.app; setViewingProfile(null); setStatusModalApp(a); }} className="flex items-center gap-1.5 text-xs text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-lg font-medium border border-blue-200"><Mail className="w-3.5 h-3.5" /> Update Status</button>
+                      {!['shortlisted', 'interview', 'selected'].includes(viewingProfile.app.status) && (
+                        <button onClick={() => { quickUpdateStatus(viewingProfile.app, 'shortlisted', 'Congratulations! Your application has been shortlisted.'); setViewingProfile(null); }} className="flex items-center gap-1.5 text-xs text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-2 rounded-lg font-medium border border-indigo-200"><Star className="w-3.5 h-3.5" /> Shortlist</button>
                       )}
+                      <button onClick={() => { const a = viewingProfile.app; setViewingProfile(null); scheduleInterviewFor(a); }} className="flex items-center gap-1.5 text-xs text-purple-700 bg-purple-50 hover:bg-purple-100 px-3 py-2 rounded-lg font-medium border border-purple-200"><CalendarPlus className="w-3.5 h-3.5" /> Schedule Interview</button>
                     </div>
-                  )}
+                  </div>
+
                   <div className="flex items-center justify-between mt-6 pt-5 border-t border-gray-100">
                     <a href={`mailto:${viewingProfile.app.applicant_email}`} className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium"><Mail className="w-4 h-4" /> Email Applicant</a>
                     <button onClick={() => setViewingProfile(null)} className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-2.5 rounded-xl text-sm">Close</button>
