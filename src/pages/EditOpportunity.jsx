@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { Save, ArrowLeft, Upload, X, Loader2 } from 'lucide-react';
+import { Save, ArrowLeft, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,6 +10,9 @@ import Navbar from '../components/layout/Navbar';
 import SEOHead from '../components/shared/SEOHead';
 import CountrySelect from '../components/forms/CountrySelect';
 import { DEFAULT_COUNTRY } from '../components/forms/formOptions';
+import { useAuth } from '../components/auth/AuthContext';
+import { isPlatformAdmin } from '@/lib/supabase/auth';
+
 
 const entityMap = {
   job: { entity: 'Job', detailPage: 'JobDetail', label: 'Job' },
