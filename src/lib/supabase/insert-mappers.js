@@ -172,10 +172,11 @@ export function toGrantInsert(payload, { employerId, organizationEmployerId } = 
     status: pending ? 'Inactive' : 'Active',
     featured: false,
     employer_id: employerId || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
   };
 }
 
-export function toEventInsert(payload, { employerId } = {}) {
+export function toEventInsert(payload, { employerId, organizationEmployerId } = {}) {
   return {
     title: payload.title?.trim(),
     organizer: payload.organization || payload.submitted_by_name || 'Organizer',
