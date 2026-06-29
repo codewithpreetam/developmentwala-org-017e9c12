@@ -176,11 +176,49 @@ export default function JobDetail() {
     }
   };
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const getShareUrl = () => {
+    const seg = (job?.opportunity_type || 'job') === 'job' ? 'jobs'
+      : `${job.opportunity_type}s`;
+    return `https://developmentwala.org/${seg}/${job?.slug || job?.id}`;
   };
+
+  const handleShare = async () => {
+    const url = getShareUrl();
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: job.title, text: job.title, url });
+        return;
+      } catch (_) { /* user cancelled — fall through to copy */ }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      toast.success('Link copied successfully.');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (_) {
+      toast.error('Could not copy link');
+    }
+  };
+
+  const shareToWhatsApp = () => {
+    const url = `https://wa.me/?text=${encodeURIComponent(job.title)}%20${encodeURIComponent(getShareUrl())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+  const shareToLinkedIn = () => {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(getShareUrl());
+      setCopied(true);
+      toast.success('Link copied successfully.');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (_) {
+      toast.error('Could not copy link');
+    }
+  };
+
 
   if (loading) return (
     <div><Navbar /><MobileHeader title="Loading..." />
