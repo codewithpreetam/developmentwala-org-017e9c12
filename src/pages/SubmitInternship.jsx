@@ -131,14 +131,11 @@ export default function SubmitInternship() {
           </FormField>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Application Link">
-            <Input type="url" value={form.application_link} onChange={e => u('application_link', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
-          </FormField>
-          <FormField label="Application Email">
-            <Input type="email" value={form.application_email} onChange={e => u('application_email', e.target.value)} placeholder="hr@ngo.org" className="h-11 rounded-xl" />
-          </FormField>
+
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+          Applications are received through DevelopmentWala.org. Review applicants from your Employer Dashboard.
         </div>
+
 
         <hr className="border-gray-100" />
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Your Contact Info (optional)</p>
