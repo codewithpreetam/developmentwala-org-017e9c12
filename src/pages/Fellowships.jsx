@@ -9,9 +9,8 @@ const filters = [
     { value: 'environment', label: 'Environment' }, { value: 'human_rights', label: 'Human Rights' },
     { value: 'governance', label: 'Governance' }, { value: 'climate', label: 'Climate' }, { value: 'other', label: 'Other' },
   ]},
-  { key: 'funding_type', label: 'Funding', type: 'select', options: [
-    { value: 'fully_funded', label: 'Fully Funded' }, { value: 'partially_funded', label: 'Partially Funded' },
-    { value: 'stipend', label: 'Stipend' }, { value: 'unpaid', label: 'Unpaid' },
+  { key: 'stipend_type', label: 'Stipend', type: 'select', options: [
+    { value: 'paid', label: 'Paid' }, { value: 'unpaid', label: 'Unpaid' },
   ]},
   { key: 'location_type', label: 'Mode', type: 'select', options: [
     { value: 'online', label: 'Online' }, { value: 'offline', label: 'In-person' }, { value: 'hybrid', label: 'Hybrid' },

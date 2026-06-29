@@ -183,9 +183,16 @@ export default function EntityListPage({
 
   const filtered = items.filter(item => {
     const q = search.toLowerCase();
-    const matchQ = !search || [item.title, item.organization_name, item.organizer_name, item.funding_agency, item.provider_name, item.location, item.country, item.description, item.tags]
-      .filter(Boolean).some(f => f.toLowerCase().includes(q));
-    return matchQ && extraFilters.every(f => !filters[f.key] || (item[f.key] || '') === filters[f.key]);
+    const matchQ = !search || [item.title, item.organization, item.organization_name, item.organizer_name, item.funding_agency, item.provider_name, item.location, item.country, item.description, item.tags]
+      .filter(Boolean).some(f => String(f).toLowerCase().includes(q));
+    const matchFilters = extraFilters.every(f => {
+      const fv = filters[f.key];
+      if (!fv) return true;
+      const iv = item[f.key];
+      if (iv == null) return false;
+      return String(iv).toLowerCase() === String(fv).toLowerCase();
+    });
+    return matchQ && matchFilters;
   });
 
   return (
@@ -198,8 +205,8 @@ export default function EntityListPage({
           <div className="max-w-5xl mx-auto">
             <h1 className="text-2xl md:text-3xl font-bold mb-1">{title}</h1>
             <p className="text-white/80 text-sm md:text-base mb-6">{description}</p>
-            <div className="flex gap-3">
-              <div className="relative flex-1">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1 min-w-0">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input value={search} onChange={e => setSearch(e.target.value)}
                   placeholder={`Search ${title.toLowerCase()}...`}
@@ -207,7 +214,7 @@ export default function EntityListPage({
               </div>
               {extraFilters.length > 0 && (
                 <button onClick={() => setShowFilters(!showFilters)}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 transition-colors ${showFilters ? 'bg-white text-gray-800' : 'bg-white/20 text-white hover:bg-white/30'}`}>
+                  className={`px-4 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-colors shrink-0 ${showFilters ? 'bg-white text-gray-800' : 'bg-white/20 text-white hover:bg-white/30'}`}>
                   <SlidersHorizontal className="w-4 h-4" /> Filters
                   {hasFilters && <span className="w-2 h-2 bg-yellow-400 rounded-full" />}
                 </button>

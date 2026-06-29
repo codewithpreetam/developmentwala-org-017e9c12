@@ -1,7 +1,6 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import EntityListPage from '../components/opportunities/EntityListPage';
-import { countryOptions } from '../components/forms/formOptions';
 
 const filters = [
   { key: 'event_category', label: 'Category', type: 'select', options: [
@@ -10,15 +9,9 @@ const filters = [
     { value: 'training', label: 'Training' }, { value: 'summit', label: 'Summit' },
     { value: 'hackathon', label: 'Hackathon' },
   ]},
-  { key: 'sector', label: 'Sector', type: 'select', options: [
-    { value: 'education', label: 'Education' }, { value: 'health', label: 'Health' },
-    { value: 'environment', label: 'Environment' }, { value: 'climate', label: 'Climate' },
-    { value: 'governance', label: 'Governance' }, { value: 'gender_equality', label: 'Gender Equality' }, { value: 'other', label: 'Other' },
-  ]},
   { key: 'location_type', label: 'Mode', type: 'select', options: [
     { value: 'online', label: 'Online' }, { value: 'offline', label: 'In-person' }, { value: 'hybrid', label: 'Hybrid' },
   ]},
-  { key: 'country', label: 'Country', type: 'select', options: countryOptions },
 ];
 
 export default function Events() {
