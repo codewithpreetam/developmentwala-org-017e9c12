@@ -116,11 +116,14 @@ export default function CreateInterviewModal({ onClose, onCreated, employerEmail
                   <Select value={selectedAppId} onValueChange={handleSelectApplicant}>
                     <SelectTrigger className="h-9 rounded-lg text-sm"><SelectValue placeholder="Select a shortlisted candidate" /></SelectTrigger>
                     <SelectContent>
-                      {shortlistedApplicants.map(app => (
-                        <SelectItem key={app.id} value={app.id}>
-                          {app.applicant_name || app.applicant_email} — {app.opportunity_title || 'Position'}
-                        </SelectItem>
-                      ))}
+                      {shortlistedApplicants.map(app => {
+                        const name = app.applicant_name || (app.applicant_email ? app.applicant_email.split('@')[0] : '') || 'Candidate';
+                        return (
+                          <SelectItem key={app.id} value={app.id}>
+                            {name}{app.opportunity_title ? ` — ${app.opportunity_title}` : ''}
+                          </SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
                 </div>
