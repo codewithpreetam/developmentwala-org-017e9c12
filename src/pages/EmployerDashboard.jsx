@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from '@/lib/router-adapter';
+import { Link, useSearchParams } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '../components/auth/AuthContext';
@@ -55,7 +55,10 @@ const miniSparkData = Array.from({ length: 7 }, (_, i) => ({ v: Math.floor(Math.
 
 export default function EmployerDashboard() {
   const { user, loading, logout } = useAuth();
-  const [tab, setTab] = useState('overview');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [tab, setTabState] = useState(searchParams.get('tab') || 'overview');
+  const setTab = (next) => { setTabState(next); setSearchParams({ tab: next }, { replace: true }); };
+  useEffect(() => { const t = searchParams.get('tab'); if (t && t !== tab) setTabState(t); }, [searchParams]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [org, setOrg] = useState(null);
   const [myJobs, setMyJobs] = useState([]);
