@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Briefcase, GraduationCap, Star, BookOpen, IndianRupee, Calendar, ArrowRight } from 'lucide-react';
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+// Navbar/Footer provided by DashboardShell wrapper route
+
 import SEOHead from '../components/shared/SEOHead';
 import AuthGateModal from '../components/auth/AuthGateModal';
 import { useAuth } from '../components/auth/AuthContext';
