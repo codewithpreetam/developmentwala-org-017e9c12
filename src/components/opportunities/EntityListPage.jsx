@@ -22,27 +22,32 @@ const accentClasses = {
 const sectorLabels = Object.fromEntries(sectorOptions.map(s => [s.value, s.label]));
 const locationLabels = { online: 'Online', offline: 'In-person', hybrid: 'Hybrid' };
 
-function OpCard({ item, detailPageParam, accentColor, isSaved, onToggleSave }) {
+function OpCard({ item, detailPageParam, accentColor, isSaved, onToggleSave, type }) {
   const deadline = item.application_deadline || item.event_date || item.registration_deadline;
   const orgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name;
   const location = item.location;
   const country = item.country || item.eligible_countries;
   const timeAgo = item.created_date ? formatDistanceToNow(new Date(item.created_date), { addSuffix: true }) : '';
   const isDeadlineSoon = deadline && !isPast(new Date(deadline)) && (new Date(deadline) - new Date()) < 7 * 24 * 60 * 60 * 1000;
+  const showImageSection = !['internship', 'fellowship'].includes(type) && (item.banner_image || item.event_date);
 
   return (
     <Link to={createPageUrl(`${detailPageParam}?id=${item.id}`)}>
       <article className={`bg-white rounded-xl border hover:shadow-md transition-all duration-200 group h-full flex flex-col overflow-hidden ${item.featured ? 'border-yellow-300 shadow-sm' : 'border-gray-200 hover:border-blue-300'}`}>
-        {/* Banner image (events) or placeholder */}
-        {item.banner_image ? (
-          <div className="w-full aspect-video overflow-hidden shrink-0">
-            <img src={item.banner_image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-          </div>
-        ) : item.event_date ? (
-          <div className="w-full aspect-video bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center shrink-0">
-            <Calendar className="w-10 h-10 text-pink-400" />
-          </div>
-        ) : null}
+        {showImageSection && (
+          <>
+            {/* Banner image (events) or placeholder */}
+            {item.banner_image ? (
+              <div className="w-full aspect-video overflow-hidden shrink-0">
+                <img src={item.banner_image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              </div>
+            ) : item.event_date ? (
+              <div className="w-full aspect-video bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center shrink-0">
+                <Calendar className="w-10 h-10 text-pink-400" />
+              </div>
+            ) : null}
+          </>
+        )}
 
         <div className="p-5 flex flex-col flex-1">
         {item.featured && (
