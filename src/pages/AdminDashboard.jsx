@@ -200,6 +200,7 @@ export default function AdminDashboard() {
     { id: 'contacts', label: `Messages${unreadContacts > 0 ? ` (${unreadContacts})` : ''}`, icon: MessageSquare },
     { id: 'newsletter', label: 'Newsletter', icon: Mail },
     { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'profile', label: 'My Profile', icon: User },
   ];
 
   if (authLoading) return null;
