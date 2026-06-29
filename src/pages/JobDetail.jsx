@@ -66,7 +66,22 @@ export default function JobDetail() {
   const [applying, setApplying] = useState(false);
   const [applied, setApplied] = useState(false);
   const [orgData, setOrgData] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+  const [cvChoice, setCvChoice] = useState('profile');
+  const [newCvUrl, setNewCvUrl] = useState('');
+  const [uploadingCv, setUploadingCv] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
   const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user) { setUserProfile(null); return; }
+    base44.entities.UserProfile.filter({ user_email: user.email })
+      .then((p) => {
+        setUserProfile(p[0] || null);
+        setCvChoice(p[0]?.cv_url ? 'profile' : 'new');
+      })
+      .catch(() => {});
+  }, [user?.email]);
 
   useEffect(() => {
     const id = searchParams.get('id');
