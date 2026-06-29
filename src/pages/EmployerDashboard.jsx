@@ -587,7 +587,7 @@ export default function EmployerDashboard() {
                               <Trash2 className="w-3.5 h-3.5" /> Remove
                             </button>
                           )}
-                          <span className="text-[11px] text-gray-400">JPG, PNG, WebP, SVG · Max 2 MB</span>
+                          <span className="text-[11px] text-gray-400">Recommended: square 400×400px (PNG/JPG/WebP). Auto-converted to WebP, max 150 KB.</span>
                         </div>
                       </div>
                     </div>

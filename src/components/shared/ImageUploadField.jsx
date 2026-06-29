@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Upload, X, Image as ImageIcon } from 'lucide-react';
 
-export default function ImageUploadField({ value, onChange, label = 'Upload Image', hint = 'JPG, PNG, or WebP. Max 2MB.' }) {
+export default function ImageUploadField({ value, onChange, label = 'Upload Image', hint = 'Recommended 1200×630px • JPG/PNG/WebP • Auto-converted to WebP (max 150 KB)' }) {
   const inputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -16,8 +16,8 @@ export default function ImageUploadField({ value, onChange, label = 'Upload Imag
       setError('Only JPG, PNG, and WebP formats are supported.');
       return;
     }
-    if (file.size > 2 * 1024 * 1024) {
-      setError('File size must be under 2MB.');
+    if (file.size > 10 * 1024 * 1024) {
+      setError('File size must be under 10MB.');
       return;
     }
 
