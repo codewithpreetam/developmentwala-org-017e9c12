@@ -25,9 +25,10 @@ export default function SocialAuthButtons({ next = '', mode = 'signin' }) {
   const handleGoogle = async () => {
     setLoading('google');
     try {
-      if (next) {
-        try { sessionStorage.setItem('post_auth_redirect', next); } catch {}
-      }
+      // Persist intended destination; consumed by AuthContext after the
+      // Supabase session is hydrated (works for both popup and full-redirect flows).
+      const dest = next || '/candidate-dashboard';
+      try { sessionStorage.setItem('post_auth_redirect', dest); } catch {}
       const result = await lovable.auth.signInWithOAuth('google', {
         redirect_uri: window.location.origin,
       });
@@ -37,7 +38,7 @@ export default function SocialAuthButtons({ next = '', mode = 'signin' }) {
         return;
       }
       if (result?.redirected) return;
-      window.location.href = next || '/';
+      window.location.href = dest;
     } catch (err) {
       toast.error(err?.message || 'Google sign-in failed.');
       setLoading(null);
