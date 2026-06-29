@@ -26,7 +26,7 @@ export default function SignUp() {
   const [done, setDone] = useState(false);
   const [verifyToken, setVerifyToken] = useState('');
 
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const next = urlParams.get('next') || '';
   const roleParam = urlParams.get('role');
   const active = role === 'employer' ? roleConfig.employer : roleConfig.job_seeker;

@@ -27,7 +27,7 @@ export default function SignIn() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const next = urlParams.get('next') || '';
   const active = role === 'employer' ? roleConfig.employer : roleConfig.job_seeker;
 
