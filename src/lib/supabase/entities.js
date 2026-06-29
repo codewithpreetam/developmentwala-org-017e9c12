@@ -62,8 +62,11 @@ async function resolveOwnerIdFromEmail(email) {
 
 function applicationOpportunityFilter(query, opportunityId) {
   const id = String(opportunityId).trim();
-  // Quote UUIDs so PostgREST does not treat hyphens as filter syntax.
-  return query.or(`opportunity_id.eq."${id}",job_id.eq."${id}"`);
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  if (isUuid) {
+    return query.or(`opportunity_id.eq."${id}",job_id.eq."${id}"`);
+  }
+  return query.eq('opportunity_id', id);
 }
 
 async function resolveEmployerEmailForOpportunity(oppType, oppId) {
