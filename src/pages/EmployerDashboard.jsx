@@ -7,7 +7,7 @@ import {
   Building2, Briefcase, Users, Plus, Save, LogOut,
   CheckCircle2, Eye, Pencil, X, Mail, Phone, MapPin,
   GraduationCap, Briefcase as BriefcaseIcon, FileText, Star, Download, User, History,
-  BarChart2, Archive, MessageSquare, CalendarDays, LayoutDashboard, Search, TrendingUp, ChevronRight, Trash2, AlertTriangle, Bookmark, Clock, Upload, Camera, Home, CalendarPlus, CheckCircle, XCircle, Filter, SlidersHorizontal
+  BarChart2, Archive, MessageSquare, CalendarDays, LayoutDashboard, Search, TrendingUp, ChevronRight, Trash2, AlertTriangle, Bookmark, Clock, Upload, Camera, Home, CalendarPlus, CheckCircle, XCircle, Filter, SlidersHorizontal, Bell
 } from 'lucide-react';
 import StatusUpdateModal from '../components/employer/StatusUpdateModal';
 import EmployerProfileSection from '../components/employer/EmployerProfileSection';
@@ -20,6 +20,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import SEOHead from '../components/shared/SEOHead';
 import NotificationBell from '../components/shared/NotificationBell';
+import NotificationsPanel from '../components/shared/NotificationsPanel';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, LineChart, Line
@@ -411,6 +412,7 @@ export default function EmployerDashboard() {
     { id: 'manage', label: `My Posts (${myJobs.length})`, icon: Briefcase },
     { id: 'applicants', label: 'Applicants', icon: Users },
     { id: 'interviews', label: 'Interviews', icon: CalendarDays },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'analytics', label: 'Analytics', icon: BarChart2 },
     { id: 'archive', label: `Archive (${archivedJobs.length})`, icon: Archive },
     { id: 'saved', label: `Saved (${savedItems.length})`, icon: Bookmark },
@@ -1108,6 +1110,13 @@ export default function EmployerDashboard() {
                 <p className="text-gray-500 text-sm">Message the admin team directly. Replies appear here as a conversation.</p>
               </div>
               <EmployerMessagingPanel user={user} orgName={orgForm.org_name} />
+            </div>
+          )}
+
+          {/* NOTIFICATIONS */}
+          {tab === 'notifications' && (
+            <div className="max-w-4xl">
+              <NotificationsPanel userEmail={user.email} role="employer" />
             </div>
           )}
         </main>

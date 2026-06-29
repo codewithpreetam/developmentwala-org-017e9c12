@@ -12,7 +12,7 @@ import {
   LayoutDashboard, Plus, Inbox, List, LogOut, Briefcase,
   Clock, CheckCircle2, XCircle, Trash2, Eye, EyeOff,
   Building2, GraduationCap, Star, DollarSign, Calendar, Pencil, Archive,
-  Users, Download, FileText, MessageSquare, Mail, ChevronRight, Settings, User
+  Users, Download, FileText, MessageSquare, Mail, ChevronRight, Settings, User, Bell
 } from 'lucide-react';
 import SiteSettingsPanel from '../components/admin/SiteSettingsPanel';
 import { DEFAULT_LOGO } from '@/lib/brand';
@@ -20,6 +20,7 @@ import BlogManager from '../components/admin/BlogManager';
 import { format } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
 import NotificationBell from '../components/shared/NotificationBell';
+import NotificationsPanel from '../components/shared/NotificationsPanel';
 import AdminMessagesPanel from '../components/messaging/AdminMessagesPanel';
 import NewsletterPanel from '../components/admin/NewsletterPanel';
 
@@ -197,6 +198,7 @@ export default function AdminDashboard() {
     { id: 'blog', label: 'Blog', icon: FileText },
     { id: 'contacts', label: `Messages${unreadContacts > 0 ? ` (${unreadContacts})` : ''}`, icon: MessageSquare },
     { id: 'newsletter', label: 'Newsletter', icon: Mail },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
   ];
 
   if (authLoading) return null;
@@ -253,7 +255,7 @@ export default function AdminDashboard() {
             <h1 className="text-lg font-bold text-gray-900">{navItems.find(n => n.id === tab)?.label || 'Overview'}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <NotificationBell userEmail="admin" />
+            <NotificationBell userEmail={authUser?.email} userRole="admin" />
             <UserAvatar user={authUser} size="sm" background={ACCENT} />
           </div>
         </header>
@@ -668,6 +670,13 @@ export default function AdminDashboard() {
 
               {/* NEWSLETTER */}
               {tab === 'newsletter' && <NewsletterPanel />}
+
+              {/* NOTIFICATIONS */}
+              {tab === 'notifications' && authUser?.email && (
+                <div className="max-w-4xl">
+                  <NotificationsPanel userEmail={authUser.email} role="admin" />
+                </div>
+              )}
             </>
           )}
         </main>
