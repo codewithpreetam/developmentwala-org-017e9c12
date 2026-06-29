@@ -69,10 +69,7 @@ export default function SubmitGrant() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="Grant objectives, what will be funded, selection criteria..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Funding Agency">
-            <Input value={form.funding_agency} onChange={e => u('funding_agency', e.target.value)} placeholder="e.g. Ford Foundation, USAID" className="h-11 rounded-xl" />
-          </FormField>
+        <div>
           <FormField label="Agency Type">
             <Select value={form.agency_type} onValueChange={v => u('agency_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
