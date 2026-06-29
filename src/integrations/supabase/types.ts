@@ -92,6 +92,84 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: number
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      blog_posts: {
+        Row: {
+          author_name: string | null
+          categories: string[] | null
+          content: string | null
+          created_at: string | null
+          excerpt: string | null
+          featured_image: string | null
+          id: number
+          meta_description: string | null
+          meta_title: string | null
+          read_time: number | null
+          slug: string
+          status: string | null
+          tags: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_name?: string | null
+          categories?: string[] | null
+          content?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: number
+          meta_description?: string | null
+          meta_title?: string | null
+          read_time?: number | null
+          slug: string
+          status?: string | null
+          tags?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_name?: string | null
+          categories?: string[] | null
+          content?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: number
+          meta_description?: string | null
+          meta_title?: string | null
+          read_time?: number | null
+          slug?: string
+          status?: string | null
+          tags?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       candidate_education: {
         Row: {
           created_at: string | null
@@ -301,6 +379,102 @@ export type Database = {
           updated_at?: string
           url?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      contact_messages: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          id: number
+          message: string | null
+          name: string | null
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          message?: string | null
+          name?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          message?: string | null
+          name?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      email_queue: {
+        Row: {
+          body_html: string | null
+          created_at: string | null
+          id: number
+          sent_at: string | null
+          status: string | null
+          subject: string
+          to_email: string
+        }
+        Insert: {
+          body_html?: string | null
+          created_at?: string | null
+          id?: number
+          sent_at?: string | null
+          status?: string | null
+          subject: string
+          to_email: string
+        }
+        Update: {
+          body_html?: string | null
+          created_at?: string | null
+          id?: number
+          sent_at?: string | null
+          status?: string | null
+          subject?: string
+          to_email?: string
+        }
+        Relationships: []
+      }
+      email_subscriptions: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          email: string
+          full_name: string | null
+          id: number
+          opportunity_types: string[] | null
+          sector_interests: string[] | null
+          source: string | null
+          user_email: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          email: string
+          full_name?: string | null
+          id?: number
+          opportunity_types?: string[] | null
+          sector_interests?: string[] | null
+          source?: string | null
+          user_email?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          email?: string
+          full_name?: string | null
+          id?: number
+          opportunity_types?: string[] | null
+          sector_interests?: string[] | null
+          source?: string | null
+          user_email?: string | null
         }
         Relationships: []
       }
@@ -861,6 +1035,54 @@ export type Database = {
           },
         ]
       }
+      interviews: {
+        Row: {
+          application_id: number | null
+          candidate_email: string | null
+          created_at: string | null
+          duration_minutes: number | null
+          employer_email: string | null
+          id: number
+          location: string | null
+          meeting_link: string | null
+          mode: string | null
+          notes: string | null
+          opportunity_title: string | null
+          scheduled_at: string | null
+          status: string | null
+        }
+        Insert: {
+          application_id?: number | null
+          candidate_email?: string | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          employer_email?: string | null
+          id?: number
+          location?: string | null
+          meeting_link?: string | null
+          mode?: string | null
+          notes?: string | null
+          opportunity_title?: string | null
+          scheduled_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          application_id?: number | null
+          candidate_email?: string | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          employer_email?: string | null
+          id?: number
+          location?: string | null
+          meeting_link?: string | null
+          mode?: string | null
+          notes?: string | null
+          opportunity_title?: string | null
+          scheduled_at?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       job_alerts: {
         Row: {
           created_at: string | null
@@ -1127,6 +1349,30 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_opportunities: {
+        Row: {
+          created_at: string | null
+          id: number
+          opportunity_id: number
+          opportunity_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          opportunity_id: number
+          opportunity_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          opportunity_id?: number
+          opportunity_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       scholarships: {
         Row: {
           amount: number | null
@@ -1274,6 +1520,60 @@ export type Database = {
           },
         ]
       }
+      site_settings: {
+        Row: {
+          id: number
+          settings: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          settings?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          settings?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          featured: boolean | null
+          id: number
+          name: string | null
+          organization: string | null
+          quote: string | null
+          role: string | null
+          sort_order: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          featured?: boolean | null
+          id?: number
+          name?: string | null
+          organization?: string | null
+          quote?: string | null
+          role?: string | null
+          sort_order?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          featured?: boolean | null
+          id?: number
+          name?: string | null
+          organization?: string | null
+          quote?: string | null
+          role?: string | null
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -1339,6 +1639,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      candidate_profile_completion: {
+        Args: { p_user_id: string }
+        Returns: number
+      }
       has_role: { Args: { _role: string; _user_id: string }; Returns: boolean }
     }
     Enums: {
