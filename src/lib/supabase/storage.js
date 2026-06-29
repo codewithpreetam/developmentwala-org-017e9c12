@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/client';
+import { compressImageToWebp } from '@/lib/image/compress';
 
 const BUCKET = 'uploads';
 
@@ -8,9 +9,14 @@ function safeName(file) {
   return `${base}.${ext}`;
 }
 
-export async function uploadFile(file, folder = 'files') {
-  if (!file) throw new Error('No file selected');
-  if (file.size > 5 * 1024 * 1024) throw new Error('File must be 5 MB or smaller');
+export async function uploadFile(originalFile, folder = 'files') {
+  if (!originalFile) throw new Error('No file selected');
+  if (originalFile.size > 10 * 1024 * 1024) throw new Error('File must be 10 MB or smaller');
+
+  // Auto-convert images to WebP and cap at ~150 KB. Non-image files pass through.
+  const file = originalFile.type?.startsWith('image/')
+    ? await compressImageToWebp(originalFile, { targetBytes: 150 * 1024 })
+    : originalFile;
 
   const supabase = createClient();
   // Storage RLS requires the FIRST folder of the object path to equal auth.uid()

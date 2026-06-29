@@ -137,7 +137,7 @@ export default function EmployerProfileSection({ user, ACCENT, onProfilePicChang
                   </button>
                 )}
               </div>
-              <p className="text-xs text-gray-400 mt-1.5">JPG, PNG or GIF • Max 5 MB</p>
+              <p className="text-xs text-gray-400 mt-1.5">Recommended square 400×400px • JPG/PNG/WebP • Auto-converted to WebP (max 150 KB)</p>
               {picError && <p className="text-xs text-red-600 mt-1">{picError}</p>}
             </div>
           </div>
