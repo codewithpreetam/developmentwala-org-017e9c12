@@ -191,6 +191,7 @@ export function toEventInsert(payload, { employerId, organizationEmployerId } = 
     tags: payload.tags || payload.sector || null,
     start_time: payload.event_time || null,
     owner_id: employerId || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
     user_role: 'employer',
   };
 }
