@@ -58,6 +58,7 @@ import { Route as FellowshipsSlugRouteImport } from './routes/fellowships.$slug'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
+import { Route as ApiPublicRssDotxmlRouteImport } from './routes/api/public/rss[.]xml'
 import { Route as ApiAuthLinkedinStartRouteImport } from './routes/api/auth.linkedin.start'
 import { Route as ApiAuthLinkedinCallbackRouteImport } from './routes/api/auth.linkedin.callback'
 
@@ -306,6 +307,11 @@ const BlogCategorySlugRoute = BlogCategorySlugRouteImport.update({
   path: '/blog/category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicRssDotxmlRoute = ApiPublicRssDotxmlRouteImport.update({
+  id: '/api/public/rss.xml',
+  path: '/api/public/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthLinkedinStartRoute = ApiAuthLinkedinStartRouteImport.update({
   id: '/api/auth/linkedin/start',
   path: '/api/auth/linkedin/start',
@@ -366,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/internships/': typeof InternshipsIndexRoute
   '/jobs/': typeof JobsIndexRoute
   '/scholarships/': typeof ScholarshipsIndexRoute
+  '/api/public/rss.xml': typeof ApiPublicRssDotxmlRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
@@ -419,6 +426,7 @@ export interface FileRoutesByTo {
   '/internships': typeof InternshipsIndexRoute
   '/jobs': typeof JobsIndexRoute
   '/scholarships': typeof ScholarshipsIndexRoute
+  '/api/public/rss.xml': typeof ApiPublicRssDotxmlRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
@@ -473,6 +481,7 @@ export interface FileRoutesById {
   '/internships/': typeof InternshipsIndexRoute
   '/jobs/': typeof JobsIndexRoute
   '/scholarships/': typeof ScholarshipsIndexRoute
+  '/api/public/rss.xml': typeof ApiPublicRssDotxmlRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
@@ -528,6 +537,7 @@ export interface FileRouteTypes {
     | '/internships/'
     | '/jobs/'
     | '/scholarships/'
+    | '/api/public/rss.xml'
     | '/blog/category/$slug'
     | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
@@ -581,6 +591,7 @@ export interface FileRouteTypes {
     | '/internships'
     | '/jobs'
     | '/scholarships'
+    | '/api/public/rss.xml'
     | '/blog/category/$slug'
     | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
@@ -634,6 +645,7 @@ export interface FileRouteTypes {
     | '/internships/'
     | '/jobs/'
     | '/scholarships/'
+    | '/api/public/rss.xml'
     | '/blog/category/$slug'
     | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
@@ -688,6 +700,7 @@ export interface RootRouteChildren {
   InternshipsIndexRoute: typeof InternshipsIndexRoute
   JobsIndexRoute: typeof JobsIndexRoute
   ScholarshipsIndexRoute: typeof ScholarshipsIndexRoute
+  ApiPublicRssDotxmlRoute: typeof ApiPublicRssDotxmlRoute
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
   ApiAuthLinkedinCallbackRoute: typeof ApiAuthLinkedinCallbackRoute
   ApiAuthLinkedinStartRoute: typeof ApiAuthLinkedinStartRoute
@@ -1038,6 +1051,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/rss.xml': {
+      id: '/api/public/rss.xml'
+      path: '/api/public/rss.xml'
+      fullPath: '/api/public/rss.xml'
+      preLoaderRoute: typeof ApiPublicRssDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/linkedin/start': {
       id: '/api/auth/linkedin/start'
       path: '/api/auth/linkedin/start'
@@ -1104,6 +1124,7 @@ const rootRouteChildren: RootRouteChildren = {
   InternshipsIndexRoute: InternshipsIndexRoute,
   JobsIndexRoute: JobsIndexRoute,
   ScholarshipsIndexRoute: ScholarshipsIndexRoute,
+  ApiPublicRssDotxmlRoute: ApiPublicRssDotxmlRoute,
   BlogCategorySlugRoute: BlogCategorySlugRoute,
   ApiAuthLinkedinCallbackRoute: ApiAuthLinkedinCallbackRoute,
   ApiAuthLinkedinStartRoute: ApiAuthLinkedinStartRoute,
@@ -1111,13 +1132,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
