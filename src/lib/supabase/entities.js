@@ -235,7 +235,7 @@ function mapOrganizationRow(row, extra = {}) {
     twitter_url: row.social_twitter || '',
     facebook_url: row.social_facebook || '',
     instagram_url: row.social_instagram || '',
-    ngo_type: extra.ngo_type || '',
+    ngo_type: row.ngo_type || extra.ngo_type || '',
   };
 }
 
@@ -258,13 +258,22 @@ async function syncEmployerOrgMeta(userEmail, { ngo_type } = {}) {
 
 function organizationPatchFromPayload(payload = {}) {
   const patch = {};
+  if (payload.org_name !== undefined || payload.name !== undefined) {
+    const nm = (payload.org_name ?? payload.name ?? '').toString().trim();
+    if (nm) patch.name = nm;
+  }
+  if (payload.tagline !== undefined) patch.tagline = payload.tagline || null;
   if (payload.logo_url !== undefined) patch.logo = payload.logo_url || null;
   if (payload.location !== undefined || payload.city !== undefined) {
     patch.location = payload.city || payload.location || null;
   }
-  if (payload.sector !== undefined || payload.tags !== undefined) {
-    patch.tags = payload.sector || payload.tags || null;
+  if (payload.sector !== undefined) {
+    patch.sector = payload.sector || null;
+    patch.tags = payload.sector || patch.tags || null;
+  } else if (payload.tags !== undefined) {
+    patch.tags = payload.tags || null;
   }
+  if (payload.ngo_type !== undefined) patch.ngo_type = payload.ngo_type || null;
   if (payload.about !== undefined) patch.about = payload.about || null;
   if (payload.website !== undefined) patch.website = payload.website || null;
   if (payload.contact_email !== undefined || payload.email !== undefined) {
@@ -275,7 +284,23 @@ function organizationPatchFromPayload(payload = {}) {
   if (payload.linkedin_url !== undefined) patch.social_linkedin = payload.linkedin_url || null;
   if (payload.instagram_url !== undefined) patch.social_instagram = payload.instagram_url || null;
   if (payload.phone !== undefined) patch.phone = payload.phone || null;
+  if (payload.founded !== undefined) patch.founded = payload.founded || null;
+  if (payload.company_size !== undefined) patch.company_size = payload.company_size || null;
+  if (payload.owner_user_id !== undefined) patch.owner_user_id = payload.owner_user_id || null;
   return patch;
+}
+
+async function ensureOwnedOrgIdForSession() {
+  const session = getSessionUser();
+  if (!session?.id) return null;
+  const { data } = await supabase
+    .from('employers')
+    .select('id')
+    .eq('owner_user_id', session.id)
+    .order('id', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  return data?.id ?? null;
 }
 
 async function fetchOrganizationsForUser(email, limit = 200) {
