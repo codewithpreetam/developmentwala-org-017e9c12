@@ -24,6 +24,7 @@ function baseOpportunity(row, type, extra = {}) {
     opportunity_type: type,
     organization: org,
     funding_agency: org,
+    organization_employer_id: row.organization_employer_id ?? null,
     sector: row.role_category || row.field || row.sector || row.tags || 'other',
     location: locationFromRow(row),
     city: row.city,
