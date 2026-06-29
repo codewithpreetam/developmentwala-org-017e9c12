@@ -18,6 +18,7 @@ import BlogManager from '../components/admin/BlogManager';
 import { format } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
 import NotificationBell from '../components/shared/NotificationBell';
+import AdminMessagesPanel from '../components/messaging/AdminMessagesPanel';
 
 const ACCENT = '#4F46E5';
 
@@ -659,47 +660,10 @@ export default function AdminDashboard() {
 
               {/* CONTACTS */}
               {tab === 'contacts' && (
-                <div>
-                  <h2 className="font-bold text-xl text-gray-900 mb-5">Contact Messages ({contacts.length})</h2>
-                  {contacts.length === 0 ? (
-                    <div className="text-center py-16 text-gray-400 bg-white rounded-2xl shadow-sm"><MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-30" /><p>No contact messages yet.</p></div>
-                  ) : (
-                    <div className="space-y-4">
-                      {contacts.map(msg => (
-                        <div key={msg.id} className={`bg-white rounded-2xl shadow-sm p-5 border ${msg.read ? 'border-transparent' : 'border-indigo-200'}`}>
-                          <div className="flex items-start justify-between gap-4 flex-wrap">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                {!msg.read && <span className="w-2 h-2 rounded-full shrink-0" style={{ background: ACCENT }} />}
-                                <span className="font-semibold text-gray-900">{msg.name}</span>
-                                <span className="text-gray-400 text-xs">{msg.email}</span>
-                                {msg.phone && <span className="text-gray-400 text-xs">· {msg.phone}</span>}
-                              </div>
-                              {msg.subject && <p className="text-sm font-medium text-gray-700 mb-1">{msg.subject}</p>}
-                              <p className="text-sm text-gray-600 whitespace-pre-line">{msg.message}</p>
-                              <p className="text-xs text-gray-300 mt-2">{msg.created_date ? format(new Date(msg.created_date), 'dd MMM yyyy, HH:mm') : ''}</p>
-                            </div>
-                            <div className="flex items-center gap-2 shrink-0">
-                              <a href={`mailto:${msg.email}`} className="flex items-center gap-1.5 text-xs text-white px-3 py-1.5 rounded-lg font-medium" style={{ background: ACCENT }}>
-                                <Mail className="w-3.5 h-3.5" /> Reply
-                              </a>
-                              {!msg.read && (
-                                <button onClick={async () => { await base44.entities.ContactMessage.update(msg.id, { read: true }); await loadAll(); }}
-                                  className="text-xs bg-gray-100 text-gray-600 hover:bg-gray-200 px-3 py-1.5 rounded-lg font-medium transition-colors">
-                                  Mark Read
-                                </button>
-                              )}
-                              <button onClick={async () => { if (confirm('Delete this message?')) { await base44.entities.ContactMessage.delete(msg.id); await loadAll(); } }}
-                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <AdminMessagesPanel
+                  contacts={contacts}
+                  onChanged={loadAll}
+                />
               )}
             </>
           )}

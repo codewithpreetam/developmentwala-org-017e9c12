@@ -153,23 +153,72 @@ export const ContactMessage = {
   async filter(criteria = {}) {
     let query = supabase.from('contact_messages').select('*');
     if (criteria.status) query = query.eq('status', criteria.status);
+    if (criteria.user_id) query = query.eq('user_id', criteria.user_id);
     const { data, error } = await query.order('created_at', { ascending: false });
     if (error) throw error;
     return (data || []).map((r) => ({ ...r, created_date: r.created_at }));
   },
+  async listForUser(userId, limit = 100) {
+    if (!userId) return [];
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (error) throw error;
+    return (data || []).map((r) => ({ ...r, created_date: r.created_at }));
+  },
   async create(payload) {
+    const { data: authData } = await supabase.auth.getUser();
+    const authUser = authData?.user;
     const { data, error } = await supabase.from('contact_messages').insert({
       name: payload.name,
       email: payload.email,
       subject: payload.subject,
       message: payload.message,
       status: 'new',
+      user_id: authUser?.id || null,
+      unread_for_admin: true,
+      unread_for_user: false,
     }).select('*').single();
     if (error) throw error;
     return { ...data, created_date: data.created_at };
   },
   async update(id, payload) {
     const { data, error } = await supabase.from('contact_messages').update(payload).eq('id', id).select('*').single();
+    if (error) throw error;
+    return data;
+  },
+  async delete(id) {
+    const { error } = await supabase.from('contact_messages').delete().eq('id', id);
+    if (error) throw error;
+    return { success: true };
+  },
+};
+
+export const ContactReply = {
+  async listForMessage(messageId) {
+    if (!messageId) return [];
+    const { data, error } = await supabase
+      .from('contact_message_replies')
+      .select('*')
+      .eq('message_id', messageId)
+      .order('created_at', { ascending: true });
+    if (error) throw error;
+    return data || [];
+  },
+  async send({ messageId, body, role, senderName }) {
+    const { data: authData } = await supabase.auth.getUser();
+    const authUser = authData?.user;
+    if (!authUser) throw new Error('Not authenticated');
+    const { data, error } = await supabase.from('contact_message_replies').insert({
+      message_id: messageId,
+      body: String(body || '').trim(),
+      sender_role: role,
+      sender_id: authUser.id,
+      sender_name: senderName || authUser.email,
+    }).select('*').single();
     if (error) throw error;
     return data;
   },
