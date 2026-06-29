@@ -118,11 +118,10 @@ export default function AdminDashboard() {
 
   const toggleFeatured = async (item) => {
     setProcessing(true);
-    const featuredCount = allItems.filter(i => i.featured).length;
-    if (!item.featured && featuredCount >= 8) { alert('Maximum 8 featured opportunities allowed.'); setProcessing(false); return; }
     await getEntity(item._type).update(item.id, { featured: !item.featured });
     await loadAll(); setProcessing(false);
   };
+
 
   const deleteUser = async (userId) => {
     if (!confirm('Delete this user and their profile?')) return;
