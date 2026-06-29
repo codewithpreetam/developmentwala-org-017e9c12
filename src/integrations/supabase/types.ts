@@ -1057,9 +1057,11 @@ export type Database = {
         Row: {
           application_id: number | null
           candidate_email: string | null
+          candidate_id: string | null
           created_at: string | null
           duration_minutes: number | null
           employer_email: string | null
+          employer_id: string | null
           id: number
           location: string | null
           meeting_link: string | null
@@ -1072,9 +1074,11 @@ export type Database = {
         Insert: {
           application_id?: number | null
           candidate_email?: string | null
+          candidate_id?: string | null
           created_at?: string | null
           duration_minutes?: number | null
           employer_email?: string | null
+          employer_id?: string | null
           id?: number
           location?: string | null
           meeting_link?: string | null
@@ -1087,9 +1091,11 @@ export type Database = {
         Update: {
           application_id?: number | null
           candidate_email?: string | null
+          candidate_id?: string | null
           created_at?: string | null
           duration_minutes?: number | null
           employer_email?: string | null
+          employer_id?: string | null
           id?: number
           location?: string | null
           meeting_link?: string | null
