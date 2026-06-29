@@ -36,7 +36,7 @@ function isPending(payload) {
   return payload.status === 'pending' || payload.is_active === false;
 }
 
-export function toJobInsert(payload, { employerId } = {}) {
+export function toJobInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const today = new Date().toISOString().split('T')[0];
   const deadline = payload.deadline;
@@ -66,12 +66,13 @@ export function toJobInsert(payload, { employerId } = {}) {
     state: state || null,
     applylink: payload.apply_url || payload.applylink || null,
     employer_id: employerId || payload.employer_id || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
     education_required: payload.education_requirement || payload.education_required || null,
     featured: !!payload.featured,
   };
 }
 
-export function toInternshipInsert(payload, { employerId } = {}) {
+export function toInternshipInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const pending = isPending(payload);
   return {
@@ -95,10 +96,11 @@ export function toInternshipInsert(payload, { employerId } = {}) {
     featured: false,
     status: pending ? 'Inactive' : 'Active',
     employer_id: employerId || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
   };
 }
 
-export function toFellowshipInsert(payload, { employerId } = {}) {
+export function toFellowshipInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const pending = isPending(payload);
   return {
@@ -122,10 +124,11 @@ export function toFellowshipInsert(payload, { employerId } = {}) {
     featured: false,
     status: pending ? 'Inactive' : 'Active',
     employer_id: employerId || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
   };
 }
 
-export function toScholarshipInsert(payload, { employerId } = {}) {
+export function toScholarshipInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const pending = isPending(payload);
   return {
@@ -149,10 +152,11 @@ export function toScholarshipInsert(payload, { employerId } = {}) {
     featured: false,
     status: pending ? 'Inactive' : 'Active',
     employer_id: employerId || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
   };
 }
 
-export function toGrantInsert(payload, { employerId } = {}) {
+export function toGrantInsert(payload, { employerId, organizationEmployerId } = {}) {
   const pending = isPending(payload);
   return {
     title: payload.title?.trim(),
@@ -168,10 +172,11 @@ export function toGrantInsert(payload, { employerId } = {}) {
     status: pending ? 'Inactive' : 'Active',
     featured: false,
     employer_id: employerId || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
   };
 }
 
-export function toEventInsert(payload, { employerId } = {}) {
+export function toEventInsert(payload, { employerId, organizationEmployerId } = {}) {
   return {
     title: payload.title?.trim(),
     organizer: payload.organization || payload.submitted_by_name || 'Organizer',
@@ -186,6 +191,7 @@ export function toEventInsert(payload, { employerId } = {}) {
     tags: payload.tags || payload.sector || null,
     start_time: payload.event_time || null,
     owner_id: employerId || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
     user_role: 'employer',
   };
 }

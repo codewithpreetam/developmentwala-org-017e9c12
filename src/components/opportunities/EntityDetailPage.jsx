@@ -125,7 +125,11 @@ export default function EntityDetailPage({
           .catch(() => {});
       }
     }).catch(() => {});
-    if (it.submitted_by_email) {
+    if (it.organization_employer_id) {
+      base44.entities.Organization.filter({ id: it.organization_employer_id })
+        .then(orgs => { if (orgs.length > 0) setOrgData(orgs[0]); })
+        .catch(() => {});
+    } else if (it.submitted_by_email) {
       base44.entities.Organization.filter({ user_email: it.submitted_by_email })
         .then(orgs => { if (orgs.length > 0) setOrgData(orgs[0]); })
         .catch(() => {});
@@ -353,7 +357,10 @@ export default function EntityDetailPage({
     </div>
   );
 
-  const orgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name;
+  const snapshotOrgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name || item.organization;
+  // Prefer the live organization profile so updates sync everywhere.
+  const orgName = orgData?.org_name || orgData?.name || snapshotOrgName;
+  const orgLogo = orgData?.logo_url || orgData?.logo || item.logo_url;
   const deadline = item.application_deadline || item.registration_deadline;
   const applyUrl = item.application_link || item.registration_link;
   const applyEmail = item.application_email;
@@ -388,11 +395,11 @@ export default function EntityDetailPage({
                   {item.featured && <span className="text-xs font-semibold bg-yellow-400/90 text-yellow-900 px-2.5 py-1 rounded-full">⭐ Featured</span>}
                 </div>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight drop-shadow">{item.title}</h1>
-                {(item.organization_name || item.organizer_name || item.funding_agency || item.provider_name) && (
+                {orgName && (
                   <p className="text-white/80 mt-1 text-sm">
                     <OrgProfileLink
                       orgData={orgData}
-                      orgName={item.organization_name || item.organizer_name || item.funding_agency || item.provider_name}
+                      orgName={orgName}
                       className="text-white/90 hover:text-white hover:underline font-medium"
                     />
                   </p>
@@ -433,7 +440,7 @@ export default function EntityDetailPage({
                       {item.banner_image && <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">{item.title}</h1>}
                       {orgName && (
                         <div className="flex items-center gap-2 mt-3 text-gray-600">
-                          {item.logo_url ? <img src={item.logo_url} alt={orgName} className="w-6 h-6 rounded object-contain" /> : <Building2 className="w-4 h-4" />}
+                          {orgLogo ? <img src={orgLogo} alt={orgName} className="w-6 h-6 rounded object-contain" /> : <Building2 className="w-4 h-4" />}
                           <OrgProfileLink orgData={orgData} orgName={orgName} className="font-medium text-blue-600 hover:underline" />
                         </div>
                       )}

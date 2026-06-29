@@ -190,7 +190,8 @@ function createTableEntity(table, mapFn, type = 'job') {
         throw new Error('You must be signed in to post an opportunity.');
       }
 
-      const insert = toOpportunityInsert(type, payload, { employerId });
+      const organizationEmployerId = payload.organization_employer_id ?? await ensureOwnedOrgIdForSession();
+      const insert = toOpportunityInsert(type, payload, { employerId, organizationEmployerId });
       const { data, error } = await supabase.from(table).insert(insert).select('*').single();
       if (error) throw error;
       return mapFn(data);
@@ -235,7 +236,7 @@ function mapOrganizationRow(row, extra = {}) {
     twitter_url: row.social_twitter || '',
     facebook_url: row.social_facebook || '',
     instagram_url: row.social_instagram || '',
-    ngo_type: extra.ngo_type || '',
+    ngo_type: row.ngo_type || extra.ngo_type || '',
   };
 }
 
@@ -258,13 +259,22 @@ async function syncEmployerOrgMeta(userEmail, { ngo_type } = {}) {
 
 function organizationPatchFromPayload(payload = {}) {
   const patch = {};
+  if (payload.org_name !== undefined || payload.name !== undefined) {
+    const nm = (payload.org_name ?? payload.name ?? '').toString().trim();
+    if (nm) patch.name = nm;
+  }
+  if (payload.tagline !== undefined) patch.tagline = payload.tagline || null;
   if (payload.logo_url !== undefined) patch.logo = payload.logo_url || null;
   if (payload.location !== undefined || payload.city !== undefined) {
     patch.location = payload.city || payload.location || null;
   }
-  if (payload.sector !== undefined || payload.tags !== undefined) {
-    patch.tags = payload.sector || payload.tags || null;
+  if (payload.sector !== undefined) {
+    patch.sector = payload.sector || null;
+    patch.tags = payload.sector || patch.tags || null;
+  } else if (payload.tags !== undefined) {
+    patch.tags = payload.tags || null;
   }
+  if (payload.ngo_type !== undefined) patch.ngo_type = payload.ngo_type || null;
   if (payload.about !== undefined) patch.about = payload.about || null;
   if (payload.website !== undefined) patch.website = payload.website || null;
   if (payload.contact_email !== undefined || payload.email !== undefined) {
@@ -275,7 +285,23 @@ function organizationPatchFromPayload(payload = {}) {
   if (payload.linkedin_url !== undefined) patch.social_linkedin = payload.linkedin_url || null;
   if (payload.instagram_url !== undefined) patch.social_instagram = payload.instagram_url || null;
   if (payload.phone !== undefined) patch.phone = payload.phone || null;
+  if (payload.founded !== undefined) patch.founded = payload.founded || null;
+  if (payload.company_size !== undefined) patch.company_size = payload.company_size || null;
+  if (payload.owner_user_id !== undefined) patch.owner_user_id = payload.owner_user_id || null;
   return patch;
+}
+
+async function ensureOwnedOrgIdForSession() {
+  const session = getSessionUser();
+  if (!session?.id) return null;
+  const { data } = await supabase
+    .from('employers')
+    .select('id')
+    .eq('owner_user_id', session.id)
+    .order('id', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  return data?.id ?? null;
 }
 
 async function fetchOrganizationsForUser(email, limit = 200) {
@@ -351,13 +377,15 @@ const Organization = {
   },
 
   async create(payload) {
-    const { data, error } = await supabase.from('employers').insert({
-      name: payload.org_name || payload.name || 'Organization',
-      ...organizationPatchFromPayload({
-        ...payload,
-        contact_email: payload.contact_email ?? payload.email ?? payload.user_email,
-      }),
-    }).select('*').single();
+    const session = getSessionUser();
+    const ownerId = payload.owner_user_id || session?.id || null;
+    const insertPatch = organizationPatchFromPayload({
+      ...payload,
+      owner_user_id: ownerId,
+      contact_email: payload.contact_email ?? payload.email ?? payload.user_email,
+    });
+    if (!insertPatch.name) insertPatch.name = payload.org_name || payload.name || 'Organization';
+    const { data, error } = await supabase.from('employers').insert(insertPatch).select('*').single();
     if (error) throw error;
 
     if (payload.ngo_type !== undefined && payload.user_email) {
@@ -367,7 +395,7 @@ const Organization = {
     return mapOrganizationRow(data, {
       user_email: payload.user_email || data.email,
       contact_email: payload.contact_email || payload.email || data.email,
-      ngo_type: payload.ngo_type,
+      ngo_type: payload.ngo_type ?? data.ngo_type ?? '',
     });
   },
 

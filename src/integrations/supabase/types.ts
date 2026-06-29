@@ -532,55 +532,73 @@ export type Database = {
         Row: {
           about: string | null
           company_size: string | null
+          created_at: string
           email: string | null
           founded: string | null
           id: number
           location: string | null
           logo: string | null
           name: string
+          ngo_type: string | null
           open_positions: number | null
+          owner_user_id: string | null
           phone: string | null
+          sector: string | null
           social_facebook: string | null
           social_instagram: string | null
           social_linkedin: string | null
           social_twitter: string | null
+          tagline: string | null
           tags: string | null
+          updated_at: string
           website: string | null
         }
         Insert: {
           about?: string | null
           company_size?: string | null
+          created_at?: string
           email?: string | null
           founded?: string | null
           id?: number
           location?: string | null
           logo?: string | null
           name: string
+          ngo_type?: string | null
           open_positions?: number | null
+          owner_user_id?: string | null
           phone?: string | null
+          sector?: string | null
           social_facebook?: string | null
           social_instagram?: string | null
           social_linkedin?: string | null
           social_twitter?: string | null
+          tagline?: string | null
           tags?: string | null
+          updated_at?: string
           website?: string | null
         }
         Update: {
           about?: string | null
           company_size?: string | null
+          created_at?: string
           email?: string | null
           founded?: string | null
           id?: number
           location?: string | null
           logo?: string | null
           name?: string
+          ngo_type?: string | null
           open_positions?: number | null
+          owner_user_id?: string | null
           phone?: string | null
+          sector?: string | null
           social_facebook?: string | null
           social_instagram?: string | null
           social_linkedin?: string | null
           social_twitter?: string | null
+          tagline?: string | null
           tags?: string | null
+          updated_at?: string
           website?: string | null
         }
         Relationships: []
@@ -596,6 +614,7 @@ export type Database = {
           link: string | null
           location: string | null
           mode: string | null
+          organization_employer_id: number | null
           organizer: string
           owner_id: string | null
           poster_url: string | null
@@ -617,6 +636,7 @@ export type Database = {
           link?: string | null
           location?: string | null
           mode?: string | null
+          organization_employer_id?: number | null
           organizer: string
           owner_id?: string | null
           poster_url?: string | null
@@ -638,6 +658,7 @@ export type Database = {
           link?: string | null
           location?: string | null
           mode?: string | null
+          organization_employer_id?: number | null
           organizer?: string
           owner_id?: string | null
           poster_url?: string | null
@@ -649,7 +670,15 @@ export type Database = {
           updated_at?: string
           user_role?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "events_organization_employer_id_fkey"
+            columns: ["organization_employer_id"]
+            isOneToOne: false
+            referencedRelation: "employers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       expired_jobs: {
         Row: {
@@ -768,6 +797,7 @@ export type Database = {
           org_about: string | null
           org_name: string
           org_website: string | null
+          organization_employer_id: number | null
           phone: string | null
           remote: boolean | null
           slug: string | null
@@ -799,6 +829,7 @@ export type Database = {
           org_about?: string | null
           org_name: string
           org_website?: string | null
+          organization_employer_id?: number | null
           phone?: string | null
           remote?: boolean | null
           slug?: string | null
@@ -830,6 +861,7 @@ export type Database = {
           org_about?: string | null
           org_name?: string
           org_website?: string | null
+          organization_employer_id?: number | null
           phone?: string | null
           remote?: boolean | null
           slug?: string | null
@@ -847,6 +879,13 @@ export type Database = {
             columns: ["employer_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fellowships_organization_employer_id_fkey"
+            columns: ["organization_employer_id"]
+            isOneToOne: false
+            referencedRelation: "employers"
             referencedColumns: ["id"]
           },
         ]
@@ -890,6 +929,7 @@ export type Database = {
           id: string
           link: string | null
           organization: string
+          organization_employer_id: number | null
           rfp_url: string | null
           sector: string | null
           status: string | null
@@ -909,6 +949,7 @@ export type Database = {
           id?: string
           link?: string | null
           organization: string
+          organization_employer_id?: number | null
           rfp_url?: string | null
           sector?: string | null
           status?: string | null
@@ -928,6 +969,7 @@ export type Database = {
           id?: string
           link?: string | null
           organization?: string
+          organization_employer_id?: number | null
           rfp_url?: string | null
           sector?: string | null
           status?: string | null
@@ -942,6 +984,13 @@ export type Database = {
             columns: ["employer_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grants_organization_employer_id_fkey"
+            columns: ["organization_employer_id"]
+            isOneToOne: false
+            referencedRelation: "employers"
             referencedColumns: ["id"]
           },
         ]
@@ -968,6 +1017,7 @@ export type Database = {
           org_about: string | null
           org_name: string
           org_website: string | null
+          organization_employer_id: number | null
           phone: string | null
           remote: boolean | null
           slug: string | null
@@ -1000,6 +1050,7 @@ export type Database = {
           org_about?: string | null
           org_name: string
           org_website?: string | null
+          organization_employer_id?: number | null
           phone?: string | null
           remote?: boolean | null
           slug?: string | null
@@ -1032,6 +1083,7 @@ export type Database = {
           org_about?: string | null
           org_name?: string
           org_website?: string | null
+          organization_employer_id?: number | null
           phone?: string | null
           remote?: boolean | null
           slug?: string | null
@@ -1049,6 +1101,13 @@ export type Database = {
             columns: ["employer_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "internships_organization_employer_id_fkey"
+            columns: ["organization_employer_id"]
+            isOneToOne: false
+            referencedRelation: "employers"
             referencedColumns: ["id"]
           },
         ]
@@ -1173,6 +1232,7 @@ export type Database = {
           is_active: boolean
           location_id: string | null
           organization: string | null
+          organization_employer_id: number | null
           organization_logo: string | null
           organization_type: string | null
           pin_code: string | null
@@ -1206,6 +1266,7 @@ export type Database = {
           is_active?: boolean
           location_id?: string | null
           organization?: string | null
+          organization_employer_id?: number | null
           organization_logo?: string | null
           organization_type?: string | null
           pin_code?: string | null
@@ -1239,6 +1300,7 @@ export type Database = {
           is_active?: boolean
           location_id?: string | null
           organization?: string | null
+          organization_employer_id?: number | null
           organization_logo?: string | null
           organization_type?: string | null
           pin_code?: string | null
@@ -1261,6 +1323,13 @@ export type Database = {
             columns: ["employer_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_organization_employer_id_fkey"
+            columns: ["organization_employer_id"]
+            isOneToOne: false
+            referencedRelation: "employers"
             referencedColumns: ["id"]
           },
         ]
@@ -1419,6 +1488,7 @@ export type Database = {
           org_about: string | null
           org_name: string
           org_website: string | null
+          organization_employer_id: number | null
           phone: string | null
           remote: boolean | null
           scholarship_type: string
@@ -1449,6 +1519,7 @@ export type Database = {
           org_about?: string | null
           org_name: string
           org_website?: string | null
+          organization_employer_id?: number | null
           phone?: string | null
           remote?: boolean | null
           scholarship_type: string
@@ -1479,6 +1550,7 @@ export type Database = {
           org_about?: string | null
           org_name?: string
           org_website?: string | null
+          organization_employer_id?: number | null
           phone?: string | null
           remote?: boolean | null
           scholarship_type?: string
@@ -1494,6 +1566,13 @@ export type Database = {
             columns: ["employer_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scholarships_organization_employer_id_fkey"
+            columns: ["organization_employer_id"]
+            isOneToOne: false
+            referencedRelation: "employers"
             referencedColumns: ["id"]
           },
         ]
