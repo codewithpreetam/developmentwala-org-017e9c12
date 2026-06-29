@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useSearchParams } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
+import { z } from 'zod';
+import { toast } from 'sonner';
 import {
   ArrowLeft, MapPin, Calendar, Building2, ExternalLink, Mail,
   Clock, Share2, CheckCircle2, Globe, DollarSign, GraduationCap,
-  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin
+  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle
 } from 'lucide-react';
 import EmployerCard from './EmployerCard';
 import OrgProfileLink from './OrgProfileLink';
@@ -17,6 +19,20 @@ import { base44 } from '@/api/base44Client';
 import { redirectToSignIn, setLoginRoleHint } from '@/lib/auth/redirect';
 import MobileHeader from '../MobileHeader';
 import { Textarea } from '@/components/ui/textarea';
+
+const applySchema = z.object({
+  coverLetter: z
+    .string()
+    .trim()
+    .min(30, 'Please write at least 30 characters about why you are a fit.')
+    .max(2000, 'Cover letter must be 2000 characters or fewer.'),
+  cvUrl: z
+    .string()
+    .trim()
+    .url('Please attach a CV before submitting.')
+    .max(2048, 'CV link is too long.'),
+});
+
 
 const locationLabels = { online: 'Online', offline: 'In-person', hybrid: 'Hybrid' };
 
