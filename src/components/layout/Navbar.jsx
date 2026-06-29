@@ -170,6 +170,13 @@ export default function Navbar() {
             <Link to="/blog" onClick={() => setOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-black/5 rounded-xl">Blog</Link>
             {user ? (
               <>
+                <div className="flex items-center gap-3 px-4 py-3 mt-1 border-t border-black/5">
+                  <UserAvatar user={user} size="md" background="#111827" />
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-gray-900 truncate">{user.full_name || user.email?.split('@')[0]}</p>
+                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                  </div>
+                </div>
                 {getDashboardLink() && <Link to={getDashboardLink()} onClick={() => setOpen(false)} className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-black/5 rounded-xl">Dashboard</Link>}
                 <button onClick={logout} className="w-full text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 rounded-xl">Sign Out</button>
               </>
