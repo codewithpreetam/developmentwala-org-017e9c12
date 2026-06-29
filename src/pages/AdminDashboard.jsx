@@ -361,7 +361,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between mb-5">
                     <h2 className="font-bold text-xl text-gray-900 flex items-center gap-2">
                       <Star className="w-5 h-5 text-yellow-500" /> Featured Opportunities
-                      <span className="text-sm font-normal text-gray-500">({featured.length}/8 slots used)</span>
+                      <span className="text-sm font-normal text-gray-500">({featured.length} featured)</span>
                     </h2>
                   </div>
                   {featured.length === 0 ? (
@@ -397,13 +397,9 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                   )}
-                  {featured.length >= 8 && (
-                    <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-xl px-5 py-3 text-sm text-yellow-800 font-medium">
-                      Maximum 8 featured slots reached. Unfeature an existing opportunity to add a new one.
-                    </div>
-                  )}
                 </div>
               )}
+
 
               {/* POST NEW */}
               {tab === 'post' && (
