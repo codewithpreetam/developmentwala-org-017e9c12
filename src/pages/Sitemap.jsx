@@ -10,24 +10,24 @@ import { Briefcase, GraduationCap, Star, BookOpen, DollarSign, Calendar, FileTex
 const staticLinks = [
   { section: 'Main Pages', links: [
     { label: 'Home', to: '/' },
-    { label: 'Organizations / Employers', to: '/Employers' },
+    { label: 'Organizations / Employers', to: '/employers' },
     { label: 'Blog', to: '/blog' },
-    { label: 'Contact Us', to: '/Contact' },
-    { label: 'Post an Opportunity', to: '/PostOpportunity' },
+    { label: 'Contact Us', to: '/contact' },
+    { label: 'Post an Opportunity', to: '/post-opportunity' },
   ]},
   { section: 'Opportunities', links: [
-    { label: 'Jobs', to: '/Jobs' },
-    { label: 'Internships', to: '/Internships' },
-    { label: 'Fellowships', to: '/Fellowships' },
-    { label: 'Scholarships', to: '/Scholarships' },
-    { label: 'Grants', to: '/Grants' },
-    { label: 'Events', to: '/Events' },
+    { label: 'Jobs', to: '/jobs' },
+    { label: 'Internships', to: '/internships' },
+    { label: 'Fellowships', to: '/fellowships' },
+    { label: 'Scholarships', to: '/scholarships' },
+    { label: 'Grants', to: '/grants' },
+    { label: 'Events', to: '/events' },
   ]},
   { section: 'Legal', links: [
-    { label: 'Privacy Policy', to: '/PrivacyPolicy' },
-    { label: 'Terms of Use', to: '/TermsOfUse' },
-    { label: 'Legal', to: '/Legal' },
-    { label: 'Sitemap', to: '/Sitemap' },
+    { label: 'Privacy Policy', to: '/privacy-policy' },
+    { label: 'Terms of Use', to: '/terms-of-use' },
+    { label: 'Legal', to: '/legal' },
+    { label: 'Sitemap', to: '/sitemap' },
   ]},
 ];
 
@@ -105,7 +105,7 @@ export default function Sitemap() {
               {items.map(item => (
                 <li key={item.id}>
                   <Link
-                    to={`/${page}?id=${item.id}`}
+                    to={`${createPageUrl(page)}?id=${item.id}`}
                     className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
                   >
                     {item.title}

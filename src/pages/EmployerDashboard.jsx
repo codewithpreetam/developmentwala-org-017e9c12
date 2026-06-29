@@ -791,7 +791,7 @@ export default function EmployerDashboard() {
                 <div className="bg-white rounded-2xl shadow-sm p-10 text-center">
                   <Bookmark className="w-10 h-10 text-gray-200 mx-auto mb-3" />
                   <p className="text-gray-500 mb-4">No saved opportunities yet.</p>
-                  <a href="/Events" className="text-white px-6 py-2.5 rounded-xl text-sm font-semibold inline-block" style={{ background: ACCENT }}>Browse Events</a>
+                  <Link to="/events" className="text-white px-6 py-2.5 rounded-xl text-sm font-semibold inline-block" style={{ background: ACCENT }}>Browse Events</Link>
                 </div>
               ) : (
                 <div className="space-y-3">

@@ -4,7 +4,7 @@ import { Home, Briefcase, LayoutDashboard } from 'lucide-react';
 import { useAuth } from './auth/AuthContext';
 import { createPageUrl } from '@/utils';
 
-const DASHBOARD_PATHS = ['/CandidateDashboard', '/EmployerDashboard', '/AdminDashboard'];
+const DASHBOARD_PATHS = ['/candidate-dashboard', '/employer-dashboard', '/admin-dashboard'];
 
 const getTabKey = (pathname) => {
   if (pathname === '/') return 'home';
@@ -48,7 +48,7 @@ export default function MobileBottomNav() {
 
   const tabs = [
     { key: 'home', icon: Home, label: 'Home', defaultPath: '/' },
-    { key: 'jobs', icon: Briefcase, label: 'Jobs', defaultPath: '/Jobs' },
+    { key: 'jobs', icon: Briefcase, label: 'Jobs', defaultPath: '/jobs' },
     { key: 'dashboard', icon: LayoutDashboard, label: user ? 'Dashboard' : 'Sign In', defaultPath: getDashboardDefault() },
   ];
 
@@ -62,11 +62,11 @@ export default function MobileBottomNav() {
               key={key}
               onClick={() => goToTab(key, defaultPath)}
               className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
-                active ? 'text-indigo-600' : 'text-gray-400'
+                active ? 'text-primary' : 'text-gray-400'
               }`}
             >
               <Icon className={`w-5 h-5 ${active ? 'stroke-2' : 'stroke-[1.5]'}`} />
-              <span className={`text-[10px] font-medium ${active ? 'text-indigo-600' : 'text-gray-400'}`}>
+              <span className={`text-[10px] font-medium ${active ? 'text-primary' : 'text-gray-400'}`}>
                 {label}
               </span>
             </button>

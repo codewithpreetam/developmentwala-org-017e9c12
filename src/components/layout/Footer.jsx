@@ -130,12 +130,12 @@ export default function Footer() {
             <h3 className="font-semibold text-sm text-gray-900 mb-4">Platform</h3>
             <ul className="space-y-3">
               {[
-              { label: 'Jobs', to: '/Jobs' },
-              { label: 'Internships', to: '/Internships' },
-              { label: 'Fellowships', to: '/Fellowships' },
-              { label: 'Scholarships', to: '/Scholarships' },
-              { label: 'Grants', to: '/Grants' },
-              { label: 'Events', to: '/Events' }].
+              { label: 'Jobs', to: '/jobs' },
+              { label: 'Internships', to: '/internships' },
+              { label: 'Fellowships', to: '/fellowships' },
+              { label: 'Scholarships', to: '/scholarships' },
+              { label: 'Grants', to: '/grants' },
+              { label: 'Events', to: '/events' }].
               map((l) =>
               <li key={l.label}>
                   <Link to={l.to} className="text-gray-400 hover:text-gray-900 text-sm transition-colors">{l.label}</Link>
@@ -149,12 +149,12 @@ export default function Footer() {
             <h3 className="font-semibold text-sm text-gray-900 mb-4">For Organizations</h3>
             <ul className="space-y-3">
               {[
-              { label: 'Post a Job', to: '/SubmitJob' },
-              { label: 'Post Internship', to: '/SubmitInternship' },
-              { label: 'Post Fellowship', to: '/SubmitFellowship' },
-              { label: 'Post Event', to: '/SubmitEvent' },
-              { label: 'Employer Dashboard', to: '/EmployerDashboard' },
-              { label: 'Organizations', to: '/Employers' }].
+              { label: 'Post a Job', to: '/submit-job' },
+              { label: 'Post Internship', to: '/submit-internship' },
+              { label: 'Post Fellowship', to: '/submit-fellowship' },
+              { label: 'Post Event', to: '/submit-event' },
+              { label: 'Employer Dashboard', to: '/employer-dashboard' },
+              { label: 'Organizations', to: '/employers' }].
               map((l) =>
               <li key={l.label}>
                   <Link to={l.to} className="text-gray-400 hover:text-gray-900 text-sm transition-colors">{l.label}</Link>
@@ -168,8 +168,8 @@ export default function Footer() {
             <h3 className="font-semibold text-sm text-gray-900 mb-4">Pages</h3>
             <ul className="space-y-3">
               <li><Link to="/blog" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Blog</Link></li>
-              <li><Link to="/PostOpportunity" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Post Opportunity</Link></li>
-              <li><Link to="/Contact" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Contact Us</Link></li>
+              <li><Link to="/post-opportunity" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Post Opportunity</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Contact Us</Link></li>
               <li>
                 <a href="https://wa.me/+917320886323" target="_blank" rel="noopener noreferrer"
                 className="text-gray-400 hover:text-gray-900 text-sm transition-colors flex items-center gap-1.5">
@@ -185,10 +185,10 @@ export default function Footer() {
           <p className="text-gray-400 text-xs">© {new Date().getFullYear()} DevelopmentWala.org. All rights reserved.</p>
           <div className="flex items-center gap-5">
             {[
-            { label: 'Privacy Policy', to: '/PrivacyPolicy' },
-            { label: 'Terms of Use', to: '/TermsOfUse' },
-            { label: 'Legal', to: '/Legal' },
-            { label: 'Site Map', to: '/Sitemap' }].
+            { label: 'Privacy Policy', to: '/privacy-policy' },
+            { label: 'Terms of Use', to: '/terms-of-use' },
+            { label: 'Legal', to: '/legal' },
+            { label: 'Site Map', to: '/sitemap' }].
             map((item) =>
             <Link key={item.label} to={item.to} className="text-gray-400 hover:text-gray-700 text-xs transition-colors">{item.label}</Link>
             )}

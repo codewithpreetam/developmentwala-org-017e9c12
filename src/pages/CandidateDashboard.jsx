@@ -695,7 +695,7 @@ export default function CandidateDashboard() {
                 <div className="bg-white rounded-2xl shadow-sm p-10 text-center">
                   <Save className="w-10 h-10 text-gray-200 mx-auto mb-3" />
                   <p className="text-gray-500 mb-4">No saved opportunities yet.</p>
-                  <a href="/Jobs" className="text-white px-6 py-2.5 rounded-xl text-sm font-semibold inline-block" style={{ background: ACCENT }}>Browse Opportunities</a>
+                  <Link to="/jobs" className="text-white px-6 py-2.5 rounded-xl text-sm font-semibold inline-block" style={{ background: ACCENT }}>Browse Opportunities</Link>
                 </div>
               ) : (
                 <div className="space-y-3">
