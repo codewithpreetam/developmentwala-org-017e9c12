@@ -601,22 +601,47 @@ const Application = {
     const user = payload.applicant_email
       ? await getUserByEmail(payload.applicant_email)
       : getSessionUser();
-    if (!user?.id) throw new Error('Not authenticated');
+    if (!user?.id) throw new Error('You must be signed in to apply.');
     const oppType = payload.opportunity_type || 'job';
     const oppId = payload.opportunity_id || payload.job_id;
     if (!oppId) throw new Error('Missing opportunity id.');
 
+    const oppIdStr = String(oppId);
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(oppIdStr);
+
+    // Duplicate guard (also enforced by unique index)
+    const { data: existing } = await supabase
+      .from('applications')
+      .select('id')
+      .eq('candidate_id', user.id)
+      .eq('opportunity_type', oppType)
+      .eq('opportunity_id', oppIdStr)
+      .maybeSingle();
+    if (existing?.id) {
+      const err = new Error('You have already applied to this opportunity.');
+      err.code = 'ALREADY_APPLIED';
+      throw err;
+    }
+
     const insert = {
-      job_id: oppType === 'job' ? oppId : null,
-      opportunity_id: oppId,
+      job_id: oppType === 'job' && isUuid ? oppIdStr : null,
+      opportunity_id: oppIdStr,
       opportunity_type: oppType,
       candidate_id: user.id,
       status: payload.status || 'applied',
       cover_letter: payload.cover_letter || null,
       cv_url: payload.cv_url || null,
+      applicant_name: payload.applicant_name || null,
     };
     const { data, error } = await supabase.from('applications').insert(insert).select('*').single();
-    if (error) throw error;
+    if (error) {
+      if (error.code === '23505') {
+        const dup = new Error('You have already applied to this opportunity.');
+        dup.code = 'ALREADY_APPLIED';
+        throw dup;
+      }
+      throw new Error(error.message || 'Could not submit your application. Please try again.');
+    }
     const opp = await getOpportunityMeta(oppType, oppId);
     const employerEmail = payload.employer_email
       || await resolveEmployerEmailForOpportunity(oppType, oppId);
@@ -630,7 +655,7 @@ const Application = {
         employerEmail,
         `New application: ${opp?.title || 'Opportunity'}`,
         `<p>${user.email} applied for <strong>${opp?.title || 'your listing'}</strong>.</p>`
-      );
+      ).catch(() => {});
       await Notification.create({
         user_email: employerEmail,
         title: 'New application received',
@@ -641,6 +666,7 @@ const Application = {
     }
     return app;
   },
+
 
   async update(id, payload) {
     const patch = { ...payload };
