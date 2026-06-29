@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { Briefcase, GraduationCap, Star, BookOpen, DollarSign, Calendar, FileText, ExternalLink } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, BookOpen, IndianRupee, Calendar, FileText, ExternalLink } from 'lucide-react';
 
 const staticLinks = [
   { section: 'Main Pages', links: [
@@ -31,7 +31,7 @@ const staticLinks = [
   ]},
 ];
 
-const typeIcon = { job: Briefcase, internship: GraduationCap, fellowship: Star, scholarship: BookOpen, grant: DollarSign, event: Calendar };
+const typeIcon = { job: Briefcase, internship: GraduationCap, fellowship: Star, scholarship: BookOpen, grant: IndianRupee, event: Calendar };
 const typeLabel = { job: 'Jobs', internship: 'Internships', fellowship: 'Fellowships', scholarship: 'Scholarships', grant: 'Grants', event: 'Events' };
 
 export default function Sitemap() {
@@ -48,7 +48,7 @@ export default function Sitemap() {
     { key: 'internship', items: internships, page: 'InternshipDetail', icon: GraduationCap },
     { key: 'fellowship', items: fellowships, page: 'FellowshipDetail', icon: Star },
     { key: 'scholarship', items: scholarships, page: 'ScholarshipDetail', icon: BookOpen },
-    { key: 'grant', items: grants, page: 'GrantDetail', icon: DollarSign },
+    { key: 'grant', items: grants, page: 'GrantDetail', icon: IndianRupee },
     { key: 'event', items: events, page: 'EventDetail', icon: Calendar },
   ].filter(s => s.items.length > 0);
 

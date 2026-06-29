@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { Search, SlidersHorizontal, X, Star, MapPin, Calendar, Globe, DollarSign, Clock, Building2, ArrowRight, Bookmark, BookmarkCheck } from 'lucide-react';
+import { Search, SlidersHorizontal, X, Star, MapPin, Calendar, Globe, IndianRupee, Clock, Building2, ArrowRight, Bookmark, BookmarkCheck } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { redirectToSignIn } from '@/lib/auth/redirect';
 import BookmarkButton from './BookmarkButton';
@@ -100,8 +100,8 @@ function OpCard({ item, detailPageParam, accentColor, isSaved, onToggleSave, typ
             {location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{location}</span>}
             {!location && country && <span className="flex items-center gap-1"><Globe className="w-3 h-3" />{country}</span>}
             {item.duration && <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{item.duration}</span>}
-            {item.grant_amount && <span className="flex items-center gap-1 text-green-600 font-medium"><DollarSign className="w-3 h-3" />{item.grant_amount}</span>}
-            {item.scholarship_amount && <span className="flex items-center gap-1 text-green-600 font-medium"><DollarSign className="w-3 h-3" />{item.scholarship_amount}</span>}
+            {item.grant_amount && <span className="flex items-center gap-1 text-green-600 font-medium"><IndianRupee className="w-3 h-3" />{item.grant_amount}</span>}
+            {item.scholarship_amount && <span className="flex items-center gap-1 text-green-600 font-medium"><IndianRupee className="w-3 h-3" />{item.scholarship_amount}</span>}
             {item.event_date && <span className="flex items-center gap-1 text-pink-500 font-medium"><Calendar className="w-3 h-3" />{format(new Date(item.event_date), 'dd MMM yyyy')}</span>}
           </div>
           {deadline && !isPast(new Date(deadline)) ? (

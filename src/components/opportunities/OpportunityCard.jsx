@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { opportunityDetailUrl } from '@/utils/opportunityUrl';
-import { MapPin, Clock, Building2, ArrowRight, Calendar, Star, Globe, DollarSign, GraduationCap, Users } from 'lucide-react';
+import { MapPin, Clock, Building2, ArrowRight, Calendar, Star, Globe, IndianRupee, GraduationCap, Users } from 'lucide-react';
 import BookmarkButton from './BookmarkButton';
 import { formatDistanceToNow, format, isPast } from 'date-fns';
 
@@ -163,7 +163,7 @@ export default function OpportunityCard({ opportunity, compact = false, isSaved 
             )}
             {(type === 'grant' || type === 'scholarship' || type === 'fellowship') && (opportunity.grant_amount || opportunity.stipend_amount || opportunity.salary) && (
               <span className="flex items-center gap-1 text-green-600 font-medium">
-                <DollarSign className="w-3 h-3" />{opportunity.grant_amount || opportunity.stipend_amount || opportunity.salary}
+                <IndianRupee className="w-3 h-3" />{opportunity.grant_amount || opportunity.stipend_amount || opportunity.salary}
               </span>
             )}
           </div>
