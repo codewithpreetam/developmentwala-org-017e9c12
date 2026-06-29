@@ -256,26 +256,44 @@ export default function EntityDetailPage({
   };
 
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const getCanonicalShareUrl = () => {
+    const seg = (listingPage || (opportunityType ? `${opportunityType}s` : 'jobs')).toLowerCase();
+    const slugOrId = item?.slug || item?.id;
+    return `https://developmentwala.org/${seg}/${slugOrId}`;
   };
 
-  const handleNativeShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: item?.title, url: window.location.href });
-      } catch (e) { /* user cancelled */ }
-    } else {
-      handleShare();
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(getCanonicalShareUrl());
+      setCopied(true);
+      toast.success('Link copied successfully.');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (_) {
+      toast.error('Could not copy link');
     }
   };
 
-  const handleLinkedinShare = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
-    window.open(url, '_blank', 'width=600,height=600');
+  const handleNativeShare = async () => {
+    const url = getCanonicalShareUrl();
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: item?.title, text: item?.title, url });
+        return;
+      } catch (e) { /* user cancelled */ }
+    }
+    handleShare();
   };
+
+  const handleLinkedinShare = () => {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getCanonicalShareUrl())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleWhatsappShare = () => {
+    const url = `https://wa.me/?text=${encodeURIComponent(item?.title || '')}%20${encodeURIComponent(getCanonicalShareUrl())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
 
   const buildGoogleCalendarUrl = () => {
     if (!item?.event_date) return null;
