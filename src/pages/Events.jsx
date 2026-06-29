@@ -1,6 +1,7 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import EntityListPage from '../components/opportunities/EntityListPage';
+import { sectorOptions } from '../components/forms/formOptions';
 
 const filters = [
   { key: 'event_category', label: 'Category', type: 'select', options: [
@@ -12,6 +13,7 @@ const filters = [
   { key: 'location_type', label: 'Mode', type: 'select', options: [
     { value: 'online', label: 'Online' }, { value: 'offline', label: 'In-person' }, { value: 'hybrid', label: 'Hybrid' },
   ]},
+  { key: 'sector', label: 'Sector', type: 'select', options: sectorOptions },
 ];
 
 export default function Events() {

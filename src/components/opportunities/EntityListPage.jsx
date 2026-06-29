@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Search, SlidersHorizontal, X, Star, MapPin, Calendar, Globe, IndianRupee, Clock, Building2, ArrowRight, Bookmark, BookmarkCheck } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { redirectToSignIn } from '@/lib/auth/redirect';
 import BookmarkButton from './BookmarkButton';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { format, isPast, formatDistanceToNow } from 'date-fns';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
@@ -21,6 +20,87 @@ const accentClasses = {
 
 const sectorLabels = Object.fromEntries(sectorOptions.map(s => [s.value, s.label]));
 const locationLabels = { online: 'Online', offline: 'In-person', hybrid: 'Hybrid' };
+
+const FILTER_ALIASES = {
+  remote: 'online',
+  virtual: 'online',
+  online: 'online',
+  in_person: 'offline',
+  inperson: 'offline',
+  offline: 'offline',
+  onsite: 'offline',
+  on_site: 'offline',
+  hybrid: 'hybrid',
+  merit_based: 'merit',
+  merit_cum_means: 'merit',
+  needbased: 'need_based',
+  need_based: 'need_based',
+  need: 'need_based',
+  partially_funded: 'partial',
+  partly_funded: 'partial',
+  full_funded: 'fully_funded',
+  fully_funded: 'fully_funded',
+  corporate_csr: 'csr',
+  corporate_social_responsibility_csr: 'csr',
+  environment_climate_change: 'environment',
+  environment_and_climate_change: 'environment',
+  environment_climate: 'environment',
+  gender_women_empowerment: 'gender_equality',
+  gender_equality_women_empowerment: 'gender_equality',
+  livelihoods_skill_development: 'livelihood',
+  livelihood_skill_development: 'livelihood',
+  child_rights_protection: 'child_welfare',
+  wash_water_sanitation_hygiene: 'water_sanitation',
+};
+
+const normalizeFilterValue = (value) => {
+  if (value === undefined || value === null || value === '') return '';
+  const normalized = String(value)
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, ' and ')
+    .replace(/\+/g, ' plus ')
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+
+  if (FILTER_ALIASES[normalized]) return FILTER_ALIASES[normalized];
+  if (normalized.includes('remote') || normalized.includes('virtual')) return 'online';
+  if (normalized.includes('in_person') || normalized.includes('offline') || normalized.includes('onsite') || normalized.includes('on_site')) return 'offline';
+  if (normalized.includes('hybrid')) return 'hybrid';
+  if (normalized.includes('need') && normalized.includes('based')) return 'need_based';
+  if (normalized.includes('merit')) return 'merit';
+  return normalized;
+};
+
+const filterValuesMatch = (itemValue, filterValue) => {
+  if (Array.isArray(itemValue)) {
+    return itemValue.some((value) => filterValuesMatch(value, filterValue));
+  }
+
+  if (typeof itemValue === 'string' && /[,;/|]/.test(itemValue)) {
+    const parts = itemValue.split(/[,;/|]/).map((value) => value.trim()).filter(Boolean);
+    if (parts.some((value) => filterValuesMatch(value, filterValue))) return true;
+  }
+
+  const itemNorm = normalizeFilterValue(itemValue);
+  const filterNorm = normalizeFilterValue(filterValue);
+  if (!filterNorm) return true;
+  if (!itemNorm) return false;
+  if (itemNorm === filterNorm) return true;
+  if (['paid', 'unpaid'].includes(filterNorm) || ['paid', 'unpaid'].includes(itemNorm)) return false;
+  return itemNorm.includes(filterNorm) || filterNorm.includes(itemNorm);
+};
+
+const humanizeOption = (value) => String(value || '')
+  .replace(/[_-]+/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .replace(/\b\w/g, c => c.toUpperCase());
+
+const getFilterableValue = (item, key) => {
+  if (key === 'country') return [item.country, item.eligible_countries, item.eligible, item.location].filter(Boolean).join(', ');
+  return item[key];
+};
 
 function OpCard({ item, detailPageParam, accentColor, isSaved, onToggleSave, type }) {
   const deadline = item.application_deadline || item.event_date || item.registration_deadline;
@@ -172,10 +252,43 @@ export default function EntityListPage({
   };
 
   const loadItems = async () => {
-    const data = await entity.filter({ status: 'published' }, '-created_date', 100);
-    setItems(data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const data = await entity.filter({ status: 'published' }, '-created_date', 300);
+      setItems(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error(`Failed to load ${type || 'opportunities'}`, error);
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const hydratedFilters = useMemo(() => extraFilters.map((filter) => {
+    const configuredOptions = filter.options || [];
+    const seen = new Set(configuredOptions.map((option) => normalizeFilterValue(option.value)));
+    const liveOptions = [];
+
+    items.forEach((item) => {
+      const rawValue = getFilterableValue(item, filter.key);
+      const values = Array.isArray(rawValue)
+        ? rawValue
+        : String(rawValue ?? '').split(/[,;/|]/).map((value) => value.trim()).filter(Boolean);
+
+      values.forEach((value) => {
+        if (value === undefined || value === null || value === '') return;
+        const normalizedValue = normalizeFilterValue(value);
+        if (!normalizedValue || seen.has(normalizedValue)) return;
+        seen.add(normalizedValue);
+        liveOptions.push({ value, label: humanizeOption(value) });
+      });
+    });
+
+    return {
+      ...filter,
+      options: [...configuredOptions, ...liveOptions],
+    };
+  }), [extraFilters, items]);
 
   const setFilter = (k, v) => setFilters(f => ({ ...f, [k]: v }));
   const clearAll = () => { setSearch(''); setFilters({}); };
@@ -185,12 +298,11 @@ export default function EntityListPage({
     const q = search.toLowerCase();
     const matchQ = !search || [item.title, item.organization, item.organization_name, item.organizer_name, item.funding_agency, item.provider_name, item.location, item.country, item.description, item.tags]
       .filter(Boolean).some(f => String(f).toLowerCase().includes(q));
-    const matchFilters = extraFilters.every(f => {
+    const matchFilters = hydratedFilters.every(f => {
       const fv = filters[f.key];
       if (!fv) return true;
-      const iv = item[f.key];
-      if (iv == null) return false;
-      return String(iv).toLowerCase() === String(fv).toLowerCase();
+      const iv = getFilterableValue(item, f.key);
+      return filterValuesMatch(iv, fv);
     });
     return matchQ && matchFilters;
   });
@@ -212,7 +324,7 @@ export default function EntityListPage({
                   placeholder={`Search ${title.toLowerCase()}...`}
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white text-gray-900 placeholder:text-gray-400 outline-none text-sm" />
               </div>
-              {extraFilters.length > 0 && (
+              {hydratedFilters.length > 0 && (
                 <button onClick={() => setShowFilters(!showFilters)}
                   className={`px-4 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-colors shrink-0 ${showFilters ? 'bg-white text-gray-800' : 'bg-white/20 text-white hover:bg-white/30'}`}>
                   <SlidersHorizontal className="w-4 h-4" /> Filters
@@ -221,10 +333,10 @@ export default function EntityListPage({
               )}
             </div>
 
-            {showFilters && extraFilters.length > 0 && (
+            {showFilters && hydratedFilters.length > 0 && (
               <div className="mt-4 bg-white/10 backdrop-blur rounded-2xl p-4">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {extraFilters.map(f => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {hydratedFilters.map(f => (
                     <div key={f.key}>
                       <label className="text-white/70 text-xs font-medium mb-1 block">{f.label}</label>
                       {f.type === 'text' ? (

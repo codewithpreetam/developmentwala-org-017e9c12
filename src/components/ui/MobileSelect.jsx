@@ -3,6 +3,11 @@ import { Check, ChevronDown } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+const ALL_VALUE = '__all__';
+
+const toSelectValue = (value) => (value === '' || value == null ? ALL_VALUE : String(value));
+const fromSelectValue = (value) => (value === ALL_VALUE ? '' : value);
+
 /**
  * Drop-in mobile-aware select.
  * On mobile (< 768px): renders a bottom-sheet Drawer.
@@ -19,16 +24,17 @@ export default function MobileSelect({ value, onValueChange, placeholder, option
   const [isMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
   const selectedLabel = options.find(o => String(o.value) === String(value))?.label;
+  const normalizedDesktopValue = toSelectValue(value);
 
   if (!isMobile) {
     return (
-      <Select value={value || ''} onValueChange={onValueChange}>
+      <Select value={normalizedDesktopValue} onValueChange={(v) => onValueChange(fromSelectValue(v))}>
         <SelectTrigger className={className}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           {options.map(o => (
-            <SelectItem key={String(o.value)} value={o.value || ''}>{o.label}</SelectItem>
+            <SelectItem key={toSelectValue(o.value)} value={toSelectValue(o.value)}>{o.label}</SelectItem>
           ))}
         </SelectContent>
       </Select>

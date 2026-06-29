@@ -55,6 +55,26 @@ function parseExperienceToMin(raw) {
   return m ? parseInt(m[0], 10) : 0;
 }
 
+function modeLabel(value) {
+  if (value === 'online') return 'Remote';
+  if (value === 'offline') return 'In-person';
+  if (value === 'hybrid') return 'Hybrid';
+  return null;
+}
+
+function eventModeLabel(value) {
+  if (value === 'online') return 'Online';
+  if (value === 'offline') return 'Offline';
+  if (value === 'hybrid') return 'Hybrid';
+  return null;
+}
+
+function numericAmount(raw) {
+  if (raw == null || raw === '') return null;
+  const value = parseFloat(String(raw).replace(/[^\d.]/g, ''));
+  return Number.isNaN(value) ? null : value;
+}
+
 export function toJobInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const today = new Date().toISOString().split('T')[0];
@@ -95,6 +115,7 @@ export function toJobInsert(payload, { employerId, organizationEmployerId } = {}
 export function toInternshipInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const pending = isPending(payload);
+  const selectedMode = modeLabel(payload.location_type);
   return {
     title: payload.title?.trim(),
     slug: slugify(payload.title),
@@ -102,14 +123,14 @@ export function toInternshipInsert(payload, { employerId, organizationEmployerId
     eligibility: payload.eligibility || 'See description for eligibility criteria.',
     application_process: applyContact(payload),
     duration: payload.duration || 'Not specified',
-    internship_type: payload.location_type === 'online' ? 'Remote' : payload.location_type === 'offline' ? 'In-person' : 'Hybrid',
+    internship_type: selectedMode || payload.internship_type || 'In-person',
     field: payload.sector || payload.field || 'other',
     country: payload.country || 'India',
     state,
     city: city || payload.location || null,
     remote: payload.location_type === 'online',
-    deadline: payload.deadline || null,
-    stipend: payload.stipend_amount ? parseFloat(String(payload.stipend_amount).replace(/[^\d.]/g, '')) || null : null,
+    deadline: payload.application_deadline || payload.deadline || null,
+    stipend: payload.stipend_type === 'unpaid' ? 0 : numericAmount(payload.stipend_amount),
     org_name: payload.organization_name || payload.organization || 'Organization',
     contact_email: payload.apply_email || payload.submitted_by_email || null,
     contact_name: payload.submitted_by_name || null,
@@ -123,6 +144,7 @@ export function toInternshipInsert(payload, { employerId, organizationEmployerId
 export function toFellowshipInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const pending = isPending(payload);
+  const selectedMode = modeLabel(payload.location_type);
   return {
     title: payload.title?.trim(),
     slug: slugify(payload.title),
@@ -130,14 +152,14 @@ export function toFellowshipInsert(payload, { employerId, organizationEmployerId
     eligibility: payload.eligibility || 'See description for eligibility criteria.',
     application_process: applyContact(payload),
     duration: payload.duration || 'Not specified',
-    fellowship_type: payload.location_type === 'online' ? 'Remote' : payload.location_type === 'offline' ? 'In-person' : 'Hybrid',
+    fellowship_type: selectedMode || payload.fellowship_category || payload.fellowship_type || 'In-person',
     field: payload.sector || payload.field_of_study || 'other',
     country: payload.country || 'India',
     state,
     city: city || payload.location || null,
     remote: payload.location_type === 'online',
-    deadline: payload.deadline || null,
-    stipend: payload.stipend_amount ? parseFloat(String(payload.stipend_amount).replace(/[^\d.]/g, '')) || null : null,
+    deadline: payload.application_deadline || payload.deadline || null,
+    stipend: payload.funding_type === 'unpaid' ? 0 : numericAmount(payload.stipend_amount),
     org_name: payload.organization || 'Organization',
     contact_email: payload.apply_email || payload.submitted_by_email || null,
     contact_name: payload.submitted_by_name || null,
@@ -157,16 +179,17 @@ export function toScholarshipInsert(payload, { employerId, organizationEmployerI
     description: payload.description?.trim(),
     eligibility: payload.eligibility || 'See description for eligibility criteria.',
     application_process: applyContact(payload),
-    benefits: payload.benefits || payload.scholarship_level || 'See description for benefits.',
-    scholarship_type: payload.funding_type || 'Fully Funded',
+    benefits: payload.benefits || payload.scholarship_amount || payload.scholarship_level || payload.level_of_study || 'See description for benefits.',
+    scholarship_type: payload.scholarship_type || payload.funding_type || 'merit',
     field: payload.field_of_study || payload.sector || 'other',
-    level: payload.scholarship_level || 'all',
+    level: payload.level_of_study || payload.scholarship_level || 'all',
     country: payload.country || 'India',
     state,
     city: city || payload.location || null,
     remote: payload.location_type === 'online',
-    deadline: payload.deadline || null,
-    org_name: payload.organization || 'Organization',
+    deadline: payload.application_deadline || payload.deadline || null,
+    amount: payload.scholarship_amount || payload.amount || null,
+    org_name: payload.provider_name || payload.organization || 'Organization',
     contact_email: payload.apply_email || payload.submitted_by_email || null,
     contact_name: payload.submitted_by_name || null,
     featured: false,
@@ -180,12 +203,12 @@ export function toGrantInsert(payload, { employerId, organizationEmployerId } = 
   const pending = isPending(payload);
   return {
     title: payload.title?.trim(),
-    organization: payload.organization || 'Funding Organization',
-    type: payload.funding_type || payload.grant_type || 'Grant',
+    organization: payload.funding_agency || payload.organization || 'Funding Organization',
+    type: payload.agency_type || payload.funding_type || payload.grant_type || 'Grant',
     sector: payload.sector || payload.tags || null,
-    eligible: payload.eligibility || payload.eligible_countries || 'See description for eligibility.',
+    eligible: payload.eligibility || payload.eligible_countries || payload.country || 'See description for eligibility.',
     amount: payload.grant_amount || payload.amount || null,
-    deadline: payload.deadline || null,
+    deadline: payload.application_deadline || payload.deadline || null,
     link: payload.apply_url || payload.link || null,
     description: payload.description?.trim(),
     tags: payload.tags || payload.sector || null,
@@ -199,12 +222,12 @@ export function toGrantInsert(payload, { employerId, organizationEmployerId } = 
 export function toEventInsert(payload, { employerId, organizationEmployerId } = {}) {
   return {
     title: payload.title?.trim(),
-    organizer: payload.organization || payload.submitted_by_name || 'Organizer',
+    organizer: payload.organizer_name || payload.organization || payload.submitted_by_name || 'Organizer',
     type: payload.event_category || 'Conference',
-    mode: payload.location_type === 'online' ? 'Online' : payload.location_type === 'offline' ? 'Offline' : 'Hybrid',
+    mode: eventModeLabel(payload.location_type) || payload.mode || 'Offline',
     location: payload.location || payload.country || 'India',
     start_date: payload.event_date || payload.deadline || null,
-    end_date: payload.event_date || payload.deadline || null,
+    end_date: payload.event_end_date || payload.event_date || payload.deadline || null,
     link: payload.apply_url || payload.link || null,
     email: payload.apply_email || payload.submitted_by_email || null,
     description: payload.description?.trim(),
