@@ -151,7 +151,8 @@ export default function SubmitJob() {
         description="Post jobs, internships, fellowships, scholarships, grants or events on DevelopmentWala.org. Reach thousands of social sector professionals."
         canonical="https://developmentwala.org/submit-job"
       />
-      <Navbar />
+
+
 
       <main>
         <section className="bg-gray-50 border-b border-gray-200 py-10 px-4">
