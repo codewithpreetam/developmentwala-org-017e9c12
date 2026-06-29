@@ -6,8 +6,9 @@ import { format } from 'date-fns';
 import {
   ArrowLeft, MapPin, Calendar, Building2, Briefcase,
   Mail, ExternalLink, Clock, Share2, CheckCircle2, Send, X, Loader2,
-  Globe, DollarSign, GraduationCap, Tag, Users, FileText, Video, AlertCircle
+  Globe, IndianRupee, GraduationCap, Tag, Users, FileText, Video, AlertCircle
 } from 'lucide-react';
+
 import { toast } from 'sonner';
 import { z } from 'zod';
 import Navbar from '../components/layout/Navbar';
