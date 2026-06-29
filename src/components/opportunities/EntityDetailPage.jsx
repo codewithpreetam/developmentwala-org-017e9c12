@@ -377,9 +377,20 @@ export default function EntityDetailPage({
                         </div>
                       )}
                     </div>
-                    <button onClick={handleShare} className="p-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-500 shrink-0" title="Copy link">
-                      {copied ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5" />}
-                    </button>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={handleToggleSave}
+                        disabled={savingToggle}
+                        className={`p-2.5 border rounded-xl transition-colors ${savedId ? 'border-indigo-200 bg-indigo-50 text-indigo-600 hover:bg-indigo-100' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
+                        title={savedId ? 'Remove from saved' : 'Save for later'}
+                        aria-label={savedId ? 'Remove from saved' : 'Save for later'}
+                      >
+                        {savedId ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
+                      </button>
+                      <button onClick={handleShare} className="p-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-500" title="Copy link">
+                        {copied ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5" />}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="flex flex-wrap gap-4 text-sm text-gray-500 border-t border-gray-100 pt-4">
