@@ -429,8 +429,10 @@ export default function JobDetail() {
         title={`${job.title}${orgName ? ` — ${orgName}` : ''} | DevelopmentWala.org`}
         description={job.description?.replace(/[#*_[\]]/g, '').substring(0, 160)}
         canonical={canonicalUrl}
+        image={job.logo_url || job.banner_image || orgData?.logo_url || undefined}
         structuredData={getStructuredData()}
       />
+
       <Navbar />
       <MobileHeader title={job.title} />
 
