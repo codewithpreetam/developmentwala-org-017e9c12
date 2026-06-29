@@ -1,6 +1,7 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import EntityListPage from '../components/opportunities/EntityListPage';
+import { countryOptions } from '../components/forms/formOptions';
 
 const filters = [
   { key: 'sector', label: 'Sector', type: 'select', options: [
@@ -14,6 +15,7 @@ const filters = [
     { value: 'foundation', label: 'Foundation' }, { value: 'bilateral', label: 'Bilateral' },
     { value: 'corporate_csr', label: 'Corporate CSR' },
   ]},
+  { key: 'country', label: 'Country', type: 'select', options: countryOptions },
 ];
 
 export default function Grants() {

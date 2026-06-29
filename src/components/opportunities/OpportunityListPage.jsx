@@ -53,6 +53,10 @@ const accentClasses = {
   pink: { bg: 'bg-pink-600', hover: 'hover:bg-pink-700' },
 };
 
+const ALL_SELECT_VALUE = '__all__';
+const toSelectValue = (value) => (value === '' || value == null ? ALL_SELECT_VALUE : value);
+const fromSelectValue = (value) => (value === ALL_SELECT_VALUE ? '' : value);
+
 export default function OpportunityListPage({ type, title, description, metaTitle, metaDesc, canonical, accentColor = 'blue' }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -163,12 +167,12 @@ export default function OpportunityListPage({ type, title, description, metaTitl
                   {/* Sector — all types */}
                   <div>
                     <label className="text-white/70 text-xs font-medium mb-1 block">Sector</label>
-                    <Select value={filters.sector} onValueChange={v => setFilter('sector', v)}>
+                    <Select value={toSelectValue(filters.sector)} onValueChange={v => setFilter('sector', fromSelectValue(v))}>
                       <SelectTrigger className="h-9 rounded-xl bg-white text-gray-800 border-0 text-sm">
                         <SelectValue placeholder="All Sectors" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={null}>All Sectors</SelectItem>
+                        <SelectItem value={ALL_SELECT_VALUE}>All Sectors</SelectItem>
                         {sectorOptions.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
                       </SelectContent>
                     </Select>
@@ -178,12 +182,12 @@ export default function OpportunityListPage({ type, title, description, metaTitl
                   {['internship', 'fellowship', 'event', 'job'].includes(type) && (
                     <div>
                       <label className="text-white/70 text-xs font-medium mb-1 block">Mode</label>
-                      <Select value={filters.location_type} onValueChange={v => setFilter('location_type', v)}>
+                      <Select value={toSelectValue(filters.location_type)} onValueChange={v => setFilter('location_type', fromSelectValue(v))}>
                         <SelectTrigger className="h-9 rounded-xl bg-white text-gray-800 border-0 text-sm">
                           <SelectValue placeholder="All Modes" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={null}>All Modes</SelectItem>
+                          <SelectItem value={ALL_SELECT_VALUE}>All Modes</SelectItem>
                           {locationTypeOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                         </SelectContent>
                       </Select>
@@ -194,12 +198,12 @@ export default function OpportunityListPage({ type, title, description, metaTitl
                   {['fellowship', 'scholarship', 'internship', 'grant'].includes(type) && (
                     <div>
                       <label className="text-white/70 text-xs font-medium mb-1 block">Funding</label>
-                      <Select value={filters.funding_type} onValueChange={v => setFilter('funding_type', v)}>
+                      <Select value={toSelectValue(filters.funding_type)} onValueChange={v => setFilter('funding_type', fromSelectValue(v))}>
                         <SelectTrigger className="h-9 rounded-xl bg-white text-gray-800 border-0 text-sm">
                           <SelectValue placeholder="All Funding" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={null}>All Funding</SelectItem>
+                          <SelectItem value={ALL_SELECT_VALUE}>All Funding</SelectItem>
                           {fundingTypeOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                         </SelectContent>
                       </Select>
@@ -210,12 +214,12 @@ export default function OpportunityListPage({ type, title, description, metaTitl
                   {type === 'scholarship' && (
                     <div>
                       <label className="text-white/70 text-xs font-medium mb-1 block">Level</label>
-                      <Select value={filters.scholarship_level} onValueChange={v => setFilter('scholarship_level', v)}>
+                      <Select value={toSelectValue(filters.scholarship_level)} onValueChange={v => setFilter('scholarship_level', fromSelectValue(v))}>
                         <SelectTrigger className="h-9 rounded-xl bg-white text-gray-800 border-0 text-sm">
                           <SelectValue placeholder="All Levels" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={null}>All Levels</SelectItem>
+                          <SelectItem value={ALL_SELECT_VALUE}>All Levels</SelectItem>
                           {scholarshipLevelOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                         </SelectContent>
                       </Select>

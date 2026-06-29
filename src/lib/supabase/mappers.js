@@ -89,6 +89,13 @@ export function mapJob(row, extra = {}) {
 
 function deriveLocationType(row) {
   if (row.remote === true) return 'online';
+  const typedMode = row.mode || row.internship_type || row.fellowship_type || row.location_type;
+  if (typedMode) {
+    const m = String(typedMode).toLowerCase();
+    if (m.includes('online') || m.includes('virtual') || m.includes('remote')) return 'online';
+    if (m.includes('hybrid')) return 'hybrid';
+    if (m.includes('person') || m.includes('offline') || m.includes('site')) return 'offline';
+  }
   if (row.mode) {
     const m = String(row.mode).toLowerCase();
     if (m.includes('online') || m.includes('virtual') || m.includes('remote')) return 'online';
@@ -100,11 +107,41 @@ function deriveLocationType(row) {
 }
 
 function deriveStipendType(row) {
-  const s = row.stipend;
+  const s = row.stipend ?? row.stipend_amount ?? row.amount;
+  if (row.stipend_type) return String(row.stipend_type).toLowerCase();
+  if (row.funding_type) {
+    const f = String(row.funding_type).toLowerCase();
+    if (f.includes('unpaid')) return 'unpaid';
+    if (f.includes('paid') || f.includes('stipend') || f.includes('funded')) return 'paid';
+  }
   if (s == null || s === '') return null;
   const str = String(s).toLowerCase().trim();
   if (str.includes('unpaid') || str === '0' || str === 'no' || str === 'none') return 'unpaid';
   return 'paid';
+}
+
+function normalizeStudyLevel(value) {
+  if (!value) return value;
+  const v = String(value).toLowerCase().trim();
+  if (v.includes('under')) return 'undergraduate';
+  if (v.includes('post') || v.includes('master')) return 'postgraduate';
+  if (v.includes('phd') || v.includes('doctor')) return 'phd';
+  if (v.includes('diploma')) return 'diploma';
+  if (v.includes('certificate')) return 'certificate';
+  if (v === 'all' || v.includes('all level')) return 'all';
+  return value;
+}
+
+function normalizeScholarshipType(value) {
+  if (!value) return value;
+  const v = String(value).toLowerCase().trim();
+  if (v.includes('need')) return 'need_based';
+  if (v.includes('merit')) return 'merit';
+  if (v.includes('minority')) return 'minority';
+  if (v.includes('women') || v.includes('woman')) return 'women';
+  if (v.includes('research')) return 'research';
+  if (v.includes('sport')) return 'sports';
+  return value;
 }
 
 export function mapInternship(row, extra = {}) {
@@ -126,6 +163,7 @@ export function mapFellowship(row, extra = {}) {
     eligibility: row.eligibility,
     duration: row.duration,
     fellowship_type: row.fellowship_type,
+    funding_type: row.funding_type || row.fellowship_type,
     stipend: row.stipend,
     stipend_type: deriveStipendType(row),
     location_type: deriveLocationType(row),
@@ -135,14 +173,17 @@ export function mapFellowship(row, extra = {}) {
 }
 
 export function mapScholarship(row, extra = {}) {
+  const level = normalizeStudyLevel(row.level || row.level_of_study);
+  const scholarshipType = normalizeScholarshipType(row.scholarship_type || row.funding_type);
   return baseOpportunity(row, 'scholarship', {
     eligibility: row.eligibility,
     benefits: row.benefits,
-    scholarship_type: row.scholarship_type,
-    level: row.level,
-    level_of_study: row.level,
-    amount: row.amount,
-    scholarship_amount: row.amount,
+    scholarship_type: scholarshipType,
+    funding_type: row.funding_type || row.scholarship_type,
+    level,
+    level_of_study: level,
+    amount: row.amount || row.scholarship_amount,
+    scholarship_amount: row.amount || row.scholarship_amount,
     employer_id: row.employer_id,
     ...extra,
   });
@@ -153,6 +194,8 @@ export function mapGrant(row, extra = {}) {
     organization: row.organization,
     type: row.type,
     agency_type: row.type,
+    country: row.country,
+    eligible_countries: row.eligible,
     sector: row.sector,
     eligible: row.eligible,
     amount: row.amount,

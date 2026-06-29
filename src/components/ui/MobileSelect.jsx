@@ -24,7 +24,7 @@ export default function MobileSelect({ value, onValueChange, placeholder, option
   const [isMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
   const selectedLabel = options.find(o => String(o.value) === String(value))?.label;
-  const normalizedDesktopValue = value === '' || value == null ? '' : String(value);
+  const normalizedDesktopValue = toSelectValue(value);
 
   if (!isMobile) {
     return (

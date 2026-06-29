@@ -1,7 +1,7 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import EntityListPage from '../components/opportunities/EntityListPage';
-import { countryOptions } from '../components/forms/formOptions';
+import { countryOptions, sectorOptions } from '../components/forms/formOptions';
 
 const filters = [
   { key: 'level_of_study', label: 'Level', type: 'select', options: [
@@ -12,6 +12,7 @@ const filters = [
     { value: 'merit', label: 'Merit-based' }, { value: 'need_based', label: 'Need-based' },
     { value: 'minority', label: 'Minority' }, { value: 'women', label: 'Women' }, { value: 'research', label: 'Research' },
   ]},
+  { key: 'sector', label: 'Field / Sector', type: 'select', options: sectorOptions },
   { key: 'country', label: 'Country', type: 'select', options: countryOptions },
 ];
 

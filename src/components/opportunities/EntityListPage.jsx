@@ -5,7 +5,6 @@ import { Search, SlidersHorizontal, X, Star, MapPin, Calendar, Globe, IndianRupe
 import { base44 } from '@/api/base44Client';
 import { redirectToSignIn } from '@/lib/auth/redirect';
 import BookmarkButton from './BookmarkButton';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { format, isPast, formatDistanceToNow } from 'date-fns';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
@@ -74,6 +73,15 @@ const normalizeFilterValue = (value) => {
 };
 
 const filterValuesMatch = (itemValue, filterValue) => {
+  if (Array.isArray(itemValue)) {
+    return itemValue.some((value) => filterValuesMatch(value, filterValue));
+  }
+
+  if (typeof itemValue === 'string' && /[,;/|]/.test(itemValue)) {
+    const parts = itemValue.split(/[,;/|]/).map((value) => value.trim()).filter(Boolean);
+    if (parts.some((value) => filterValuesMatch(value, filterValue))) return true;
+  }
+
   const itemNorm = normalizeFilterValue(itemValue);
   const filterNorm = normalizeFilterValue(filterValue);
   if (!filterNorm) return true;
@@ -88,6 +96,11 @@ const humanizeOption = (value) => String(value || '')
   .replace(/\s+/g, ' ')
   .trim()
   .replace(/\b\w/g, c => c.toUpperCase());
+
+const getFilterableValue = (item, key) => {
+  if (key === 'country') return [item.country, item.eligible_countries, item.eligible, item.location].filter(Boolean).join(', ');
+  return item[key];
+};
 
 function OpCard({ item, detailPageParam, accentColor, isSaved, onToggleSave, type }) {
   const deadline = item.application_deadline || item.event_date || item.registration_deadline;
@@ -239,9 +252,16 @@ export default function EntityListPage({
   };
 
   const loadItems = async () => {
-    const data = await entity.filter({ status: 'published' }, '-created_date', 100);
-    setItems(data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const data = await entity.filter({ status: 'published' }, '-created_date', 300);
+      setItems(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error(`Failed to load ${type || 'opportunities'}`, error);
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const hydratedFilters = useMemo(() => extraFilters.map((filter) => {
@@ -250,12 +270,18 @@ export default function EntityListPage({
     const liveOptions = [];
 
     items.forEach((item) => {
-      const rawValue = item[filter.key];
-      if (rawValue === undefined || rawValue === null || rawValue === '') return;
-      const normalizedValue = normalizeFilterValue(rawValue);
-      if (!normalizedValue || seen.has(normalizedValue)) return;
-      seen.add(normalizedValue);
-      liveOptions.push({ value: rawValue, label: humanizeOption(rawValue) });
+      const rawValue = getFilterableValue(item, filter.key);
+      const values = Array.isArray(rawValue)
+        ? rawValue
+        : String(rawValue ?? '').split(/[,;/|]/).map((value) => value.trim()).filter(Boolean);
+
+      values.forEach((value) => {
+        if (value === undefined || value === null || value === '') return;
+        const normalizedValue = normalizeFilterValue(value);
+        if (!normalizedValue || seen.has(normalizedValue)) return;
+        seen.add(normalizedValue);
+        liveOptions.push({ value, label: humanizeOption(value) });
+      });
     });
 
     return {
@@ -275,7 +301,7 @@ export default function EntityListPage({
     const matchFilters = hydratedFilters.every(f => {
       const fv = filters[f.key];
       if (!fv) return true;
-      const iv = item[f.key];
+      const iv = getFilterableValue(item, f.key);
       return filterValuesMatch(iv, fv);
     });
     return matchQ && matchFilters;
