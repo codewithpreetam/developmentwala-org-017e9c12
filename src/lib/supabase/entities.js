@@ -144,7 +144,7 @@ async function enrichWithEmployerEmail(rows, mapFn) {
 function createTableEntity(table, mapFn, type = 'job') {
   return {
     async list(sort = '-created_at', limit = 200) {
-      const { data, error } = await supabase.from(table).select('*').limit(limit);
+      const { data, error } = await supabase.from(table).select('*').order('created_at', { ascending: false }).limit(limit);
       if (error) throw error;
       return sortRows(await enrichWithEmployerEmail(data || [], mapFn), sort);
     },
