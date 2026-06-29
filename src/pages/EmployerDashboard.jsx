@@ -181,7 +181,6 @@ export default function EmployerDashboard() {
   };
 
   const uo = (k, v) => {
-    if (k === 'org_name') return;
     setOrgForm(p => ({ ...p, [k]: v }));
   };
 
