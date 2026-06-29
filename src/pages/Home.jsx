@@ -302,93 +302,132 @@ export default function Home() {
         </section>
 
         {/* Browse by Type */}
-        <section className="py-10 sm:py-14 px-4 sm:px-6 bg-white border-b border-gray-100">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-10">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Browse by Type</h2>
-              <p className="text-gray-400 text-sm mt-2">Explore every kind of social impact opportunity</p>
+        <section className="py-14 sm:py-20 px-4 sm:px-6 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <p className="text-[11px] font-bold text-blue-600 uppercase tracking-[0.2em] mb-3">Opportunities</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Browse by Type</h2>
+              <p className="text-gray-500 text-base mt-3 max-w-xl mx-auto">Six ways to grow your career in the social impact sector — explore live listings curated daily.</p>
             </div>
-            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3">
-              {opportunitySections.map(({ type, title, icon: Icon, page }) => (
-                <Link key={type} to={createPageUrl(page)}
-                  className="group flex flex-col items-center gap-3 p-5 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg hover:shadow-gray-100 transition-all bg-white cursor-pointer">
-                  <div className="w-10 h-10 rounded-xl bg-gray-50 group-hover:bg-gray-100 flex items-center justify-center transition-colors">
-                    <Icon className="w-5 h-5 text-gray-700" />
-                  </div>
-                  <span className="text-xs font-semibold text-gray-600 group-hover:text-gray-900 text-center leading-tight">{title}</span>
-                  {!loading && typeCounts[type] > 0 && (
-                    <span className="text-xs text-gray-400">{typeCounts[type]} live</span>
-                  )}
-                  {loading && (
-                    <span className="text-xs text-gray-200 w-10 h-3 bg-gray-100 rounded animate-pulse" />
-                  )}
-                </Link>
-              ))}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+              {opportunitySections.map(({ type, title, icon: Icon, page, tint }) => {
+                const count = typeCounts[type] || 0;
+                return (
+                  <Link
+                    key={type}
+                    to={createPageUrl(page)}
+                    className="group relative flex flex-col items-center gap-3.5 p-5 sm:p-6 rounded-2xl border border-gray-100 bg-white hover:border-transparent hover:shadow-[0_10px_40px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <div className={`w-12 h-12 rounded-2xl ring-1 ${tint} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-900 text-center leading-tight">{title}</span>
+                    {loading ? (
+                      <span className="w-12 h-3 bg-gray-100 rounded animate-pulse" />
+                    ) : (
+                      <span className="text-[11px] font-medium text-gray-400 tabular-nums">
+                        {count > 0 ? `${count} live` : 'Coming soon'}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* Browse by Sector */}
-        <section className="py-10 sm:py-14 px-4 sm:px-6 bg-[#f5f5f7]">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-10">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Browse by Sector</h2>
-              <p className="text-gray-400 text-sm mt-2">Find opportunities aligned with your mission</p>
+        <section className="py-14 sm:py-20 px-4 sm:px-6 bg-[#fafafb] border-y border-gray-100">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <p className="text-[11px] font-bold text-indigo-600 uppercase tracking-[0.2em] mb-3">Causes</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Browse by Sector</h2>
+              <p className="text-gray-500 text-base mt-3 max-w-xl mx-auto">Find opportunities aligned with the mission you care about most.</p>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              {sectors.map(({ icon: Icon, label, value }) => (
-                <button key={value} onClick={() => navigate(createPageUrl(`Jobs?sector=${value}`))}
-                  className="group flex flex-col items-center gap-3 p-5 bg-white rounded-2xl border border-transparent hover:border-gray-200 hover:shadow-lg hover:shadow-gray-100 transition-all cursor-pointer">
-                  <Icon className="w-6 h-6 text-gray-400 group-hover:text-gray-700 transition-colors" />
-                  <span className="text-xs font-semibold text-gray-500 group-hover:text-gray-900 text-center transition-colors">{label}</span>
-                </button>
-              ))}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+              {sectors.map(({ icon: Icon, label, value, accent, iconColor }) => {
+                const count = sectorCounts[value] || 0;
+                return (
+                  <button
+                    key={value}
+                    onClick={() => navigate(createPageUrl(`Jobs?sector=${value}`))}
+                    className="group relative flex flex-col items-center gap-3.5 p-5 sm:p-6 bg-white rounded-2xl border border-gray-100 hover:border-transparent hover:shadow-[0_10px_40px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 text-left"
+                  >
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${accent} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}>
+                      <Icon className={`w-5 h-5 ${iconColor}`} />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-900 text-center leading-tight">{label}</span>
+                    {loading ? (
+                      <span className="w-10 h-3 bg-gray-100 rounded animate-pulse" />
+                    ) : (
+                      <span className="text-[11px] font-medium text-gray-400 tabular-nums">
+                        {count > 0 ? `${count} open` : 'Explore'}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* Featured Opportunities */}
         {!loading && featuredItems.length > 0 && (
-          <section className="py-10 sm:py-16 px-4 sm:px-6 bg-white">
-            <div className="max-w-5xl mx-auto">
-              <div className="flex items-end justify-between mb-10">
-                <div>
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Handpicked</p>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Featured Opportunities</h2>
+          <section className="py-14 sm:py-20 px-4 sm:px-6 bg-white">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 mb-10 sm:mb-12">
+                <div className="min-w-0">
+                  <p className="text-[11px] font-bold text-amber-600 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                    <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" /> Handpicked
+                  </p>
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Featured Opportunities</h2>
+                  <p className="text-gray-500 text-base mt-2">Editor-selected roles, fellowships and grants worth your attention.</p>
                 </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
                 {featuredItems.map(item => {
                   const orgName = orgNameFromItem(item);
                   const deadline = item.deadline || item.application_deadline || item.registration_deadline;
-                  const detailPage = detailPageMap[item._type] || 'JobDetail';
                   return (
-                    <Link key={`${item._type}-${item.id}`} to={opportunityDetailUrl(item, item._type)}
-                      className="group bg-white border border-gray-100 hover:border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-gray-100 transition-all flex flex-col">
-                      {item.banner_image && (
-                        <div className="h-36 overflow-hidden bg-gray-50">
-                          <img src={item.banner_image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        </div>
-                      )}
-                      <div className="p-4 flex-1 flex flex-col">
-                        <div className="flex items-center gap-1.5 mb-2">
-                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full capitalize ${typeBadgeColor[item._type] || 'bg-gray-50 text-gray-600'}`}>{item._type}</span>
-                        </div>
-                        <h3 className="font-semibold text-gray-900 text-sm leading-snug group-hover:text-blue-600 transition-colors line-clamp-2 flex-1">{item.title}</h3>
-                        {orgName && (
-                          <div className="flex items-center gap-1 mt-3 text-xs text-gray-400">
-                            <Building2 className="w-3 h-3 shrink-0" />
-                            <span className="truncate">{orgName}</span>
+                    <Link
+                      key={`${item._type}-${item.id}`}
+                      to={opportunityDetailUrl(item, item._type)}
+                      className="group relative bg-white border border-gray-100 hover:border-transparent rounded-2xl overflow-hidden hover:shadow-[0_20px_50px_-20px_rgba(0,0,0,0.18)] hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                    >
+                      <div className="relative h-40 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+                        {item.banner_image ? (
+                          <img src={item.banner_image} alt={item.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Building2 className="w-10 h-10 text-gray-300" />
                           </div>
                         )}
-                        {deadline && (
-                          <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
-                            <Clock className="w-3 h-3 shrink-0" />
-                            <span>Due {new Date(deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
-                          </div>
-                        )}
-                        <div className="mt-3 flex items-center gap-1 text-xs font-semibold text-blue-600 group-hover:gap-2 transition-all">
-                          View <ArrowRight className="w-3 h-3" />
+                        <div className="absolute top-3 left-3">
+                          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full capitalize backdrop-blur bg-white/90 shadow-sm ${typeBadgeColor[item._type] || 'text-gray-700'}`}>
+                            {item._type}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-4 sm:p-5 flex-1 flex flex-col">
+                        <h3 className="font-semibold text-gray-900 text-sm leading-snug group-hover:text-blue-600 transition-colors line-clamp-2 mb-3">{item.title}</h3>
+                        <div className="mt-auto space-y-1.5 text-xs text-gray-500">
+                          {orgName && (
+                            <div className="flex items-center gap-1.5">
+                              <Building2 className="w-3.5 h-3.5 shrink-0 text-gray-400" />
+                              <span className="truncate">{orgName}</span>
+                            </div>
+                          )}
+                          {deadline && (
+                            <div className="flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 shrink-0 text-gray-400" />
+                              <span>Due {new Date(deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
+                          <span className="text-xs font-semibold text-blue-600 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                            View details <ArrowRight className="w-3.5 h-3.5" />
+                          </span>
                         </div>
                       </div>
                     </Link>
@@ -399,34 +438,37 @@ export default function Home() {
           </section>
         )}
 
-        {/* Dynamic sections */}
-        {opportunitySections.map(({ type, title, page, icon: Icon, detailParam }) => {
+        {/* Dynamic sections — Jobs, Fellowships, Internships, Scholarships, Grants, Events */}
+        {opportunitySections.map(({ type, title, page, icon: Icon, detailParam, tint }) => {
           const items = sections[type] || [];
           const total = typeCounts[type] || 0;
           if (!loading && items.length === 0) return null;
           return (
-            <section key={type} className="py-10 sm:py-16 px-4 sm:px-6 border-t border-gray-100">
-              <div className="max-w-5xl mx-auto">
-                <div className="flex items-end justify-between mb-10">
-                  <div>
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Explore</p>
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">{title}</h2>
+            <section key={type} className="py-14 sm:py-20 px-4 sm:px-6 bg-white border-t border-gray-100">
+              <div className="max-w-6xl mx-auto">
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 mb-8 sm:mb-12">
+                  <div className="min-w-0">
+                    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full ring-1 ${tint} mb-3`}>
+                      <Icon className="w-3.5 h-3.5" />
+                      <span className="text-[11px] font-bold uppercase tracking-wider">Explore</span>
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">{title}</h2>
                     {!loading && total > 0 && (
-                      <p className="text-sm text-gray-400 mt-1">{total} live listing{total !== 1 ? 's' : ''}</p>
+                      <p className="text-sm text-gray-500 mt-2">{total} live listing{total !== 1 ? 's' : ''} · Updated daily</p>
                     )}
                   </div>
-                  <Link to={createPageUrl(page)} className="hidden md:flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
-                    View All <ArrowUpRight className="w-4 h-4" />
+                  <Link to={createPageUrl(page)} className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 hover:gap-2.5 transition-all shrink-0">
+                    View all <ArrowUpRight className="w-4 h-4" />
                   </Link>
                 </div>
                 {loading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className="h-52 bg-gray-100 rounded-xl animate-pulse" />
+                      <div key={i} className="h-64 bg-gray-50 rounded-2xl animate-pulse" />
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                     {items.map((o) => (
                       <OpportunityCard
                         key={`${type}-${o.id}`}
@@ -435,8 +477,10 @@ export default function Home() {
                     ))}
                   </div>
                 )}
-                <div className="md:hidden text-center mt-6">
-                  <Link to={createPageUrl(page)} className="text-blue-600 text-sm font-medium">View all {title} →</Link>
+                <div className="sm:hidden text-center mt-6">
+                  <Link to={createPageUrl(page)} className="inline-flex items-center gap-1.5 text-blue-600 text-sm font-semibold">
+                    View all {title} <ArrowRight className="w-4 h-4" />
+                  </Link>
                 </div>
               </div>
             </section>
@@ -445,36 +489,60 @@ export default function Home() {
 
         {/* Top Organisations Hiring Now */}
         {!loading && topOrgs.length > 0 && (
-          <section className="py-10 sm:py-16 px-4 sm:px-6 bg-[#f5f5f7] border-t border-gray-100">
-            <div className="max-w-5xl mx-auto">
-              <div className="text-center mb-10">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Now Hiring</p>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Top Organisations Hiring Now</h2>
-                <p className="text-gray-400 text-sm mt-2">Leading NGOs and social impact organisations with the most open positions</p>
+          <section className="py-14 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#fafafb] to-white border-t border-gray-100">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12">
+                <p className="text-[11px] font-bold text-emerald-600 uppercase tracking-[0.2em] mb-3 flex items-center justify-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                  Now Hiring
+                </p>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Top Organisations Hiring Now</h2>
+                <p className="text-gray-500 text-base mt-3 max-w-2xl mx-auto">Leading NGOs and social impact organisations with the most open positions on DevelopmentWala.</p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {topOrgs.map(({ name, count, org }, i) => (
-                  <Link key={i} to={org?.id ? createPageUrl(`EmployerProfile?id=${org.id}`) : createPageUrl(`EmployerProfile?org=${encodeURIComponent(name)}`)}
-                    className="group bg-white rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-xl hover:shadow-gray-100 transition-all p-6 flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
-                      {org?.logo_url ? (
-                        <img src={org.logo_url} alt={name} className="w-full h-full object-contain p-1" />
-                      ) : (
-                        <Building2 className="w-6 h-6 text-blue-400" />
-                      )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                {topOrgs.map(({ name, count, sectors: orgSec, org }, i) => (
+                  <Link
+                    key={i}
+                    to={org?.id ? createPageUrl(`EmployerProfile?id=${org.id}`) : createPageUrl(`EmployerProfile?org=${encodeURIComponent(name)}`)}
+                    className="group relative bg-white rounded-2xl border border-gray-100 hover:border-transparent hover:shadow-[0_20px_50px_-20px_rgba(0,0,0,0.18)] hover:-translate-y-1 transition-all duration-300 p-5 sm:p-6"
+                  >
+                    <div className="absolute top-4 right-4 text-[10px] font-bold text-gray-300 tabular-nums">
+                      #{String(i + 1).padStart(2, '0')}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-blue-600 transition-colors truncate">{name}</h3>
-                      {org?.sector && (
-                        <p className="text-xs text-gray-400 mt-0.5 capitalize">{org.sector.replace(/_/g, ' ')}</p>
-                      )}
-                      <div className="mt-2 inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-full">
-                        <Briefcase className="w-3 h-3" /> {count} open position{count !== 1 ? 's' : ''}
+                    <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 items-start">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 ring-1 ring-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
+                        {org?.logo_url ? (
+                          <img src={org.logo_url} alt={name} loading="lazy" className="w-full h-full object-contain p-1.5" />
+                        ) : (
+                          <Building2 className="w-6 h-6 text-blue-400" />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="font-bold text-gray-900 text-[15px] leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">{name}</h3>
+                        {(orgSec?.length > 0 || org?.sector) && (
+                          <div className="flex flex-wrap gap-1 mt-1.5">
+                            {(orgSec?.length > 0 ? orgSec : [org.sector]).slice(0, 2).map((s) => (
+                              <span key={s} className="text-[10px] font-medium text-gray-500 bg-gray-50 px-2 py-0.5 rounded-md capitalize">
+                                {String(s).replace(/_/g, ' ')}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 transition-colors shrink-0" />
+                    <div className="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between">
+                      <div className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                        <Briefcase className="w-3 h-3" /> {count} open position{count !== 1 ? 's' : ''}
+                      </div>
+                      <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
+                    </div>
                   </Link>
                 ))}
+              </div>
+              <div className="text-center mt-10">
+                <Link to={createPageUrl('Employers')} className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 hover:gap-3 transition-all">
+                  Browse all organisations <ArrowUpRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
           </section>
