@@ -99,9 +99,7 @@ export default function DashboardShell({ children, title }) {
         </div>
         <div className="px-5 py-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ background: ACCENT }}>
-              {(user.full_name || user.email || 'U').charAt(0).toUpperCase()}
-            </div>
+            <UserAvatar user={user} size="md" background={ACCENT} />
             <div className="min-w-0">
               <p className="text-white text-sm font-semibold truncate">{user.full_name || cfg.title}</p>
               <p className="text-gray-400 text-xs truncate">{user.email}</p>
