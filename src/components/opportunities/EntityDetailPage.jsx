@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import EmployerCard from './EmployerCard';
 import OrgProfileLink from './OrgProfileLink';
+import OrganizationInfoSection from './OrganizationInfoSection';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 import SEOHead from '../shared/SEOHead';
@@ -616,6 +617,11 @@ export default function EntityDetailPage({
                 <ArrowLeft className="w-4 h-4" /> Back to all {typeLabel}s
               </Link>
             </aside>
+          </div>
+
+          {/* Organization Information — synced from the employer's Organization Profile */}
+          <div className="mt-10">
+            <OrganizationInfoSection orgData={orgData} fallbackOrgName={orgName} />
           </div>
         </div>
       </main>

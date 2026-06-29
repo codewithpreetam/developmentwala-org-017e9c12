@@ -23,10 +23,9 @@ export default function SubmitGrant() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', funding_agency: '', agency_type: '', sector: '',
+    title: '', description: '', agency_type: '', sector: '',
     country: DEFAULT_COUNTRY, eligible_countries: '', grant_amount: '',
-    application_deadline: '', application_link: '',
-    application_email: '', tags: '', submitted_by_name: '', submitted_by_email: '',
+    application_deadline: '', tags: '', submitted_by_name: '', submitted_by_email: '',
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -70,10 +69,7 @@ export default function SubmitGrant() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="Grant objectives, what will be funded, selection criteria..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Funding Agency">
-            <Input value={form.funding_agency} onChange={e => u('funding_agency', e.target.value)} placeholder="e.g. Ford Foundation, USAID" className="h-11 rounded-xl" />
-          </FormField>
+        <div>
           <FormField label="Agency Type">
             <Select value={form.agency_type} onValueChange={v => u('agency_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
@@ -112,13 +108,8 @@ export default function SubmitGrant() {
           </FormField>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Application Link">
-            <Input type="url" value={form.application_link} onChange={e => u('application_link', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
-          </FormField>
-          <FormField label="Application Email">
-            <Input type="email" value={form.application_email} onChange={e => u('application_email', e.target.value)} placeholder="grants@org.com" className="h-11 rounded-xl" />
-          </FormField>
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+          Applications are received through DevelopmentWala.org. Review applicants from your Employer Dashboard.
         </div>
 
         <hr className="border-gray-100" />

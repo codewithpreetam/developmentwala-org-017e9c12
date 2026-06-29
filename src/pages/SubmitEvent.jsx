@@ -24,9 +24,9 @@ export default function SubmitEvent() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', organizer_name: '', organizer_type: '', event_category: '',
+    title: '', description: '', organizer_type: '', event_category: '',
     sector: '', event_date: '', event_end_date: '', event_time: '', location: '',
-    location_type: '', country: DEFAULT_COUNTRY, registration_link: '', registration_deadline: '',
+    location_type: '', country: DEFAULT_COUNTRY, registration_deadline: '',
     is_free: true, registration_fee: '', banner_image: '', tags: '', submitted_by_name: '', submitted_by_email: '',
   });
   const [submitting, setSubmitting] = useState(false);
@@ -81,10 +81,7 @@ export default function SubmitEvent() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="What is this event about? Who should attend? Key speakers..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Organizer Name">
-            <Input value={form.organizer_name} onChange={e => u('organizer_name', e.target.value)} placeholder="Organizing NGO or institution" className="h-11 rounded-xl" />
-          </FormField>
+        <div>
           <FormField label="Organizer Type">
             <Select value={form.organizer_type} onValueChange={v => u('organizer_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
@@ -163,10 +160,10 @@ export default function SubmitEvent() {
             <Input value={form.tags} onChange={e => u('tags', e.target.value)} placeholder="e.g. climate, youth, webinar" className="h-11 rounded-xl" />
           </FormField>
         </div>
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+          Registrations are managed through DevelopmentWala.org. Track registrants from your Employer Dashboard.
+        </div>
 
-        <FormField label="Registration Link">
-          <Input type="url" value={form.registration_link} onChange={e => u('registration_link', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
-        </FormField>
 
         <ImageUploadField
           label="Event Header Image (optional)"

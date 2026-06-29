@@ -40,10 +40,9 @@ export default function SubmitScholarship() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', provider_name: '', provider_type: '', university_name: '',
+    title: '', description: '', provider_type: '', university_name: '',
     country: DEFAULT_COUNTRY, level_of_study: '', scholarship_type: '', funding_type: '', eligible_countries: '',
-    field_of_study: '', scholarship_amount: '', application_deadline: '', application_link: '',
-    application_email: '', tags: '',
+    field_of_study: '', scholarship_amount: '', application_deadline: '', tags: '',
     submitted_by_name: '', submitted_by_email: '',
   });
   const [submitting, setSubmitting] = useState(false);
@@ -88,10 +87,7 @@ export default function SubmitScholarship() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="About the scholarship, benefits, selection process..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Provider / Donor Name">
-            <Input value={form.provider_name} onChange={e => u('provider_name', e.target.value)} placeholder="e.g. Tata Trusts, Ford Foundation" className="h-11 rounded-xl" />
-          </FormField>
+        <div>
           <FormField label="Provider Type">
             <Select value={form.provider_type} onValueChange={v => u('provider_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
@@ -154,13 +150,8 @@ export default function SubmitScholarship() {
           </FormField>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Application Link">
-            <Input type="url" value={form.application_link} onChange={e => u('application_link', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
-          </FormField>
-          <FormField label="Application Email">
-            <Input type="email" value={form.application_email} onChange={e => u('application_email', e.target.value)} placeholder="scholarships@org.com" className="h-11 rounded-xl" />
-          </FormField>
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+          Applications are received through DevelopmentWala.org. Review applicants from your Employer Dashboard.
         </div>
 
         <hr className="border-gray-100" />

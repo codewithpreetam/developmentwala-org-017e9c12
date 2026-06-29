@@ -28,11 +28,11 @@ export default function SubmitFellowship() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', organization_name: '', organization_type: '', sector: '',
+    title: '', description: '', organization_type: '', sector: '',
     fellowship_category: '', location_type: '', location: '', country: DEFAULT_COUNTRY, duration: '',
     funding_type: '', stipend_amount: '', eligible_countries: '', education_requirement: '',
     experience_required: '', field_of_study: '', application_deadline: '', application_process: '',
-    application_link: '', application_email: '', video_link: '', tags: '',
+    video_link: '', tags: '',
     submitted_by_name: '', submitted_by_email: '',
   });
   const [submitting, setSubmitting] = useState(false);
@@ -77,10 +77,7 @@ export default function SubmitFellowship() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="About the fellowship, what fellows will do, benefits..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Organization Name">
-            <Input value={form.organization_name} onChange={e => u('organization_name', e.target.value)} placeholder="Offering organization" className="h-11 rounded-xl" />
-          </FormField>
+        <div>
           <FormField label="Organization Type">
             <Select value={form.organization_type} onValueChange={v => u('organization_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
@@ -167,13 +164,12 @@ export default function SubmitFellowship() {
           </FormField>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Application Link">
-            <Input type="url" value={form.application_link} onChange={e => u('application_link', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
-          </FormField>
-          <FormField label="Video Link (optional)">
-            <Input type="url" value={form.video_link} onChange={e => u('video_link', e.target.value)} placeholder="YouTube / Vimeo" className="h-11 rounded-xl" />
-          </FormField>
+        <FormField label="Video Link (optional)">
+          <Input type="url" value={form.video_link} onChange={e => u('video_link', e.target.value)} placeholder="YouTube / Vimeo" className="h-11 rounded-xl" />
+        </FormField>
+
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+          Applications are received through DevelopmentWala.org. Review applicants from your Employer Dashboard.
         </div>
 
         <hr className="border-gray-100" />

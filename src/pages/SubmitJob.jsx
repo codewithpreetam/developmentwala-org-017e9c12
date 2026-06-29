@@ -78,12 +78,12 @@ export default function SubmitJob() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', organization: '', location: '', country: DEFAULT_COUNTRY,
+    title: '', description: '', location: '', country: DEFAULT_COUNTRY,
     opportunity_type: 'job', job_type: '', sector: '', salary: '', deadline: '',
     location_type: '', funding_type: '', duration: '', stipend_amount: '', grant_amount: '',
     eligible_countries: '', scholarship_level: '', field_of_study: '', education_requirement: '',
     experience_required: '', application_process: '',
-    event_date: '', event_time: '', event_category: '', apply_url: '', apply_email: '',
+    event_date: '', event_time: '', event_category: '',
     tags: '', submitted_by_name: '', submitted_by_email: '',
   });
   const [submitting, setSubmitting] = useState(false);
@@ -240,20 +240,13 @@ export default function SubmitJob() {
 
                   {showOptional && (
                     <div className="space-y-5">
-                      {/* Organization */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <FormField label={type === 'grant' ? 'Funding Agency' : 'Organization Name'}>
-                          <Input value={form.organization} onChange={(e) => update('organization', e.target.value)}
-                            placeholder={type === 'grant' ? 'e.g. Ford Foundation' : 'Your NGO name'}
-                            className="h-11 rounded-xl border-gray-200" />
-                        </FormField>
-                        <FormField label="Sector">
-                          <Select value={form.sector} onValueChange={v => update('sector', v)}>
-                            <SelectTrigger className="h-11 rounded-xl border-gray-200"><SelectValue placeholder="Select sector" /></SelectTrigger>
-                            <SelectContent>{sectorOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
-                          </Select>
-                        </FormField>
-                      </div>
+                      {/* Sector */}
+                      <FormField label="Sector">
+                        <Select value={form.sector} onValueChange={v => update('sector', v)}>
+                          <SelectTrigger className="h-11 rounded-xl border-gray-200"><SelectValue placeholder="Select sector" /></SelectTrigger>
+                          <SelectContent>{sectorOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+                        </Select>
+                      </FormField>
 
                       {/* Location */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -353,17 +346,11 @@ export default function SubmitJob() {
                           placeholder="e.g. women, rural, fellowship, india" className="h-11 rounded-xl border-gray-200" />
                       </FormField>
 
-                      {/* Apply links */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <FormField label={type === 'event' ? 'Registration Link' : 'Application URL'}>
-                          <Input type="url" value={form.apply_url} onChange={(e) => update('apply_url', e.target.value)}
-                            placeholder="https://..." className="h-11 rounded-xl border-gray-200" />
-                        </FormField>
-                        <FormField label="Application Email">
-                          <Input type="email" value={form.apply_email} onChange={(e) => update('apply_email', e.target.value)}
-                            placeholder="apply@org.com" className="h-11 rounded-xl border-gray-200" />
-                        </FormField>
+
+                      <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+                        Applicants will apply directly through DevelopmentWala.org using the platform's built-in application workflow. Manage applicants from your Employer Dashboard.
                       </div>
+
 
                       <hr className="border-gray-100" />
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Your Contact Info</p>

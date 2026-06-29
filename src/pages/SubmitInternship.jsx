@@ -16,10 +16,10 @@ export default function SubmitInternship() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', organization_name: '', organization_type: '', sector: '',
+    title: '', description: '', organization_type: '', sector: '',
     location: '', location_type: '', country: DEFAULT_COUNTRY, duration: '', stipend_type: '',
     stipend_amount: '', responsibilities: '', required_skills: '',
-    application_deadline: '', application_link: '', application_email: '', tags: '',
+    application_deadline: '', tags: '',
     submitted_by_name: '', submitted_by_email: '',
   });
   const [submitting, setSubmitting] = useState(false);
@@ -65,24 +65,21 @@ export default function SubmitInternship() {
         </FormField>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Organization Name">
-            <Input value={form.organization_name} onChange={e => u('organization_name', e.target.value)} placeholder="Your NGO name" className="h-11 rounded-xl" />
-          </FormField>
           <FormField label="Organization Type">
             <Select value={form.organization_type} onValueChange={v => u('organization_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
               <SelectContent>{orgTypeOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
             </Select>
           </FormField>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <FormField label="Sector">
             <Select value={form.sector} onValueChange={v => u('sector', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select sector" /></SelectTrigger>
               <SelectContent>{sectorOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
             </Select>
           </FormField>
+        </div>
+
+        <div>
           <FormField label="Mode">
             <Select value={form.location_type} onValueChange={v => u('location_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Online / Offline" /></SelectTrigger>
@@ -134,14 +131,11 @@ export default function SubmitInternship() {
           </FormField>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Application Link">
-            <Input type="url" value={form.application_link} onChange={e => u('application_link', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
-          </FormField>
-          <FormField label="Application Email">
-            <Input type="email" value={form.application_email} onChange={e => u('application_email', e.target.value)} placeholder="hr@ngo.org" className="h-11 rounded-xl" />
-          </FormField>
+
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+          Applications are received through DevelopmentWala.org. Review applicants from your Employer Dashboard.
         </div>
+
 
         <hr className="border-gray-100" />
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Your Contact Info (optional)</p>
