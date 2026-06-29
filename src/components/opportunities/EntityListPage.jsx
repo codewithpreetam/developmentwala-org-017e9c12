@@ -87,7 +87,7 @@ const filterValuesMatch = (itemValue, filterValue) => {
   if (!filterNorm) return true;
   if (!itemNorm) return false;
   if (itemNorm === filterNorm) return true;
-  if (filterNorm === 'paid' && itemNorm === 'unpaid') return false;
+  if (['paid', 'unpaid'].includes(filterNorm) || ['paid', 'unpaid'].includes(itemNorm)) return false;
   return itemNorm.includes(filterNorm) || filterNorm.includes(itemNorm);
 };
 
