@@ -6,7 +6,7 @@ import { Save, ArrowLeft, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import Navbar from '../components/layout/Navbar';
+// Navbar provided by DashboardShell wrapper route
 import SEOHead from '../components/shared/SEOHead';
 import CountrySelect from '../components/forms/CountrySelect';
 import { DEFAULT_COUNTRY } from '../components/forms/formOptions';
