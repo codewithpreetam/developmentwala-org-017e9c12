@@ -255,7 +255,7 @@ export default function AdminDashboard() {
             <h1 className="text-lg font-bold text-gray-900">{navItems.find(n => n.id === tab)?.label || 'Overview'}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <NotificationBell userEmail="admin" />
+            <NotificationBell userEmail={authUser?.email} userRole="admin" />
             <UserAvatar user={authUser} size="sm" background={ACCENT} />
           </div>
         </header>
