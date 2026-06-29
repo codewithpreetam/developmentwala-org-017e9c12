@@ -57,6 +57,7 @@ import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
 import { Route as ApiAuthLinkedinStartRouteImport } from './routes/api/auth.linkedin.start'
+import { Route as ApiAuthLinkedinCallbackRouteImport } from './routes/api/auth.linkedin.callback'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -298,6 +299,11 @@ const ApiAuthLinkedinStartRoute = ApiAuthLinkedinStartRouteImport.update({
   path: '/api/auth/linkedin/start',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthLinkedinCallbackRoute = ApiAuthLinkedinCallbackRouteImport.update({
+  id: '/api/auth/linkedin/callback',
+  path: '/api/auth/linkedin/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -347,6 +353,7 @@ export interface FileRoutesByFullPath {
   '/jobs/': typeof JobsIndexRoute
   '/scholarships/': typeof ScholarshipsIndexRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
+  '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
 }
 export interface FileRoutesByTo {
@@ -397,6 +404,7 @@ export interface FileRoutesByTo {
   '/jobs': typeof JobsIndexRoute
   '/scholarships': typeof ScholarshipsIndexRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
+  '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
 }
 export interface FileRoutesById {
@@ -448,6 +456,7 @@ export interface FileRoutesById {
   '/jobs/': typeof JobsIndexRoute
   '/scholarships/': typeof ScholarshipsIndexRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
+  '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
 }
 export interface FileRouteTypes {
@@ -500,6 +509,7 @@ export interface FileRouteTypes {
     | '/jobs/'
     | '/scholarships/'
     | '/blog/category/$slug'
+    | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -550,6 +560,7 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/scholarships'
     | '/blog/category/$slug'
+    | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
   id:
     | '__root__'
@@ -600,6 +611,7 @@ export interface FileRouteTypes {
     | '/jobs/'
     | '/scholarships/'
     | '/blog/category/$slug'
+    | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
   fileRoutesById: FileRoutesById
 }
@@ -651,6 +663,7 @@ export interface RootRouteChildren {
   JobsIndexRoute: typeof JobsIndexRoute
   ScholarshipsIndexRoute: typeof ScholarshipsIndexRoute
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
+  ApiAuthLinkedinCallbackRoute: typeof ApiAuthLinkedinCallbackRoute
   ApiAuthLinkedinStartRoute: typeof ApiAuthLinkedinStartRoute
 }
 
@@ -992,6 +1005,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthLinkedinStartRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/linkedin/callback': {
+      id: '/api/auth/linkedin/callback'
+      path: '/api/auth/linkedin/callback'
+      fullPath: '/api/auth/linkedin/callback'
+      preLoaderRoute: typeof ApiAuthLinkedinCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1043,6 +1063,7 @@ const rootRouteChildren: RootRouteChildren = {
   JobsIndexRoute: JobsIndexRoute,
   ScholarshipsIndexRoute: ScholarshipsIndexRoute,
   BlogCategorySlugRoute: BlogCategorySlugRoute,
+  ApiAuthLinkedinCallbackRoute: ApiAuthLinkedinCallbackRoute,
   ApiAuthLinkedinStartRoute: ApiAuthLinkedinStartRoute,
 }
 export const routeTree = rootRouteImport

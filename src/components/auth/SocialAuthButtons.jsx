@@ -45,7 +45,17 @@ export default function SocialAuthButtons({ next = '', mode = 'signin' }) {
   };
 
   const handleLinkedIn = () => {
-    toast.info('LinkedIn sign-in is coming soon. Please use Google or email for now.');
+    setLoading('linkedin');
+    try {
+      if (next) {
+        try { sessionStorage.setItem('post_auth_redirect', next); } catch {}
+      }
+      const target = `/api/auth/linkedin/start?next=${encodeURIComponent(next || '/')}`;
+      window.location.href = target;
+    } catch (err) {
+      toast.error(err?.message || 'LinkedIn sign-in failed.');
+      setLoading(null);
+    }
   };
 
   const verb = mode === 'signup' ? 'Sign up' : 'Continue';
