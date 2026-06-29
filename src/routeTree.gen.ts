@@ -17,6 +17,7 @@ import { Route as SubmitInternshipRouteImport } from './routes/submit-internship
 import { Route as SubmitGrantRouteImport } from './routes/submit-grant'
 import { Route as SubmitFellowshipRouteImport } from './routes/submit-fellowship'
 import { Route as SubmitEventRouteImport } from './routes/submit-event'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
@@ -97,6 +98,11 @@ const SubmitFellowshipRoute = SubmitFellowshipRouteImport.update({
 const SubmitEventRoute = SubmitEventRouteImport.update({
   id: '/submit-event',
   path: '/submit-event',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapRoute = SitemapRouteImport.update({
@@ -330,6 +336,7 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap': typeof SitemapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/submit-event': typeof SubmitEventRoute
   '/submit-fellowship': typeof SubmitFellowshipRoute
   '/submit-grant': typeof SubmitGrantRoute
@@ -381,6 +388,7 @@ export interface FileRoutesByTo {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap': typeof SitemapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/submit-event': typeof SubmitEventRoute
   '/submit-fellowship': typeof SubmitFellowshipRoute
   '/submit-grant': typeof SubmitGrantRoute
@@ -433,6 +441,7 @@ export interface FileRoutesById {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap': typeof SitemapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/submit-event': typeof SubmitEventRoute
   '/submit-fellowship': typeof SubmitFellowshipRoute
   '/submit-grant': typeof SubmitGrantRoute
@@ -486,6 +495,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sitemap'
+    | '/sitemap.xml'
     | '/submit-event'
     | '/submit-fellowship'
     | '/submit-grant'
@@ -537,6 +547,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sitemap'
+    | '/sitemap.xml'
     | '/submit-event'
     | '/submit-fellowship'
     | '/submit-grant'
@@ -588,6 +599,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sitemap'
+    | '/sitemap.xml'
     | '/submit-event'
     | '/submit-fellowship'
     | '/submit-grant'
@@ -640,6 +652,7 @@ export interface RootRouteChildren {
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   SitemapRoute: typeof SitemapRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubmitEventRoute: typeof SubmitEventRoute
   SubmitFellowshipRoute: typeof SubmitFellowshipRoute
   SubmitGrantRoute: typeof SubmitGrantRoute
@@ -723,6 +736,13 @@ declare module '@tanstack/react-router' {
       path: '/submit-event'
       fullPath: '/submit-event'
       preLoaderRoute: typeof SubmitEventRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap': {
@@ -1040,6 +1060,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   SitemapRoute: SitemapRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubmitEventRoute: SubmitEventRoute,
   SubmitFellowshipRoute: SubmitFellowshipRoute,
   SubmitGrantRoute: SubmitGrantRoute,
