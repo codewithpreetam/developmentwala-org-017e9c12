@@ -28,7 +28,7 @@ export default function SubmitFellowship() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', organization_type: '', sector: '',
+    title: '', description: '', organization: '', organization_type: '', sector: '',
     fellowship_category: '', location_type: '', location: '', country: DEFAULT_COUNTRY, duration: '',
     funding_type: '', stipend_amount: '', eligible_countries: '', education_requirement: '',
     experience_required: '', field_of_study: '', application_deadline: '', application_process: '',
