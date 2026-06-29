@@ -39,8 +39,11 @@ async function ensureUserProfile(authUser, { firstName, lastName, role } = {}) {
     is_active: true,
   };
   const { error } = await supabase.from('users').insert(profile);
-  if (error) throw error;
+  if (error && error.code !== '23505' && !/row-level security/i.test(error.message || '')) {
+    throw error;
+  }
   return profile;
+
 }
 
 const auth = {

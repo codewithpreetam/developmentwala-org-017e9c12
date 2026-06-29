@@ -45,8 +45,10 @@ export default function SignUp() {
       setError('Passwords do not match.');
       return;
     }
-    if (form.password.length < 8) {
-      setError('Password must be at least 8 characters.');
+    const pw = form.password;
+    const pwOk = pw.length >= 8 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw) && /[^A-Za-z0-9]/.test(pw);
+    if (!pwOk) {
+      setError('Password must be at least 8 characters and include an uppercase letter, a lowercase letter, a number, and a symbol.');
       return;
     }
     setSubmitting(true);
@@ -158,6 +160,7 @@ export default function SignUp() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+              <p className="mt-1.5 text-xs text-gray-500">At least 8 characters, including uppercase, lowercase, number, and symbol.</p>
             </div>
             <div>
               <label htmlFor="signup-confirm" className="block text-sm font-medium text-gray-700 mb-1.5">Confirm password</label>
