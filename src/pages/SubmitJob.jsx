@@ -84,6 +84,7 @@ export default function SubmitJob() {
     eligible_countries: '', scholarship_level: '', field_of_study: '', education_requirement: '',
     experience_required: '', application_process: '',
     event_date: '', event_time: '', event_category: '',
+    organization: '',
     tags: '', submitted_by_name: '', submitted_by_email: '',
   });
   const [submitting, setSubmitting] = useState(false);
