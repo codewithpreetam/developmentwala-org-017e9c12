@@ -79,32 +79,77 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const SITE_URL = "https://developmentwala.org";
+const SITE_TITLE = "DevelopmentWala.org — NGO & Social Sector Jobs, Internships, Fellowships, Scholarships in India";
+const SITE_DESC = "India's dedicated platform for NGO, CSR and social sector careers. Find jobs, internships, fellowships, scholarships, grants and events from leading NGOs and development organisations.";
+const SITE_IMAGE = "https://media.base44.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp";
+
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "DevelopmentWala.org",
+  alternateName: "Development Wala",
+  url: SITE_URL,
+  logo: SITE_IMAGE,
+  sameAs: [
+    "https://www.linkedin.com/company/developmentwala",
+    "https://twitter.com/developmentwala",
+  ],
+};
+
+const websiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "DevelopmentWala.org",
+  url: SITE_URL,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/jobs?search={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1.0, viewport-fit=cover" },
-      { title: "DevelopmentWala.org — NGO & Social Sector Jobs, Internships, Fellowships, Scholarships in India" },
-      { name: "description", content: "India's dedicated platform for NGO, CSR and social sector careers. Find jobs, internships, fellowships, scholarships, grants and events from leading NGOs and development organisations." },
+      { title: SITE_TITLE },
+      { name: "description", content: SITE_DESC },
       { name: "keywords", content: "NGO jobs India, social sector jobs, development sector jobs, NGO internships, fellowships India, scholarships India, grants for NGOs, CSR jobs, nonprofit jobs" },
       { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" },
+      { name: "googlebot", content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" },
+      { name: "format-detection", content: "telephone=no" },
+      { name: "theme-color", content: "#0f766e" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "DevelopmentWala.org" },
-      { property: "og:title", content: "DevelopmentWala.org — NGO & Social Sector Jobs, Internships, Fellowships, Scholarships in India" },
-      { name: "twitter:title", content: "DevelopmentWala.org — NGO & Social Sector Jobs, Internships, Fellowships, Scholarships in India" },
-      { property: "og:description", content: "India's dedicated platform for NGO, CSR and social sector careers. Find jobs, internships, fellowships, scholarships, grants and events from leading NGOs and development organisations." },
-      { name: "twitter:description", content: "India's dedicated platform for NGO, CSR and social sector careers. Find jobs, internships, fellowships, scholarships, grants and events from leading NGOs and development organisations." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ca07a508-6890-46ca-9335-583d53ce05f9/id-preview-65dbd284--dc561459-630b-4294-ade1-8769095cc7b5.lovable.app-1782714640390.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ca07a508-6890-46ca-9335-583d53ce05f9/id-preview-65dbd284--dc561459-630b-4294-ade1-8769095cc7b5.lovable.app-1782714640390.png" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:locale", content: "en_IN" },
+      { property: "og:title", content: SITE_TITLE },
+      { name: "twitter:title", content: SITE_TITLE },
+      { property: "og:description", content: SITE_DESC },
+      { name: "twitter:description", content: SITE_DESC },
+      { property: "og:image", content: SITE_IMAGE },
+      { name: "twitter:image", content: SITE_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@developmentwala" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/webp", href: "https://media.base44.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp" },
+      { rel: "icon", type: "image/webp", href: SITE_IMAGE },
+      { rel: "apple-touch-icon", href: SITE_IMAGE },
       { rel: "manifest", href: "/manifest.json" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://ymrzpbpjhmdkjmgqswnw.supabase.co" },
+      { rel: "dns-prefetch", href: "https://media.base44.com" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" },
+      { rel: "alternate", type: "application/rss+xml", title: "DevelopmentWala.org RSS Feed", href: `${SITE_URL}/api/public/rss.xml` },
+      { rel: "sitemap", type: "application/xml", href: `${SITE_URL}/sitemap.xml` },
+    ],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(organizationLd) },
+      { type: "application/ld+json", children: JSON.stringify(websiteLd) },
     ],
   }),
 
