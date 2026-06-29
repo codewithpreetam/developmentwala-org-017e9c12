@@ -495,6 +495,11 @@ export default function Jobs() {
       <main className="bg-gray-50 min-h-screen">
         {/* Search bar */}
         <section className="bg-white border-b border-gray-200 py-5 px-4">
+          <div className="max-w-7xl mx-auto mb-3">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">NGO and Social Impact Jobs in India</h1>
+            <p className="text-sm text-gray-600 mt-1">Browse curated openings across nonprofits, CSR, foundations and development organisations.</p>
+          </div>
+
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row gap-3 items-center">
             <div className="relative flex-1 w-full">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
