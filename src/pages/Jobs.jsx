@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useLocation } from '@/lib/router-adapter';
+import { useLocation, Link } from '@/lib/router-adapter';
+import dwHireAd from '@/assets/dw-hire-ad.png.asset.json';
+
 import { redirectToSignIn } from '@/lib/auth/redirect';
 import { Search, X, Briefcase, SlidersHorizontal, MapPin, Building2, ChevronDown, ChevronUp } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
