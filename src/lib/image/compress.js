@@ -81,3 +81,55 @@ export async function compressImageToWebp(file, opts = {}) {
     return file;
   }
 }
+
+/**
+ * Resizes an image to exact target dimensions using a center-crop "cover" fit,
+ * then encodes as WebP under `targetBytes`. Use for art-directed assets like
+ * blog featured images that must match a fixed aspect ratio (e.g. 1200×630).
+ * Falls back to the original file if running outside the browser or if
+ * conversion fails.
+ */
+export async function resizeImageToCoverWebp(file, opts = {}) {
+  if (!file || typeof window === 'undefined' || typeof document === 'undefined') return file;
+  if (!file.type?.startsWith('image/')) return file;
+  if (file.type === 'image/svg+xml' || file.type === 'image/gif') return file;
+
+  const targetW = opts.width ?? 1200;
+  const targetH = opts.height ?? 630;
+  const targetBytes = opts.targetBytes ?? DEFAULT_TARGET_BYTES;
+
+  try {
+    const img = await loadImage(file);
+    // Cover-fit: scale source so it fully covers the target box, then center-crop.
+    const scale = Math.max(targetW / img.width, targetH / img.height);
+    const drawW = img.width * scale;
+    const drawH = img.height * scale;
+    const dx = (targetW - drawW) / 2;
+    const dy = (targetH - drawH) / 2;
+
+    let quality = 0.9;
+    let blob = null;
+    for (let i = 0; i < 8; i++) {
+      const canvas = document.createElement('canvas');
+      canvas.width = targetW;
+      canvas.height = targetH;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return file;
+      ctx.drawImage(img, dx, dy, drawW, drawH);
+      // eslint-disable-next-line no-await-in-loop
+      blob = await canvasToBlob(canvas, 'image/webp', quality);
+      if (!blob) break;
+      if (blob.size <= targetBytes) break;
+      quality = Math.max(0.5, quality - 0.1);
+    }
+    if (!blob) return file;
+    const baseName = (file.name || 'image').replace(/\.[^.]+$/, '');
+    return new File([blob], `${baseName}-${targetW}x${targetH}.webp`, {
+      type: 'image/webp',
+      lastModified: Date.now(),
+    });
+  } catch {
+    return file;
+  }
+}
+
