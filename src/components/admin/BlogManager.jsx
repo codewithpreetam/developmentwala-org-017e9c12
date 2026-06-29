@@ -127,10 +127,17 @@ export default function BlogManager() {
     const file = e.target.files[0];
     if (!file) return;
     setUploadingImg(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    u('featured_image', file_url);
-    setUploadingImg(false);
+    try {
+      // Force 1200×630 (Google/OG recommended), center-crop, encode as WebP.
+      const resized = await resizeImageToCoverWebp(file, { width: 1200, height: 630, targetBytes: 200 * 1024 });
+      const { file_url } = await base44.integrations.Core.UploadFile({ file: resized });
+      u('featured_image', file_url);
+    } finally {
+      setUploadingImg(false);
+      e.target.value = '';
+    }
   };
+
 
   const toggleCategory = (slug) => {
     const cats = editPost.categories || [];
