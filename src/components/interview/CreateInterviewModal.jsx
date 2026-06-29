@@ -28,11 +28,12 @@ const durations = [
   { value: 120, label: '2 hours' },
 ];
 
-export default function CreateInterviewModal({ onClose, onCreated, employerEmail, orgName, prefillApp, shortlistedApplicants = [] }) {
+export default function CreateInterviewModal({ onClose, onCreated, employerEmail, employerId, orgName, prefillApp, shortlistedApplicants = [] }) {
   const [selectedAppId, setSelectedAppId] = useState(prefillApp?.id || '');
   const [form, setForm] = useState({
     candidate_email: prefillApp?.applicant_email || '',
     candidate_name: prefillApp?.applicant_name || '',
+    candidate_id: prefillApp?.candidate_id || '',
     application_id: prefillApp?.id || '',
     job_title: prefillApp?.opportunity_title || '',
     job_id: prefillApp?.opportunity_id || '',
@@ -55,6 +56,7 @@ export default function CreateInterviewModal({ onClose, onCreated, employerEmail
         ...f,
         candidate_email: app.applicant_email || '',
         candidate_name: app.applicant_name || '',
+        candidate_id: app.candidate_id || '',
         application_id: app.id,
         job_title: app.opportunity_title || '',
         job_id: app.opportunity_id || '',
@@ -71,8 +73,8 @@ export default function CreateInterviewModal({ onClose, onCreated, employerEmail
       const interview = await base44.entities.Interview.create({
         ...form,
         employer_email: employerEmail,
+        employer_id: employerId,
         employer_org: orgName,
-        audit_trail: [{ action: 'scheduled', by: employerEmail, at: new Date().toISOString(), note: 'Interview scheduled by employer' }],
       });
 
       await base44.entities.Notification.create({

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { supabase } from '@/integrations/supabase/client';
-import { X, Video, Calendar, Clock, User, AlertCircle, CheckCircle2, RotateCcw, ExternalLink } from 'lucide-react';
+import { X, Video, Calendar, Clock, User, AlertCircle, CheckCircle2, RotateCcw, ExternalLink, Mail, Phone, MapPin, Briefcase, GraduationCap, FileText } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 const statusColors = {
@@ -24,92 +25,165 @@ const platformLabels = {
 export default function InterviewDetailModal({ interview, onClose, onUpdated, viewerRole = 'employer' }) {
   const [action, setAction] = useState(null); // 'cancel' | 'reschedule' | 'complete'
   const [note, setNote] = useState('');
+  const [reschedDate, setReschedDate] = useState(interview.date || '');
+  const [reschedTime, setReschedTime] = useState(interview.start_time || '10:00');
+  const [reschedDuration, setReschedDuration] = useState(interview.duration || 60);
+  const [reschedLink, setReschedLink] = useState(interview.meeting_link || '');
   const [saving, setSaving] = useState(false);
-  const [candidate, setCandidate] = useState(null);
+  const [userRow, setUserRow] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
     async function loadCandidate() {
-      if (!interview?.candidate_email) return;
-      const { data } = await supabase
-        .from('users')
-        .select('first_name,last_name,email,profile_image_url,phone')
-        .eq('email', interview.candidate_email)
-        .maybeSingle();
-      if (!cancelled && data) setCandidate(data);
+      // Resolve users row by candidate_id first, then by email fallback
+      let u = null;
+      if (interview?.candidate_id) {
+        const { data } = await supabase
+          .from('users').select('id,user_id,email,first_name,last_name,phone,profile_image_url,location')
+          .eq('id', interview.candidate_id).maybeSingle();
+        u = data;
+      }
+      if (!u && interview?.candidate_email) {
+        const { data } = await supabase
+          .from('users').select('id,user_id,email,first_name,last_name,phone,profile_image_url,location')
+          .eq('email', interview.candidate_email).maybeSingle();
+        u = data;
+      }
+      if (cancelled) return;
+      setUserRow(u);
+      if (u?.user_id) {
+        const { data: cp } = await supabase
+          .from('candidate_profiles')
+          .select('profile_picture_url,professional_title,experience_level,education_level,profession,skills,cv_url,cv_filename,biography')
+          .eq('user_id', u.user_id).maybeSingle();
+        if (!cancelled) setProfile(cp);
+      }
     }
     loadCandidate();
     return () => { cancelled = true; };
-  }, [interview?.candidate_email]);
+  }, [interview?.candidate_id, interview?.candidate_email]);
 
   const candidateName = (
-    [candidate?.first_name, candidate?.last_name].filter(Boolean).join(' ').trim()
+    [userRow?.first_name, userRow?.last_name].filter(Boolean).join(' ').trim()
     || interview.candidate_name
-    || (interview.candidate_email ? interview.candidate_email.split('@')[0] : 'Candidate')
+    || (userRow?.email || interview.candidate_email || '').split('@')[0]
+    || 'Candidate'
   );
+  const avatar = profile?.profile_picture_url || userRow?.profile_image_url;
 
   const handleAction = async () => {
     setSaving(true);
-    const auditEntry = { action, by: viewerRole, at: new Date().toISOString(), note };
-    const updates = {
-      status: action === 'cancel' ? 'cancelled' : action === 'complete' ? 'completed' : 'rescheduled',
-      audit_trail: [...(interview.audit_trail || []), auditEntry],
-    };
-    if (action === 'cancel') updates.cancelled_by = viewerRole;
-    if (action === 'reschedule') updates.reschedule_reason = note;
-    await base44.entities.Interview.update(interview.id, updates);
+    try {
+      const updates = {};
+      if (action === 'cancel') {
+        updates.status = 'cancelled';
+        if (note) updates.notes = `${interview.notes ? interview.notes + '\n\n' : ''}[Cancelled] ${note}`;
+      } else if (action === 'complete') {
+        updates.status = 'completed';
+      } else if (action === 'reschedule') {
+        if (!reschedDate || !reschedTime) {
+          alert('Pick a new date and time.');
+          setSaving(false);
+          return;
+        }
+        updates.status = 'rescheduled';
+        updates.date = reschedDate;
+        updates.start_time = reschedTime;
+        updates.duration = Number(reschedDuration) || 60;
+        if (reschedLink) updates.meeting_link = reschedLink;
+        if (note) updates.notes = `${interview.notes ? interview.notes + '\n\n' : ''}[Rescheduled] ${note}`;
+      }
+      await base44.entities.Interview.update(interview.id, updates);
 
-    // Notify candidate if employer is acting
-    if (viewerRole === 'employer' && (action === 'cancel' || action === 'reschedule')) {
-      await base44.entities.Notification.create({
-        user_email: interview.candidate_email,
-        title: action === 'cancel' ? 'Interview Cancelled' : 'Interview Rescheduled',
-        message: action === 'cancel'
-          ? `Your interview for "${interview.job_title}" on ${interview.date} has been cancelled. Reason: ${note || 'No reason provided.'}`
-          : `Your interview for "${interview.job_title}" has been rescheduled. ${note}`,
-        type: action === 'cancel' ? 'interview_cancelled' : 'interview_rescheduled',
-        read: false,
-      }).catch(() => {});
+      // Notify candidate (trigger also fires, but include extra context)
+      if (viewerRole === 'employer' && (action === 'cancel' || action === 'reschedule')) {
+        await base44.entities.Notification.create({
+          user_email: interview.candidate_email,
+          title: action === 'cancel' ? 'Interview Cancelled' : 'Interview Rescheduled',
+          message: action === 'cancel'
+            ? `Your interview for "${interview.job_title || 'your application'}" has been cancelled.${note ? ' Reason: ' + note : ''}`
+            : `Your interview for "${interview.job_title || 'your application'}" was rescheduled to ${reschedDate} ${reschedTime}.${note ? ' Note: ' + note : ''}`,
+          type: action === 'cancel' ? 'interview_cancelled' : 'interview_rescheduled',
+        }).catch(() => {});
+      }
+
+      onUpdated?.();
+      onClose();
+    } catch (err) {
+      console.error('Interview update failed:', err);
+      alert(`Failed: ${err?.message || 'Unknown error'}`);
+    } finally {
+      setSaving(false);
     }
-
-    setSaving(false);
-    onUpdated();
-    onClose();
   };
 
   const canJoin = interview.meeting_link && interview.status !== 'cancelled';
+  const skills = Array.isArray(profile?.skills) ? profile.skills : (typeof profile?.skills === 'string' ? profile.skills.split(',').map(s => s.trim()).filter(Boolean) : []);
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 py-8 overflow-y-auto">
       <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl my-auto">
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <div>
+          <div className="min-w-0">
             <h3 className="font-bold text-gray-900">Interview Details</h3>
             <span className={`text-xs font-semibold px-2.5 py-1 rounded-full mt-1 inline-block capitalize ${statusColors[interview.status] || statusColors.confirmed}`}>
               {interview.status}
             </span>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg shrink-0">
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
 
         <div className="p-6 space-y-4">
           {/* Candidate */}
-          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-            {candidate?.profile_image_url ? (
-              <img src={candidate.profile_image_url} alt={candidateName} className="w-10 h-10 rounded-xl object-cover shrink-0" />
+          <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+            {avatar ? (
+              <img src={avatar} alt={candidateName} className="w-12 h-12 rounded-xl object-cover shrink-0" />
             ) : (
-              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
-                <User className="w-5 h-5 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+                <User className="w-6 h-6 text-blue-600" />
               </div>
             )}
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="font-semibold text-gray-900 truncate">{candidateName}</div>
-              <div className="text-sm text-gray-500 truncate">{interview.candidate_email}</div>
-              {candidate?.phone && <div className="text-xs text-gray-500 truncate">{candidate.phone}</div>}
+              {profile?.professional_title && (
+                <div className="text-xs text-gray-600 truncate">{profile.professional_title}</div>
+              )}
+              <div className="mt-1 space-y-0.5 text-xs text-gray-500">
+                {(userRow?.email || interview.candidate_email) && (
+                  <div className="flex items-center gap-1.5 min-w-0"><Mail className="w-3 h-3 shrink-0" /><span className="truncate">{userRow?.email || interview.candidate_email}</span></div>
+                )}
+                {userRow?.phone && <div className="flex items-center gap-1.5"><Phone className="w-3 h-3 shrink-0" />{userRow.phone}</div>}
+                {userRow?.location && <div className="flex items-center gap-1.5"><MapPin className="w-3 h-3 shrink-0" />{userRow.location}</div>}
+              </div>
             </div>
           </div>
+
+          {/* Profile snippets */}
+          {(profile?.experience_level || profile?.education_level || skills.length > 0 || profile?.cv_url) && (
+            <div className="grid grid-cols-1 gap-2 text-xs text-gray-700">
+              {profile?.experience_level && (
+                <div className="flex items-center gap-2"><Briefcase className="w-3.5 h-3.5 text-gray-400 shrink-0" /><span className="capitalize">{profile.experience_level.replace(/_/g, ' ')}</span></div>
+              )}
+              {profile?.education_level && (
+                <div className="flex items-center gap-2"><GraduationCap className="w-3.5 h-3.5 text-gray-400 shrink-0" /><span className="capitalize">{profile.education_level.replace(/_/g, ' ')}</span></div>
+              )}
+              {skills.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {skills.slice(0, 8).map((s, i) => (
+                    <span key={i} className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full text-[11px]">{s}</span>
+                  ))}
+                </div>
+              )}
+              {profile?.cv_url && (
+                <a href={profile.cv_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-blue-600 hover:underline">
+                  <FileText className="w-3.5 h-3.5" /> View CV{profile.cv_filename ? ` (${profile.cv_filename})` : ''}
+                </a>
+              )}
+            </div>
+          )}
 
           {/* Job */}
           {interview.job_title && (
@@ -125,7 +199,7 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
           </div>
 
           {/* Date/Time */}
-          <div className="flex items-center gap-4 text-sm text-gray-700">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700">
             <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-gray-400" />{interview.date}</span>
             <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-gray-400" />{interview.start_time} · {interview.duration} min</span>
           </div>
@@ -135,7 +209,7 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
             <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-200">
               <Video className="w-5 h-5 text-green-600 shrink-0" />
               <div className="flex-1 min-w-0">
-                <div className="text-xs font-semibold text-green-700 mb-0.5">{platformLabels[interview.meeting_platform] || 'Meeting'}</div>
+                <div className="text-xs font-semibold text-green-700 mb-0.5">Meeting</div>
                 <a href={interview.meeting_link} target="_blank" rel="noopener noreferrer"
                   className="text-xs text-green-800 hover:underline inline-flex items-center gap-1 max-w-full">
                   <span className="truncate">{interview.meeting_link}</span> <ExternalLink className="w-3 h-3 shrink-0" />
@@ -180,9 +254,34 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
               ) : (
                 <div className="space-y-3">
                   <p className="text-sm font-semibold text-gray-700 capitalize">{action} Interview</p>
-                  <Textarea value={note} onChange={e => setNote(e.target.value)}
-                    placeholder={action === 'reschedule' ? 'Reason / new time details...' : 'Reason for cancellation...'}
-                    className="min-h-[70px] rounded-xl text-sm" />
+
+                  {action === 'reschedule' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-gray-500 mb-1">New Date *</label>
+                        <Input type="date" value={reschedDate} onChange={e => setReschedDate(e.target.value)} min={new Date().toISOString().split('T')[0]} className="h-9 rounded-lg text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-gray-500 mb-1">Start Time *</label>
+                        <Input type="time" value={reschedTime} onChange={e => setReschedTime(e.target.value)} className="h-9 rounded-lg text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-gray-500 mb-1">Duration (min)</label>
+                        <Input type="number" min="15" step="15" value={reschedDuration} onChange={e => setReschedDuration(e.target.value)} className="h-9 rounded-lg text-sm" />
+                      </div>
+                      <div className="sm:col-span-3">
+                        <label className="block text-[11px] font-semibold text-gray-500 mb-1">Meeting Link</label>
+                        <Input type="url" value={reschedLink} onChange={e => setReschedLink(e.target.value)} placeholder="https://meet.google.com/..." className="h-9 rounded-lg text-sm" />
+                      </div>
+                    </div>
+                  )}
+
+                  {action !== 'complete' && (
+                    <Textarea value={note} onChange={e => setNote(e.target.value)}
+                      placeholder={action === 'reschedule' ? 'Optional note to the candidate...' : 'Reason for cancellation (optional)...'}
+                      className="min-h-[70px] rounded-xl text-sm" />
+                  )}
+
                   <div className="flex gap-2">
                     <button onClick={handleAction} disabled={saving}
                       className="bg-gray-900 hover:bg-gray-800 disabled:opacity-50 text-white text-xs font-bold px-5 py-2 rounded-lg">
@@ -192,23 +291,6 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
                   </div>
                 </div>
               )}
-            </div>
-          )}
-
-          {/* Audit trail */}
-          {interview.audit_trail?.length > 0 && (
-            <div className="border-t border-gray-100 pt-4">
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">History</p>
-              <div className="space-y-2">
-                {interview.audit_trail.map((entry, i) => (
-                  <div key={i} className="text-xs text-gray-500 flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 bg-gray-300 rounded-full mt-1.5 shrink-0" />
-                    <span className="capitalize font-medium text-gray-700">{entry.action}</span>
-                    {entry.note && <span>— {entry.note}</span>}
-                    <span className="ml-auto shrink-0">{entry.at ? new Date(entry.at).toLocaleDateString('en-IN') : ''}</span>
-                  </div>
-                ))}
-              </div>
             </div>
           )}
         </div>
