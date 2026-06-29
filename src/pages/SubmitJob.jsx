@@ -346,17 +346,11 @@ export default function SubmitJob() {
                           placeholder="e.g. women, rural, fellowship, india" className="h-11 rounded-xl border-gray-200" />
                       </FormField>
 
-                      {/* Apply links */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <FormField label={type === 'event' ? 'Registration Link' : 'Application URL'}>
-                          <Input type="url" value={form.apply_url} onChange={(e) => update('apply_url', e.target.value)}
-                            placeholder="https://..." className="h-11 rounded-xl border-gray-200" />
-                        </FormField>
-                        <FormField label="Application Email">
-                          <Input type="email" value={form.apply_email} onChange={(e) => update('apply_email', e.target.value)}
-                            placeholder="apply@org.com" className="h-11 rounded-xl border-gray-200" />
-                        </FormField>
+
+                      <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+                        Applicants will apply directly through DevelopmentWala.org using the platform's built-in application workflow. Manage applicants from your Employer Dashboard.
                       </div>
+
 
                       <hr className="border-gray-100" />
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Your Contact Info</p>
