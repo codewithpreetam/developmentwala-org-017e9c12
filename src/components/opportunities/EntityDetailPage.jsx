@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import {
   ArrowLeft, MapPin, Calendar, CalendarPlus, Building2, ExternalLink, Mail,
   Clock, Share2, CheckCircle2, Globe, IndianRupee, GraduationCap,
-  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle, Bookmark, BookmarkCheck
+  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, MessageCircle, AlertCircle, Bookmark, BookmarkCheck
 } from 'lucide-react';
 import EmployerCard from './EmployerCard';
 import OrgProfileLink from './OrgProfileLink';
