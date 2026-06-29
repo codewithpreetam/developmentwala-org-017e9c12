@@ -12,6 +12,7 @@ import { roleConfig } from '@/lib/auth/roles';
 import { consumeLoginRoleHint } from '@/lib/auth/redirect';
 import { getLogoUrl, SITE_NAME } from '@/lib/brand';
 import ResendVerification from '../components/auth/ResendVerification';
+import SocialAuthButtons from '../components/auth/SocialAuthButtons';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 
 export default function SignUp() {
@@ -131,6 +132,8 @@ export default function SignUp() {
           </div>
 
           <RoleToggle role={role} onChange={(id) => { setRole(id); setError(''); }} roles={[roleConfig.job_seeker, roleConfig.employer]} />
+
+          <SocialAuthButtons next={next} mode="signup" />
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
