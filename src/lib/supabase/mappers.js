@@ -80,12 +80,34 @@ export function mapJob(row, extra = {}) {
   });
 }
 
+function deriveLocationType(row) {
+  if (row.remote === true) return 'online';
+  if (row.mode) {
+    const m = String(row.mode).toLowerCase();
+    if (m.includes('online') || m.includes('virtual') || m.includes('remote')) return 'online';
+    if (m.includes('hybrid')) return 'hybrid';
+    if (m.includes('person') || m.includes('offline') || m.includes('site')) return 'offline';
+  }
+  if (row.remote === false && (row.city || row.state || row.location)) return 'offline';
+  return null;
+}
+
+function deriveStipendType(row) {
+  const s = row.stipend;
+  if (s == null || s === '') return null;
+  const str = String(s).toLowerCase().trim();
+  if (str.includes('unpaid') || str === '0' || str === 'no' || str === 'none') return 'unpaid';
+  return 'paid';
+}
+
 export function mapInternship(row, extra = {}) {
   return baseOpportunity(row, 'internship', {
     eligibility: row.eligibility,
     duration: row.duration,
     internship_type: row.internship_type,
     stipend: row.stipend,
+    stipend_type: deriveStipendType(row),
+    location_type: deriveLocationType(row),
     apply_link: row.apply_link,
     employer_id: row.employer_id,
     ...extra,
@@ -98,6 +120,8 @@ export function mapFellowship(row, extra = {}) {
     duration: row.duration,
     fellowship_type: row.fellowship_type,
     stipend: row.stipend,
+    stipend_type: deriveStipendType(row),
+    location_type: deriveLocationType(row),
     employer_id: row.employer_id,
     ...extra,
   });
@@ -109,7 +133,9 @@ export function mapScholarship(row, extra = {}) {
     benefits: row.benefits,
     scholarship_type: row.scholarship_type,
     level: row.level,
+    level_of_study: row.level,
     amount: row.amount,
+    scholarship_amount: row.amount,
     employer_id: row.employer_id,
     ...extra,
   });
@@ -119,9 +145,11 @@ export function mapGrant(row, extra = {}) {
   return baseOpportunity(row, 'grant', {
     organization: row.organization,
     type: row.type,
+    agency_type: row.type,
     sector: row.sector,
     eligible: row.eligible,
     amount: row.amount,
+    grant_amount: row.amount,
     link: row.link,
     employer_id: row.employer_id,
     ...extra,
