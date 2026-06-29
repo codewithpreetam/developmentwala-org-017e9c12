@@ -23,7 +23,7 @@ export default function SubmitGrant() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', agency_type: '', sector: '',
+    title: '', description: '', funding_agency: '', agency_type: '', sector: '',
     country: DEFAULT_COUNTRY, eligible_countries: '', grant_amount: '',
     application_deadline: '', tags: '', submitted_by_name: '', submitted_by_email: '',
   });
