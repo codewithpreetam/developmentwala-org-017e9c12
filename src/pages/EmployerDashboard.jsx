@@ -412,6 +412,7 @@ export default function EmployerDashboard() {
     { id: 'manage', label: `My Posts (${myJobs.length})`, icon: Briefcase },
     { id: 'applicants', label: 'Applicants', icon: Users },
     { id: 'interviews', label: 'Interviews', icon: CalendarDays },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'analytics', label: 'Analytics', icon: BarChart2 },
     { id: 'archive', label: `Archive (${archivedJobs.length})`, icon: Archive },
     { id: 'saved', label: `Saved (${savedItems.length})`, icon: Bookmark },
