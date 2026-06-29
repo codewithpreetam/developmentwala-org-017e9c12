@@ -79,13 +79,7 @@ export default function SubmitInternship() {
           </FormField>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Sector">
-            <Select value={form.sector} onValueChange={v => u('sector', v)}>
-              <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select sector" /></SelectTrigger>
-              <SelectContent>{sectorOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
-            </Select>
-          </FormField>
+        <div>
           <FormField label="Mode">
             <Select value={form.location_type} onValueChange={v => u('location_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Online / Offline" /></SelectTrigger>
