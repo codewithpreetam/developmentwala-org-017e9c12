@@ -159,12 +159,8 @@ export default function EntityListPage({
     } else {
       const created = await base44.entities.SavedOpportunity.create({
         user_email: currentUser.email,
+        opportunity_type: type,
         opportunity_id: item.id,
-        opportunity_title: item.title,
-        organization: orgName,
-        deadline: item.application_deadline || item.event_date || item.registration_deadline || '',
-        banner_image: item.banner_image || '',
-        detail_page: detailPageParam,
       });
       setSavedMap(prev => ({ ...prev, [item.id]: created.id }));
     }

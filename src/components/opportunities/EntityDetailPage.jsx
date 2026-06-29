@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import {
   ArrowLeft, MapPin, Calendar, Building2, ExternalLink, Mail,
   Clock, Share2, CheckCircle2, Globe, DollarSign, GraduationCap,
-  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle
+  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle, Bookmark, BookmarkCheck
 } from 'lucide-react';
 import EmployerCard from './EmployerCard';
 import OrgProfileLink from './OrgProfileLink';
@@ -74,6 +74,8 @@ export default function EntityDetailPage({
   const [orgData, setOrgData] = useState(null);
   const [shareMsg, setShareMsg] = useState('');
   const [formErrors, setFormErrors] = useState({});
+  const [savedId, setSavedId] = useState(null);
+  const [savingToggle, setSavingToggle] = useState(false);
 
 
   useEffect(() => {
@@ -114,6 +116,12 @@ export default function EntityDetailPage({
       if (u) {
         base44.entities.Application.filter({ opportunity_id: it.id, applicant_email: u.email })
           .then(existing => { if (existing.length > 0) setApplied(true); })
+          .catch(() => {});
+        base44.entities.SavedOpportunity.filter({ user_email: u.email })
+          .then(saved => {
+            const match = saved.find(s => String(s.opportunity_id) === String(it.id) && (s.opportunity_type || 'job') === resolvedType);
+            if (match) setSavedId(match.id);
+          })
           .catch(() => {});
       }
     }).catch(() => {});
@@ -156,6 +164,36 @@ export default function EntityDetailPage({
       setUploadingCv(false);
     }
   };
+
+  const handleToggleSave = async () => {
+    if (!user) {
+      setLoginRoleHint('job_seeker');
+      redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '');
+      return;
+    }
+    if (!item) return;
+    setSavingToggle(true);
+    try {
+      if (savedId) {
+        await base44.entities.SavedOpportunity.delete(savedId);
+        setSavedId(null);
+        toast.success('Removed from saved.');
+      } else {
+        const created = await base44.entities.SavedOpportunity.create({
+          user_email: user.email,
+          opportunity_type: resolvedType,
+          opportunity_id: item.id,
+        });
+        setSavedId(created.id);
+        toast.success('Saved to your dashboard.');
+      }
+    } catch (e) {
+      toast.error(e?.message || 'Could not update saved opportunities.');
+    } finally {
+      setSavingToggle(false);
+    }
+  };
+
 
   const handleApply = async () => {
     if (!user) {
@@ -339,9 +377,20 @@ export default function EntityDetailPage({
                         </div>
                       )}
                     </div>
-                    <button onClick={handleShare} className="p-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-500 shrink-0" title="Copy link">
-                      {copied ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5" />}
-                    </button>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={handleToggleSave}
+                        disabled={savingToggle}
+                        className={`p-2.5 border rounded-xl transition-colors ${savedId ? 'border-indigo-200 bg-indigo-50 text-indigo-600 hover:bg-indigo-100' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
+                        title={savedId ? 'Remove from saved' : 'Save for later'}
+                        aria-label={savedId ? 'Remove from saved' : 'Save for later'}
+                      >
+                        {savedId ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
+                      </button>
+                      <button onClick={handleShare} className="p-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-500" title="Copy link">
+                        {copied ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5" />}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="flex flex-wrap gap-4 text-sm text-gray-500 border-t border-gray-100 pt-4">

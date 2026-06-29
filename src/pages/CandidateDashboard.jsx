@@ -710,11 +710,11 @@ export default function CandidateDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        {item.detail_page && item.opportunity_id && (
-                          <a href={`/${item.detail_page}?id=${item.opportunity_id}`}
+                        {(item.detail_url || (item.detail_page && item.opportunity_id)) && (
+                          <Link to={item.detail_url || `/${item.detail_page}?id=${item.opportunity_id}`}
                             className="flex items-center gap-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-200">
                             <Eye className="w-3.5 h-3.5" /> View
-                          </a>
+                          </Link>
                         )}
                         <button onClick={async () => {
                           await base44.entities.SavedOpportunity.delete(item.id);

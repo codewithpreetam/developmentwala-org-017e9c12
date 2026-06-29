@@ -93,15 +93,10 @@ export default function OpportunityListPage({ type, title, description, metaTitl
       await base44.entities.SavedOpportunity.delete(savedMap[item.id]);
       setSavedMap(prev => { const m = { ...prev }; delete m[item.id]; return m; });
     } else {
-      const detailPageMap = { job: 'JobDetail', internship: 'InternshipDetail', fellowship: 'FellowshipDetail', scholarship: 'ScholarshipDetail', grant: 'GrantDetail', event: 'EventDetail' };
       const created = await base44.entities.SavedOpportunity.create({
         user_email: currentUser.email,
+        opportunity_type: type,
         opportunity_id: item.id,
-        opportunity_title: item.title,
-        organization: orgName,
-        deadline: item.deadline || item.application_deadline || '',
-        banner_image: item.banner_image || '',
-        detail_page: detailPageMap[type] || 'JobDetail',
       });
       setSavedMap(prev => ({ ...prev, [item.id]: created.id }));
     }

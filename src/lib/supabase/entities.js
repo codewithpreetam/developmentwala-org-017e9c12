@@ -718,7 +718,7 @@ const SavedOpportunity = {
       const type = row.opportunity_type || 'job';
       const id = row.opportunity_id || row.job_id;
       const meta = OPPORTUNITY_TABLES[type] || OPPORTUNITY_TABLES.job;
-      const { data: opp } = await supabase.from(meta.table).select('title, slug').eq('id', id).maybeSingle();
+      const { data: opp } = await supabase.from(meta.table).select('*').eq('id', id).maybeSingle();
       if (row._source === 'legacy') {
         return mapSavedJob({ ...row, user_email: criteria.user_email }, opp);
       }
