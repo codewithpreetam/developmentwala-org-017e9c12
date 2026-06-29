@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import {
   ArrowLeft, MapPin, Calendar, CalendarPlus, Building2, ExternalLink, Mail,
   Clock, Share2, CheckCircle2, Globe, IndianRupee, GraduationCap,
-  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle, Bookmark, BookmarkCheck
+  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, MessageCircle, AlertCircle, Bookmark, BookmarkCheck
 } from 'lucide-react';
 import EmployerCard from './EmployerCard';
 import OrgProfileLink from './OrgProfileLink';
@@ -256,26 +256,44 @@ export default function EntityDetailPage({
   };
 
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const getCanonicalShareUrl = () => {
+    const seg = (listingPage || (opportunityType ? `${opportunityType}s` : 'jobs')).toLowerCase();
+    const slugOrId = item?.slug || item?.id;
+    return `https://developmentwala.org/${seg}/${slugOrId}`;
   };
 
-  const handleNativeShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: item?.title, url: window.location.href });
-      } catch (e) { /* user cancelled */ }
-    } else {
-      handleShare();
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(getCanonicalShareUrl());
+      setCopied(true);
+      toast.success('Link copied successfully.');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (_) {
+      toast.error('Could not copy link');
     }
   };
 
-  const handleLinkedinShare = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
-    window.open(url, '_blank', 'width=600,height=600');
+  const handleNativeShare = async () => {
+    const url = getCanonicalShareUrl();
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: item?.title, text: item?.title, url });
+        return;
+      } catch (e) { /* user cancelled */ }
+    }
+    handleShare();
   };
+
+  const handleLinkedinShare = () => {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getCanonicalShareUrl())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleWhatsappShare = () => {
+    const url = `https://wa.me/?text=${encodeURIComponent(item?.title || '')}%20${encodeURIComponent(getCanonicalShareUrl())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
 
   const buildGoogleCalendarUrl = () => {
     if (!item?.event_date) return null;
@@ -373,8 +391,10 @@ export default function EntityDetailPage({
       <SEOHead
         title={`${item.title}${orgName ? ` — ${orgName}` : ''} | DevelopmentWala.org`}
         description={item.description?.replace(/[#*_[\]]/g, '').substring(0, 160)}
-        canonical={`https://developmentwala.org/${listingPage.toLowerCase()}/${item.id}`}
+        canonical={`https://developmentwala.org/${listingPage.toLowerCase()}/${item.slug || item.id}`}
+        image={item.logo_url || item.banner_image || orgData?.logo_url || undefined}
         structuredData={structuredData}
+
       />
       <Navbar />
       <MobileHeader title={item?.title} />
@@ -536,10 +556,15 @@ export default function EntityDetailPage({
                     className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
                     <Share2 className="w-4 h-4 text-gray-500" /> Share
                   </button>
+                  <button onClick={handleWhatsappShare}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-xl text-sm font-medium hover:bg-[#1ebe5d] transition-colors shadow-sm">
+                    <MessageCircle className="w-4 h-4" /> WhatsApp
+                  </button>
                   <button onClick={handleLinkedinShare}
                     className="flex items-center gap-2 px-4 py-2 bg-[#0077B5] text-white rounded-xl text-sm font-medium hover:bg-[#006097] transition-colors shadow-sm">
-                    <Linkedin className="w-4 h-4" /> Share on LinkedIn
+                    <Linkedin className="w-4 h-4" /> LinkedIn
                   </button>
+
                 </div>
               </div>
 

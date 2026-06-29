@@ -6,8 +6,10 @@ import { format } from 'date-fns';
 import {
   ArrowLeft, MapPin, Calendar, Building2, Briefcase,
   Mail, ExternalLink, Clock, Share2, CheckCircle2, Send, X, Loader2,
-  Globe, IndianRupee, GraduationCap, Tag, Users, FileText, Video, AlertCircle
+  Globe, IndianRupee, GraduationCap, Tag, Users, FileText, Video, AlertCircle,
+  Linkedin, MessageCircle, Link as LinkIcon, Copy
 } from 'lucide-react';
+
 
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -176,11 +178,49 @@ export default function JobDetail() {
     }
   };
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const getShareUrl = () => {
+    const seg = (job?.opportunity_type || 'job') === 'job' ? 'jobs'
+      : `${job.opportunity_type}s`;
+    return `https://developmentwala.org/${seg}/${job?.slug || job?.id}`;
   };
+
+  const handleShare = async () => {
+    const url = getShareUrl();
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: job.title, text: job.title, url });
+        return;
+      } catch (_) { /* user cancelled — fall through to copy */ }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      toast.success('Link copied successfully.');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (_) {
+      toast.error('Could not copy link');
+    }
+  };
+
+  const shareToWhatsApp = () => {
+    const url = `https://wa.me/?text=${encodeURIComponent(job.title)}%20${encodeURIComponent(getShareUrl())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+  const shareToLinkedIn = () => {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl())}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(getShareUrl());
+      setCopied(true);
+      toast.success('Link copied successfully.');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (_) {
+      toast.error('Could not copy link');
+    }
+  };
+
 
   if (loading) return (
     <div><Navbar /><MobileHeader title="Loading..." />
@@ -389,8 +429,10 @@ export default function JobDetail() {
         title={`${job.title}${orgName ? ` — ${orgName}` : ''} | DevelopmentWala.org`}
         description={job.description?.replace(/[#*_[\]]/g, '').substring(0, 160)}
         canonical={canonicalUrl}
+        image={job.logo_url || job.banner_image || orgData?.logo_url || undefined}
         structuredData={getStructuredData()}
       />
+
       <Navbar />
       <MobileHeader title={job.title} />
 
@@ -588,9 +630,43 @@ export default function JobDetail() {
                 <DetailRow icon={Users} label="Experience Required" value={job.experience_required} />
               </div>
 
+              {/* Share */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-6">
+                <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Share2 className="w-4 h-4 text-gray-500" /> Share this {typeLabels[opType]}
+                </h3>
+                <div className="grid grid-cols-3 gap-2">
+                  <button onClick={shareToWhatsApp}
+                    className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-gray-200 hover:bg-green-50 hover:border-green-200 transition-colors"
+                    aria-label="Share on WhatsApp">
+                    <MessageCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-xs font-medium text-gray-700">WhatsApp</span>
+                  </button>
+                  <button onClick={shareToLinkedIn}
+                    className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-gray-200 hover:bg-blue-50 hover:border-blue-200 transition-colors"
+                    aria-label="Share on LinkedIn">
+                    <Linkedin className="w-5 h-5 text-blue-700" />
+                    <span className="text-xs font-medium text-gray-700">LinkedIn</span>
+                  </button>
+                  <button onClick={copyLink}
+                    className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors"
+                    aria-label="Copy link">
+                    {copied ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : <LinkIcon className="w-5 h-5 text-gray-600" />}
+                    <span className="text-xs font-medium text-gray-700">{copied ? 'Copied' : 'Copy Link'}</span>
+                  </button>
+                </div>
+                {typeof navigator !== 'undefined' && 'share' in navigator && (
+                  <button onClick={handleShare}
+                    className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition-colors">
+                    <Share2 className="w-4 h-4" /> Share…
+                  </button>
+                )}
+              </div>
+
               <Link to={createPageUrl(listingPage)} className="flex items-center gap-2 text-gray-500 hover:text-blue-600 text-sm">
                 <ArrowLeft className="w-4 h-4" /> Back to all {typeLabels[opType]}s
               </Link>
+
             </aside>
           </div>
         </div>
