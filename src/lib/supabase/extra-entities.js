@@ -314,7 +314,31 @@ export const Interview = {
     if (criteria.application_id) query = query.eq('application_id', criteria.application_id);
     const { data, error } = await query.limit(limit);
     if (error) throw error;
-    return sortRows((data || []).map(mapInterview), sort === '-created_date' ? '-created_at' : sort);
+    const rows = (data || []).map(mapInterview);
+
+    // Enrich with candidate names from public.users
+    const ids = [...new Set(rows.map(r => r.candidate_id).filter(Boolean))];
+    const emails = [...new Set(rows.filter(r => !r.candidate_id && r.candidate_email).map(r => r.candidate_email))];
+    const nameById = {};
+    const nameByEmail = {};
+    if (ids.length) {
+      const { data: us } = await supabase.from('users').select('id,email,first_name,last_name').in('id', ids);
+      (us || []).forEach(u => {
+        const n = [u.first_name, u.last_name].filter(Boolean).join(' ').trim() || (u.email ? u.email.split('@')[0] : '');
+        nameById[u.id] = n;
+      });
+    }
+    if (emails.length) {
+      const { data: us } = await supabase.from('users').select('email,first_name,last_name').in('email', emails);
+      (us || []).forEach(u => {
+        const n = [u.first_name, u.last_name].filter(Boolean).join(' ').trim() || (u.email ? u.email.split('@')[0] : '');
+        nameByEmail[u.email] = n;
+      });
+    }
+    rows.forEach(r => {
+      r.candidate_name = nameById[r.candidate_id] || nameByEmail[r.candidate_email] || (r.candidate_email ? r.candidate_email.split('@')[0] : 'Candidate');
+    });
+    return sortRows(rows, sort === '-created_date' ? '-created_at' : sort);
   },
   async create(payload) {
     let scheduledAt = null;
