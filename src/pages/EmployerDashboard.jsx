@@ -82,6 +82,11 @@ export default function EmployerDashboard() {
   const [deleting, setDeleting] = useState(false);
   const [empProfilePic, setEmpProfilePic] = useState('');
   const [savedItems, setSavedItems] = useState([]);
+  const [applicantFilter, setApplicantFilter] = useState('all');
+  const [applicantSearch, setApplicantSearch] = useState('');
+  const [applicantSort, setApplicantSort] = useState('recent');
+  const [prefillInterviewApp, setPrefillInterviewApp] = useState(null);
+  const [quickActionLoading, setQuickActionLoading] = useState(null);
 
   useEffect(() => {
     if (user?.id) loadData();
