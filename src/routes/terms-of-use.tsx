@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import TermsOfUse from "@/pages/TermsOfUse";
 
-const URL = "https://developmentwala-org.lovable.app/terms-of-use";
+const URL = "https://developmentwala.org/terms-of-use";
 const TITLE = "Terms & Conditions and Disclaimer | DevelopmentWala.org";
 const DESC =
   "Read the Terms & Conditions and Disclaimer governing the use of DevelopmentWala.org — India's career and recruitment platform for the nonprofit and social impact sectors.";
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/terms-of-use")({
           isPartOf: {
             "@type": "WebSite",
             name: "DevelopmentWala.org",
-            url: "https://developmentwala-org.lovable.app",
+            url: "https://developmentwala.org",
           },
         }),
       },
@@ -44,7 +44,7 @@ export const Route = createFileRoute("/terms-of-use")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://developmentwala-org.lovable.app/" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://developmentwala.org/" },
             { "@type": "ListItem", position: 2, name: "Terms & Conditions", item: URL },
           ],
         }),

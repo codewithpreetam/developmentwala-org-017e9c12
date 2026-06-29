@@ -35,15 +35,14 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const [jobs, internships, fellowships, scholarships, grants, events, blogPosts, blogCategories] = await Promise.all([
-          fetchTable("jobs"),
-          fetchTable("internships"),
-          fetchTable("fellowships"),
-          fetchTable("scholarships"),
-          fetchTable("grants"),
+          fetchTable("jobs", "is_active=eq.true"),
+          fetchTable("internships", "status=eq.Active"),
+          fetchTable("fellowships", "status=eq.Active"),
+          fetchTable("scholarships", "status=eq.Active"),
+          fetchTable("grants", "status=eq.Published"),
           fetchTable("events"),
           fetchTable("blog_posts", "status=eq.published"),
           fetchTable("blog_categories"),
-
         ]);
 
         const parts: string[] = [];

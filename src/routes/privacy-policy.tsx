@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
-const URL = "https://developmentwala-org.lovable.app/privacy-policy";
+const URL = "https://developmentwala.org/privacy-policy";
 const TITLE = "Privacy Policy | DevelopmentWala.org";
 const DESC =
   "Learn how DevelopmentWala.org collects, uses, protects, and manages your personal information while using our platform.";
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/privacy-policy")({
           isPartOf: {
             "@type": "WebSite",
             name: "DevelopmentWala.org",
-            url: "https://developmentwala-org.lovable.app",
+            url: "https://developmentwala.org",
           },
         }),
       },
@@ -44,8 +44,8 @@ export const Route = createFileRoute("/privacy-policy")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://developmentwala-org.lovable.app/" },
-            { "@type": "ListItem", position: 2, name: "Legal", item: "https://developmentwala-org.lovable.app/legal" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://developmentwala.org/" },
+            { "@type": "ListItem", position: 2, name: "Legal", item: "https://developmentwala.org/legal" },
             { "@type": "ListItem", position: 3, name: "Privacy Policy", item: URL },
           ],
         }),
