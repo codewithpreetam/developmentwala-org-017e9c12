@@ -69,6 +69,10 @@ export default function SubmitGrant() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="Grant objectives, what will be funded, selection criteria..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
+        <FormField label="Funding Agency / Organization" required={adminPost} hint={adminPost ? 'Name of the funding agency offering this grant.' : 'Auto-filled from your organization profile.'}>
+          <Input value={form.funding_agency} onChange={e => u('funding_agency', e.target.value)} placeholder="e.g. Mary Foundation" required={adminPost} className="h-11 rounded-xl" />
+        </FormField>
+
         <div>
           <FormField label="Agency Type">
             <Select value={form.agency_type} onValueChange={v => u('agency_type', v)}>
