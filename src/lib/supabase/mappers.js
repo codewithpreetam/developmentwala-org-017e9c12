@@ -152,8 +152,11 @@ export function mapEmployer(row) {
     logo: row.logo,
     location: row.location,
     city: row.location,
-    sector: row.tags,
+    sector: row.sector || row.tags,
     tags: row.tags,
+    tagline: row.tagline || null,
+    ngo_type: row.ngo_type || null,
+    owner_user_id: row.owner_user_id || null,
     open_positions: row.open_positions,
     about: row.about,
     founded: row.founded,
@@ -166,6 +169,7 @@ export function mapEmployer(row) {
     social_linkedin: row.social_linkedin,
     social_instagram: row.social_instagram,
     created_date: row.created_at,
+    updated_date: row.updated_at,
   };
 }
 
