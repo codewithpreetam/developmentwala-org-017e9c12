@@ -35,6 +35,17 @@ export function AuthProvider({ children }) {
       } catch {
         setProfile(null);
       }
+      // Consume post-OAuth redirect target once the session is fully hydrated.
+      try {
+        if (typeof window !== 'undefined') {
+          const dest = sessionStorage.getItem('post_auth_redirect');
+          if (dest) {
+            sessionStorage.removeItem('post_auth_redirect');
+            // Defer so React state commits before navigation.
+            setTimeout(() => { window.location.assign(dest); }, 0);
+          }
+        }
+      } catch {}
     } catch (err) {
       console.error('Auth profile load failed', err);
       setUser(null);
