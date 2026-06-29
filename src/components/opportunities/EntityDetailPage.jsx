@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import {
-  ArrowLeft, MapPin, Calendar, Building2, ExternalLink, Mail,
+  ArrowLeft, MapPin, Calendar, CalendarPlus, Building2, ExternalLink, Mail,
   Clock, Share2, CheckCircle2, Globe, DollarSign, GraduationCap,
   FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle, Bookmark, BookmarkCheck
 } from 'lucide-react';
