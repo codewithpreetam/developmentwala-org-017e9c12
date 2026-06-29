@@ -128,9 +128,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Platform */}
+          {/* Opportunity */}
           <div className="col-span-1">
-            <h3 className="font-semibold text-sm text-gray-900 mb-4">Platform</h3>
+            <h3 className="font-semibold text-sm text-gray-900 mb-4">Opportunity</h3>
             <ul className="space-y-3">
               {[
               { label: 'Jobs', to: '/jobs' },
@@ -173,6 +173,8 @@ export default function Footer() {
               <li><Link to="/blog" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Blog</Link></li>
               <li><Link to="/post-opportunity" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Post Opportunity</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Contact Us</Link></li>
+              <li><Link to="/privacy-policy" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms-of-use" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Disclaimer &amp; Terms and Conditions</Link></li>
               <li>
                 <a href="https://wa.me/+917320886323" target="_blank" rel="noopener noreferrer"
                 className="text-gray-400 hover:text-gray-900 text-sm transition-colors flex items-center gap-1.5">
