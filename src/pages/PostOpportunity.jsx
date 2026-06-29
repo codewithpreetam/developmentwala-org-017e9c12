@@ -107,7 +107,7 @@ export default function PostOpportunity() {
             </div>
           </section>
         </main>
-        <Footer />
+
       </div>
     </div>
   );
