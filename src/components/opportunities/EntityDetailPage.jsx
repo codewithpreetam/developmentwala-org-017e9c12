@@ -554,10 +554,15 @@ export default function EntityDetailPage({
                     className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
                     <Share2 className="w-4 h-4 text-gray-500" /> Share
                   </button>
+                  <button onClick={handleWhatsappShare}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-xl text-sm font-medium hover:bg-[#1ebe5d] transition-colors shadow-sm">
+                    <MessageCircle className="w-4 h-4" /> WhatsApp
+                  </button>
                   <button onClick={handleLinkedinShare}
                     className="flex items-center gap-2 px-4 py-2 bg-[#0077B5] text-white rounded-xl text-sm font-medium hover:bg-[#006097] transition-colors shadow-sm">
-                    <Linkedin className="w-4 h-4" /> Share on LinkedIn
+                    <Linkedin className="w-4 h-4" /> LinkedIn
                   </button>
+
                 </div>
               </div>
 
