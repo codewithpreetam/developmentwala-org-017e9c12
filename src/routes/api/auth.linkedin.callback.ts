@@ -87,6 +87,9 @@ export const Route = createFileRoute('/api/auth/linkedin/callback')({
         if (!profile.email) {
           return errorRedirect(origin, 'LinkedIn account has no email');
         }
+        if (profile.email_verified === false) {
+          return errorRedirect(origin, 'LinkedIn email address is not verified');
+        }
 
         const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
 

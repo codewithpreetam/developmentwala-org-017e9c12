@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DOMPurify from 'isomorphic-dompurify';
 import { Link, useParams } from '@/lib/router-adapter';
 import { base44 } from '@/api/base44Client';
 import Navbar from '../components/layout/Navbar';
@@ -143,7 +144,7 @@ export default function BlogPost() {
             {/* Content */}
             <div
               className="prose prose-lg prose-gray max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-600 prose-li:text-gray-600 prose-a:text-blue-600 prose-img:rounded-xl"
-              dangerouslySetInnerHTML={{ __html: post.content || '' }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || '') }}
             />
 
             {/* Tags */}

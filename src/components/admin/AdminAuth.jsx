@@ -8,15 +8,33 @@ export function AdminAuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const session = sessionStorage.getItem('ngo_admin');
-    setIsAdmin(session === 'yes');
-    setLoading(false);
+    let cancelled = false;
+    (async () => {
+      try {
+        const user = await base44.auth.me();
+        const role = user?.role;
+        const ok = role === 'admin' || role === 'super_admin';
+        if (!cancelled) {
+          setIsAdmin(ok);
+          if (ok) sessionStorage.setItem('ngo_admin', 'yes');
+          else sessionStorage.removeItem('ngo_admin');
+        }
+      } catch {
+        if (!cancelled) {
+          setIsAdmin(false);
+          sessionStorage.removeItem('ngo_admin');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
   }, []);
 
   const login = async (email, password) => {
     try {
       const user = await base44.auth.login(email, password);
-      if (user.role === 'super_admin') {
+      if (user.role === 'super_admin' || user.role === 'admin') {
         sessionStorage.setItem('ngo_admin', 'yes');
         setIsAdmin(true);
         return true;
