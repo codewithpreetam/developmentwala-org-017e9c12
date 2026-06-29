@@ -137,8 +137,8 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-semibold text-green-700 mb-0.5">{platformLabels[interview.meeting_platform] || 'Meeting'}</div>
                 <a href={interview.meeting_link} target="_blank" rel="noopener noreferrer"
-                  className="text-xs text-green-800 truncate hover:underline flex items-center gap-1">
-                  {interview.meeting_link} <ExternalLink className="w-3 h-3 shrink-0" />
+                  className="text-xs text-green-800 hover:underline inline-flex items-center gap-1 max-w-full">
+                  <span className="truncate">{interview.meeting_link}</span> <ExternalLink className="w-3 h-3 shrink-0" />
                 </a>
               </div>
               {canJoin && (
