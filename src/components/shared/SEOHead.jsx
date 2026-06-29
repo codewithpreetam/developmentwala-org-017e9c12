@@ -42,9 +42,16 @@ export default function SEOHead({ title, description, canonical, job, structured
     setMeta('og:type', job ? 'article' : 'website');
     setMeta('og:url', pageUrl);
     setMeta('og:site_name', 'DevelopmentWala.org');
-    setMeta('twitter:card', 'summary_large_image', 'name');
+    setMeta('twitter:card', image ? 'summary_large_image' : 'summary', 'name');
     setMeta('twitter:title', title || 'DevelopmentWala.org', 'name');
     setMeta('twitter:description', description || '', 'name');
+    if (image) {
+      setMeta('og:image', image);
+      setMeta('og:image:width', '1200');
+      setMeta('og:image:height', '630');
+      setMeta('twitter:image', image, 'name');
+    }
+
 
     // Canonical (self-referencing, no www to match SEOHead convention)
     let canonicalLink = document.querySelector('link[rel="canonical"]');
