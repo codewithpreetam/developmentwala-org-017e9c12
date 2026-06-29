@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { X, Video, Calendar, Clock, User, AlertCircle, CheckCircle2, RotateCcw, ExternalLink } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 
