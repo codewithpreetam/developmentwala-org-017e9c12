@@ -21,6 +21,7 @@ import {
   BlogCategory,
   SiteSettings,
   ContactMessage,
+  ContactReply,
   EmailSubscription,
   Interview,
   Testimonial,
