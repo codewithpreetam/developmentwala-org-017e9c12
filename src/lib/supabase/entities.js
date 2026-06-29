@@ -376,13 +376,15 @@ const Organization = {
   },
 
   async create(payload) {
-    const { data, error } = await supabase.from('employers').insert({
-      name: payload.org_name || payload.name || 'Organization',
-      ...organizationPatchFromPayload({
-        ...payload,
-        contact_email: payload.contact_email ?? payload.email ?? payload.user_email,
-      }),
-    }).select('*').single();
+    const session = getSessionUser();
+    const ownerId = payload.owner_user_id || session?.id || null;
+    const insertPatch = organizationPatchFromPayload({
+      ...payload,
+      owner_user_id: ownerId,
+      contact_email: payload.contact_email ?? payload.email ?? payload.user_email,
+    });
+    if (!insertPatch.name) insertPatch.name = payload.org_name || payload.name || 'Organization';
+    const { data, error } = await supabase.from('employers').insert(insertPatch).select('*').single();
     if (error) throw error;
 
     if (payload.ngo_type !== undefined && payload.user_email) {
@@ -392,7 +394,7 @@ const Organization = {
     return mapOrganizationRow(data, {
       user_email: payload.user_email || data.email,
       contact_email: payload.contact_email || payload.email || data.email,
-      ngo_type: payload.ngo_type,
+      ngo_type: payload.ngo_type ?? data.ngo_type ?? '',
     });
   },
 
