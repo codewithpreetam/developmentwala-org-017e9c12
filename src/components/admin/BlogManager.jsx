@@ -579,7 +579,7 @@ export default function BlogManager() {
               ) : (
                 <label className="block cursor-pointer border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-blue-300 transition-colors">
                   {uploadingImg ? <Loader2 className="w-8 h-8 text-blue-400 animate-spin mx-auto mb-1" /> : <Upload className="w-8 h-8 text-gray-300 mx-auto mb-1" />}
-                  <p className="text-xs text-gray-500">{uploadingImg ? 'Uploading...' : 'Upload image (JPG, PNG)'}</p>
+                  <p className="text-xs text-gray-500">{uploadingImg ? 'Resizing & uploading…' : 'Upload image (any size — auto-resized to 1200×630 WebP)'}</p>
                   <input type="file" accept="image/*" onChange={handleFeaturedImageUpload} className="hidden" />
                 </label>
               )}
