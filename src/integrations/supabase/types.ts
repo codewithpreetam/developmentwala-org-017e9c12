@@ -400,33 +400,83 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_message_replies: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          message_id: number
+          sender_id: string | null
+          sender_name: string | null
+          sender_role: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          message_id: number
+          sender_id?: string | null
+          sender_name?: string | null
+          sender_role: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          message_id?: number
+          sender_id?: string | null
+          sender_name?: string | null
+          sender_role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_message_replies_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "contact_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_messages: {
         Row: {
           created_at: string | null
           email: string | null
           id: number
+          last_reply_at: string | null
           message: string | null
           name: string | null
           status: string | null
           subject: string | null
+          unread_for_admin: boolean
+          unread_for_user: boolean
+          user_id: string | null
         }
         Insert: {
           created_at?: string | null
           email?: string | null
           id?: number
+          last_reply_at?: string | null
           message?: string | null
           name?: string | null
           status?: string | null
           subject?: string | null
+          unread_for_admin?: boolean
+          unread_for_user?: boolean
+          user_id?: string | null
         }
         Update: {
           created_at?: string | null
           email?: string | null
           id?: number
+          last_reply_at?: string | null
           message?: string | null
           name?: string | null
           status?: string | null
           subject?: string | null
+          unread_for_admin?: boolean
+          unread_for_user?: boolean
+          user_id?: string | null
         }
         Relationships: []
       }
