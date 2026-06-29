@@ -124,10 +124,11 @@ export function toFellowshipInsert(payload, { employerId, organizationEmployerId
     featured: false,
     status: pending ? 'Inactive' : 'Active',
     employer_id: employerId || null,
+    organization_employer_id: organizationEmployerId ?? payload.organization_employer_id ?? null,
   };
 }
 
-export function toScholarshipInsert(payload, { employerId } = {}) {
+export function toScholarshipInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const pending = isPending(payload);
   return {
