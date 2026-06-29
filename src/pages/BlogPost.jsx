@@ -158,7 +158,12 @@ export default function BlogPost() {
               </div>
             )}
 
+            <div className="mt-10 pt-6 border-t border-gray-100">
+              <ShareButtons url={canonicalUrl} title={post.title} summary={post.excerpt || ''} />
+            </div>
+
             <AuthorBox />
+
 
             <div className="mt-8">
               <Link to="/blog" className="flex items-center gap-2 text-blue-600 hover:underline text-sm font-medium">
