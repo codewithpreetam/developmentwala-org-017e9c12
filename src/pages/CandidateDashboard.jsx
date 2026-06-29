@@ -234,8 +234,8 @@ export default function CandidateDashboard() {
     { id: 'saved', label: 'Saved', icon: Save, badge: savedItems.length },
     { id: 'notifications', label: 'Notifications', icon: Bell, badge: unreadCount },
     { id: 'alerts', label: 'Email Alerts', icon: Mail },
-    { id: 'contact', label: 'Contact Us', icon: MessageCircle },
   ];
+
 
   const statsCards = [
     { label: 'Applications Sent', value: applications.length, color: ACCENT },
