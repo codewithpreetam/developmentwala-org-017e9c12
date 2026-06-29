@@ -152,7 +152,7 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
 
           {/* Notes */}
           {interview.notes && (
-            <div className="text-sm text-gray-600 bg-yellow-50 rounded-xl p-3 border border-yellow-100">
+            <div className="text-sm text-gray-600 bg-yellow-50 rounded-xl p-3 border border-yellow-100 break-words whitespace-pre-wrap">
               <span className="font-semibold">Notes:</span> {interview.notes}
             </div>
           )}
