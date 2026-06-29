@@ -411,7 +411,7 @@ export default function SubmitJob() {
         </section>
       </main>
 
-      <Footer />
+
     </div>
   );
 }
