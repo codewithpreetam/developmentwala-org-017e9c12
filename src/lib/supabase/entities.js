@@ -656,7 +656,9 @@ const Application = {
       }
       return mapApplication(row, email, opp?.title, candidate, {
         opportunity_title: opp?.title,
+        opportunity_slug: opp?.slug || null,
       });
+
     }));
 
     return sortRows(enriched.filter(Boolean), sort === '-created_date' ? '-applied_at' : sort);
