@@ -8,10 +8,6 @@ const filters = [
     { value: 'undergraduate', label: 'Undergraduate' }, { value: 'postgraduate', label: 'Postgraduate' },
     { value: 'phd', label: 'PhD' }, { value: 'diploma', label: 'Diploma' }, { value: 'all', label: 'All Levels' },
   ]},
-  { key: 'funding_type', label: 'Funding', type: 'select', options: [
-    { value: 'fully_funded', label: 'Fully Funded' }, { value: 'partially_funded', label: 'Partially Funded' },
-    { value: 'tuition_only', label: 'Tuition Only' }, { value: 'living_allowance', label: 'Living Allowance' },
-  ]},
   { key: 'scholarship_type', label: 'Type', type: 'select', options: [
     { value: 'merit', label: 'Merit-based' }, { value: 'need_based', label: 'Need-based' },
     { value: 'minority', label: 'Minority' }, { value: 'women', label: 'Women' }, { value: 'research', label: 'Research' },
