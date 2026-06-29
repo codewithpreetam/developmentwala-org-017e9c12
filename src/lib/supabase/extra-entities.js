@@ -281,13 +281,17 @@ function mapInterview(row) {
     id: row.id,
     application_id: row.application_id,
     employer_email: row.employer_email,
+    employer_id: row.employer_id,
     candidate_email: row.candidate_email,
+    candidate_id: row.candidate_id,
     job_title: row.opportunity_title,
     opportunity_title: row.opportunity_title,
     date: scheduled ? scheduled.toISOString().split('T')[0] : null,
     start_time: scheduled ? scheduled.toTimeString().slice(0, 5) : null,
+    scheduled_at: row.scheduled_at,
     duration: row.duration_minutes,
     meeting_link: row.meeting_link,
+    location: row.location,
     interview_type: row.mode || 'video',
     status: row.status || 'confirmed',
     notes: row.notes,
@@ -295,11 +299,18 @@ function mapInterview(row) {
   };
 }
 
+const INTERVIEW_COLUMNS = new Set([
+  'application_id', 'candidate_id', 'candidate_email', 'employer_id', 'employer_email',
+  'opportunity_title', 'scheduled_at', 'duration_minutes', 'mode', 'meeting_link',
+  'location', 'status', 'notes',
+]);
+
 export const Interview = {
   async filter(criteria = {}, sort = '-created_at', limit = 100) {
     let query = supabase.from('interviews').select('*');
     if (criteria.employer_email) query = query.eq('employer_email', criteria.employer_email);
     if (criteria.candidate_email) query = query.eq('candidate_email', criteria.candidate_email);
+    if (criteria.candidate_id) query = query.eq('candidate_id', criteria.candidate_id);
     if (criteria.application_id) query = query.eq('application_id', criteria.application_id);
     const { data, error } = await query.limit(limit);
     if (error) throw error;
@@ -314,10 +325,11 @@ export const Interview = {
     }
     // application_id column is bigint in DB but our app uses uuid; only pass it when numeric
     const appIdNum = payload.application_id && /^\d+$/.test(String(payload.application_id)) ? Number(payload.application_id) : null;
-    const { data, error } = await supabase.from('interviews').insert({
+    const insert = {
       application_id: appIdNum,
-
+      candidate_id: payload.candidate_id || null,
       candidate_email: payload.candidate_email,
+      employer_id: payload.employer_id || null,
       employer_email: payload.employer_email,
       opportunity_title: payload.job_title || payload.opportunity_title,
       scheduled_at: scheduledAt,
@@ -327,17 +339,24 @@ export const Interview = {
       location: payload.location,
       status: payload.status || 'confirmed',
       notes: payload.notes,
-    }).select('*').single();
+    };
+    const { data, error } = await supabase.from('interviews').insert(insert).select('*').single();
     if (error) throw error;
     return mapInterview(data);
   },
   async update(id, payload) {
-    const patch = { ...payload };
+    const patch = {};
     if (payload.date && payload.start_time) {
       patch.scheduled_at = new Date(`${payload.date}T${payload.start_time}:00`).toISOString();
+    } else if (payload.scheduled_at) {
+      patch.scheduled_at = payload.scheduled_at;
     }
-    delete patch.date;
-    delete patch.start_time;
+    if (payload.duration != null) patch.duration_minutes = payload.duration;
+    if (payload.interview_type) patch.mode = payload.interview_type;
+    // Whitelist any remaining known columns
+    for (const k of Object.keys(payload)) {
+      if (INTERVIEW_COLUMNS.has(k)) patch[k] = payload[k];
+    }
     const { data, error } = await supabase.from('interviews').update(patch).eq('id', id).select('*').single();
     if (error) throw error;
     return mapInterview(data);
