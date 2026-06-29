@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.notify_candidate_on_interview() FROM PUBLIC, anon, authenticated;

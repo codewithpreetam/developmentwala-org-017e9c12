@@ -26,6 +26,7 @@ export type Database = {
           opportunity_id: string | null
           opportunity_type: string
           status: string
+          status_history: Json | null
           updated_at: string
         }
         Insert: {
@@ -39,6 +40,7 @@ export type Database = {
           opportunity_id?: string | null
           opportunity_type?: string
           status: string
+          status_history?: Json | null
           updated_at?: string
         }
         Update: {
@@ -52,6 +54,7 @@ export type Database = {
           opportunity_id?: string | null
           opportunity_type?: string
           status?: string
+          status_history?: Json | null
           updated_at?: string
         }
         Relationships: [

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Calendar, List, Plus, Video, Clock, User, ChevronRight } from 'lucide-react';
@@ -19,13 +19,24 @@ const typeLabels = {
   group_discussion: 'Group Discussion', other: 'Other',
 };
 
-export default function EmployerInterviewPanel({ employerEmail, orgName, allApplicants = [] }) {
+export default function EmployerInterviewPanel({ employerEmail, orgName, allApplicants = [], prefillApp = null, onPrefillConsumed }) {
   const queryClient = useQueryClient();
   const shortlistedApplicants = allApplicants.filter(a => ['shortlisted', 'interview'].includes(a.status));
   const [view, setView] = useState('calendar');
   const [showCreate, setShowCreate] = useState(false);
+  const [pendingPrefill, setPendingPrefill] = useState(null);
   const [selectedInterview, setSelectedInterview] = useState(null);
   const [filter, setFilter] = useState('upcoming');
+
+  // Auto-open the schedule modal when an applicant prefill is passed in
+  useEffect(() => {
+    if (prefillApp) {
+      setPendingPrefill(prefillApp);
+      setShowCreate(true);
+      if (onPrefillConsumed) onPrefillConsumed();
+    }
+  }, [prefillApp]);
+
 
   const { data: interviews = [], isLoading: loading } = useQuery({
     queryKey: ['interviews', employerEmail],
@@ -153,13 +164,15 @@ export default function EmployerInterviewPanel({ employerEmail, orgName, allAppl
 
       {showCreate && (
         <CreateInterviewModal
-          onClose={() => setShowCreate(false)}
+          onClose={() => { setShowCreate(false); setPendingPrefill(null); }}
           onCreated={() => loadInterviews()}
           employerEmail={employerEmail}
           orgName={orgName}
-          shortlistedApplicants={shortlistedApplicants}
+          shortlistedApplicants={shortlistedApplicants.length > 0 ? shortlistedApplicants : (pendingPrefill ? [pendingPrefill] : [])}
+          prefillApp={pendingPrefill}
         />
       )}
+
 
       {selectedInterview && (
         <InterviewDetailModal
