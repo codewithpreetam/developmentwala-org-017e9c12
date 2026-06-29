@@ -34,7 +34,7 @@ export function AdminAuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       const user = await base44.auth.login(email, password);
-      if (user.role === 'super_admin') {
+      if (user.role === 'super_admin' || user.role === 'admin') {
         sessionStorage.setItem('ngo_admin', 'yes');
         setIsAdmin(true);
         return true;
