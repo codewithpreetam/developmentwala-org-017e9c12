@@ -357,7 +357,10 @@ export default function EntityDetailPage({
     </div>
   );
 
-  const orgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name;
+  const snapshotOrgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name || item.organization;
+  // Prefer the live organization profile so updates sync everywhere.
+  const orgName = orgData?.org_name || orgData?.name || snapshotOrgName;
+  const orgLogo = orgData?.logo_url || orgData?.logo || item.logo_url;
   const deadline = item.application_deadline || item.registration_deadline;
   const applyUrl = item.application_link || item.registration_link;
   const applyEmail = item.application_email;
