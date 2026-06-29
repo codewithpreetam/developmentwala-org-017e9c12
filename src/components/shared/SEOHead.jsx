@@ -35,14 +35,25 @@ export default function SEOHead({ title, description, canonical, job, structured
       tag.content = content;
     };
 
+    const pageUrl = canonical || (typeof window !== 'undefined' ? window.location.href.split('?')[0].split('#')[0] : 'https://developmentwala.org');
     setMeta('og:title', title || 'DevelopmentWala.org');
     setMeta('og:description', description || 'Find NGO jobs in India');
     setMeta('og:type', job ? 'article' : 'website');
-    setMeta('og:url', canonical || 'https://developmentwala.org');
+    setMeta('og:url', pageUrl);
     setMeta('og:site_name', 'DevelopmentWala.org');
     setMeta('twitter:card', 'summary_large_image', 'name');
     setMeta('twitter:title', title || 'DevelopmentWala.org', 'name');
     setMeta('twitter:description', description || '', 'name');
+
+    // Canonical (self-referencing, no www to match SEOHead convention)
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', pageUrl);
+
 
     // Custom structured data (overrides job schema)
     if (structuredData) {
@@ -101,7 +112,10 @@ export default function SEOHead({ title, description, canonical, job, structured
     return () => {
       const s = document.querySelector('#job-schema');
       if (s) s.remove();
+      const o = document.querySelector('#opportunity-schema');
+      if (o) o.remove();
     };
+
   }, [title, description, canonical, job]);
 
   return null;
