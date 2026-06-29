@@ -230,12 +230,12 @@ export default function OpportunityListPage({ type, title, description, metaTitl
                   {type === 'event' && (
                     <div>
                       <label className="text-white/70 text-xs font-medium mb-1 block">Category</label>
-                      <Select value={filters.event_category} onValueChange={v => setFilter('event_category', v)}>
+                      <Select value={toSelectValue(filters.event_category)} onValueChange={v => setFilter('event_category', fromSelectValue(v))}>
                         <SelectTrigger className="h-9 rounded-xl bg-white text-gray-800 border-0 text-sm">
                           <SelectValue placeholder="All Categories" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={null}>All Categories</SelectItem>
+                          <SelectItem value={ALL_SELECT_VALUE}>All Categories</SelectItem>
                           {eventCategoryOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                         </SelectContent>
                       </Select>
@@ -246,12 +246,12 @@ export default function OpportunityListPage({ type, title, description, metaTitl
                   {type === 'job' && (
                     <div>
                       <label className="text-white/70 text-xs font-medium mb-1 block">Job Type</label>
-                      <Select value={filters.job_type} onValueChange={v => setFilter('job_type', v)}>
+                      <Select value={toSelectValue(filters.job_type)} onValueChange={v => setFilter('job_type', fromSelectValue(v))}>
                         <SelectTrigger className="h-9 rounded-xl bg-white text-gray-800 border-0 text-sm">
                           <SelectValue placeholder="All Types" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={null}>All Types</SelectItem>
+                          <SelectItem value={ALL_SELECT_VALUE}>All Types</SelectItem>
                           {jobTypeOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                         </SelectContent>
                       </Select>
