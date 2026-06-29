@@ -164,13 +164,12 @@ export default function SubmitFellowship() {
           </FormField>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Application Link">
-            <Input type="url" value={form.application_link} onChange={e => u('application_link', e.target.value)} placeholder="https://..." className="h-11 rounded-xl" />
-          </FormField>
-          <FormField label="Video Link (optional)">
-            <Input type="url" value={form.video_link} onChange={e => u('video_link', e.target.value)} placeholder="YouTube / Vimeo" className="h-11 rounded-xl" />
-          </FormField>
+        <FormField label="Video Link (optional)">
+          <Input type="url" value={form.video_link} onChange={e => u('video_link', e.target.value)} placeholder="YouTube / Vimeo" className="h-11 rounded-xl" />
+        </FormField>
+
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700">
+          Applications are received through DevelopmentWala.org. Review applicants from your Employer Dashboard.
         </div>
 
         <hr className="border-gray-100" />
