@@ -976,6 +976,7 @@ export default function EmployerDashboard() {
           {tab === 'interviews' && (
             <EmployerInterviewPanel
               employerEmail={user.email}
+              employerId={user.id}
               orgName={orgForm.org_name}
               allApplicants={allApplicants}
               prefillApp={prefillInterviewApp}
