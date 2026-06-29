@@ -18,6 +18,8 @@ import SEOHead from '../components/shared/SEOHead';
 import { getProfileCompletion } from '@/lib/supabase/extra-entities';
 import { Progress } from '@/components/ui/progress';
 import NotificationBell from '../components/shared/NotificationBell';
+import NotificationsPanel from '../components/shared/NotificationsPanel';
+
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line
 } from 'recharts';
@@ -755,13 +757,11 @@ export default function CandidateDashboard() {
           )}
 
           {tab === 'notifications' && (
-            <div>
-              <h2 className="text-lg font-bold text-gray-900 mb-5">Notifications ({notifications.length})</h2>
-              {notifications.length === 0 ? (
-                <div className="bg-white rounded-2xl shadow-sm p-10 text-center"><Bell className="w-10 h-10 text-gray-200 mx-auto mb-3" /><p className="text-gray-500">No notifications yet.</p></div>
-              ) : <NotificationList notifications={notifications} />}
+            <div className="max-w-4xl">
+              <NotificationsPanel userEmail={user.email} role="job_seeker" />
             </div>
           )}
+
 
           {tab === 'alerts' && (
             <div className="max-w-2xl">
