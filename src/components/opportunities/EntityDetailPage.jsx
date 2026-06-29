@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import EmployerCard from './EmployerCard';
 import OrgProfileLink from './OrgProfileLink';
+import OrganizationInfoSection from './OrganizationInfoSection';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 import SEOHead from '../shared/SEOHead';
