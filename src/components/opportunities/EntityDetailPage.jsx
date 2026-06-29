@@ -125,7 +125,11 @@ export default function EntityDetailPage({
           .catch(() => {});
       }
     }).catch(() => {});
-    if (it.submitted_by_email) {
+    if (it.organization_employer_id) {
+      base44.entities.Organization.filter({ id: it.organization_employer_id })
+        .then(orgs => { if (orgs.length > 0) setOrgData(orgs[0]); })
+        .catch(() => {});
+    } else if (it.submitted_by_email) {
       base44.entities.Organization.filter({ user_email: it.submitted_by_email })
         .then(orgs => { if (orgs.length > 0) setOrgData(orgs[0]); })
         .catch(() => {});
