@@ -7,8 +7,6 @@ import { CheckCircle2, Loader2, ChevronDown, AlertCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
 import SEOHead from '../components/shared/SEOHead';
 import CountrySelect from '../components/forms/CountrySelect';
 import CountryMultiSelect from '../components/forms/CountryMultiSelect';
