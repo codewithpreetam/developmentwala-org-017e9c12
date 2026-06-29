@@ -664,13 +664,25 @@ export default function CandidateDashboard() {
                     const status = statusInfo[app.status] || statusInfo.applied;
                     const historyCount = Array.isArray(app.status_history) ? app.status_history.length : 0;
                     const lastUpdate = historyCount > 0 ? app.status_history[historyCount - 1] : null;
+                    const detailUrl = app.detail_url || (app.detail_page && app.opportunity_id ? `/${app.detail_page}?id=${app.opportunity_id}` : null);
                     return (
                       <div key={app.id} className="bg-white rounded-xl shadow-sm p-5">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-gray-900">{app.opportunity_title || 'Opportunity'}</h3>
+                            {detailUrl ? (
+                              <Link to={detailUrl} className="font-semibold text-gray-900 hover:underline" style={{ color: ACCENT }}>
+                                {app.opportunity_title || 'Opportunity'}
+                              </Link>
+                            ) : (
+                              <h3 className="font-semibold text-gray-900">{app.opportunity_title || 'Opportunity'}</h3>
+                            )}
                             {app.organization && <p className="text-sm text-gray-500 mt-0.5">{app.organization}</p>}
                             <p className="text-xs text-gray-400 mt-1 capitalize">{app.opportunity_type} {app.created_date ? '· Applied ' + new Date(app.created_date).toLocaleDateString('en-IN') : ''}</p>
+                            {detailUrl && (
+                              <Link to={detailUrl} className="inline-flex items-center gap-1 text-xs font-semibold mt-2 hover:underline" style={{ color: ACCENT }}>
+                                View job listing <ChevronRight className="w-3 h-3" />
+                              </Link>
+                            )}
                           </div>
                           <div className="flex flex-col items-end gap-2 shrink-0">
                             <span className={`text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5 ${status.color}`}>
@@ -691,6 +703,7 @@ export default function CandidateDashboard() {
                       </div>
                     );
                   })}
+
                 </div>
               )}
             </div>
