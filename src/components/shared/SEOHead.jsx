@@ -101,7 +101,10 @@ export default function SEOHead({ title, description, canonical, job, structured
     return () => {
       const s = document.querySelector('#job-schema');
       if (s) s.remove();
+      const o = document.querySelector('#opportunity-schema');
+      if (o) o.remove();
     };
+
   }, [title, description, canonical, job]);
 
   return null;
