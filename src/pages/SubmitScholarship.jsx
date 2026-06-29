@@ -40,7 +40,7 @@ export default function SubmitScholarship() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', provider_type: '', university_name: '',
+    title: '', description: '', provider_name: '', provider_type: '', university_name: '',
     country: DEFAULT_COUNTRY, level_of_study: '', scholarship_type: '', funding_type: '', eligible_countries: '',
     field_of_study: '', scholarship_amount: '', application_deadline: '', tags: '',
     submitted_by_name: '', submitted_by_email: '',
