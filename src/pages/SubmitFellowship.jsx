@@ -77,10 +77,7 @@ export default function SubmitFellowship() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="About the fellowship, what fellows will do, benefits..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Organization Name">
-            <Input value={form.organization_name} onChange={e => u('organization_name', e.target.value)} placeholder="Offering organization" className="h-11 rounded-xl" />
-          </FormField>
+        <div>
           <FormField label="Organization Type">
             <Select value={form.organization_type} onValueChange={v => u('organization_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
