@@ -115,7 +115,7 @@ export default function CandidateDashboard() {
 
   useEffect(() => {
     if (user) loadData();
-  }, [user]);
+  }, [user?.id]);
 
   useEffect(() => {
     if (profile) {

@@ -30,7 +30,7 @@ export default function SubmitFormShell({ title, subtitle, seoTitle, seoDesc, on
       if (!cancelled) onUserLoadedRef.current?.(me, contact);
     })();
     return () => { cancelled = true; };
-  }, [user]);
+  }, [user?.id]);
   return (
     <div>
       <SEOHead title={seoTitle} description={seoDesc} canonical="https://developmentwala.org/submit" />
