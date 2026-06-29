@@ -117,6 +117,12 @@ export default function EntityDetailPage({
         base44.entities.Application.filter({ opportunity_id: it.id, applicant_email: u.email })
           .then(existing => { if (existing.length > 0) setApplied(true); })
           .catch(() => {});
+        base44.entities.SavedOpportunity.filter({ user_email: u.email })
+          .then(saved => {
+            const match = saved.find(s => String(s.opportunity_id) === String(it.id) && (s.opportunity_type || 'job') === resolvedType);
+            if (match) setSavedId(match.id);
+          })
+          .catch(() => {});
       }
     }).catch(() => {});
     if (it.submitted_by_email) {
