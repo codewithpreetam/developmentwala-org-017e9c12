@@ -79,7 +79,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    await base44.auth.logout('/SignIn');
+    await base44.auth.logout('/sign-in');
     setUser(null);
     setProfile(null);
     clearSessionUser();

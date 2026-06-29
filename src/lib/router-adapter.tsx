@@ -5,6 +5,7 @@ import {
   useParams as useTanStackParams,
   useSearch as useTanStackSearch,
   useLocation as useTanStackLocation,
+  useRouter,
   type LinkProps,
 } from "@tanstack/react-router";
 
@@ -77,7 +78,8 @@ export const Link = React.forwardRef<HTMLAnchorElement, RRLinkProps>(
 Link.displayName = "Link";
 
 export function useNavigate() {
-  const navigate = useTanStackNavigate();
+  const tanStackNavigate = useTanStackNavigate();
+  const router = useRouter();
   return React.useCallback(
     (
       to:
@@ -87,12 +89,12 @@ export function useNavigate() {
       options?: { replace?: boolean; state?: unknown }
     ) => {
       if (typeof to === "number") {
-        if (to < 0) return navigate({ to: ".", replace: options?.replace });
-        return navigate({ to: ".", replace: options?.replace });
+        router.history.go(to);
+        return;
       }
 
       const { to: target, search, hash } = parseTo(to);
-      return navigate({
+      return tanStackNavigate({
         to: target,
         search,
         hash,
@@ -100,7 +102,7 @@ export function useNavigate() {
         state: options?.state as never,
       });
     },
-    [navigate]
+    [tanStackNavigate, router]
   );
 }
 
@@ -190,4 +192,3 @@ export function Navigate({ to, replace }: { to: string; replace?: boolean }) {
   }, [navigate, to, replace]);
   return null;
 }
-

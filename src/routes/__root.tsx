@@ -67,12 +67,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           >
             Try again
           </button>
-          <a
-            href="/"
+          <Link
+            to="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Go home
-          </a>
+          </Link>
         </div>
       </div>
     </div>
@@ -83,21 +83,30 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { name: "viewport", content: "width=device-width, initial-scale=1.0, viewport-fit=cover" },
+      { title: "DevelopmentWala.org — NGO & Social Sector Jobs, Internships, Fellowships, Scholarships in India" },
+      { name: "description", content: "India's dedicated platform for NGO, CSR and social sector careers. Find jobs, internships, fellowships, scholarships, grants and events from leading NGOs and development organisations." },
+      { name: "keywords", content: "NGO jobs India, social sector jobs, development sector jobs, NGO internships, fellowships India, scholarships India, grants for NGOs, CSR jobs, nonprofit jobs" },
+      { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:title", content: "DevelopmentWala.org — NGO & Social Sector Jobs in India" },
+      { property: "og:description", content: "India's dedicated platform for NGO, CSR and social sector careers." },
+      { property: "og:url", content: "https://www.developmentwala.org/" },
+      { property: "og:image", content: "https://media.base44.com/images/public/69b1780f308798c9112e1851/407d68969_DevelopmentwalalogoaplatformforhiringsocialsectornonprofitngocsrjobsinternshipscholarshipinIndia.png" },
+      { property: "og:site_name", content: "DevelopmentWala.org" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "DevelopmentWala.org — NGO & Social Sector Jobs in India" },
+      { name: "twitter:description", content: "India's dedicated platform for NGO, CSR and social sector careers." },
+      { name: "twitter:image", content: "https://media.base44.com/images/public/69b1780f308798c9112e1851/407d68969_DevelopmentwalalogoaplatformforhiringsocialsectornonprofitngocsrjobsinternshipscholarshipinIndia.png" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/webp", href: "https://media.base44.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp" },
+      { rel: "manifest", href: "/manifest.json" },
+      { rel: "canonical", href: "https://www.developmentwala.org/" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" },
     ],
   }),
   shellComponent: RootShell,

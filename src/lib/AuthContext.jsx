@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { getSessionUser, setSessionUser, clearSessionUser, toAppUser } from '@/lib/supabase/auth';
+import { createPageUrl } from '@/utils';
 
 const supabase = createClient();
 const AuthContext = createContext();
@@ -78,11 +79,11 @@ export const AuthProvider = ({ children }) => {
     clearSessionUser();
     setUser(null);
     setIsAuthenticated(false);
-    if (shouldRedirect) window.location.href = '/SignIn';
+    if (shouldRedirect) window.location.href = createPageUrl('SignIn');
   };
 
   const navigateToLogin = () => {
-    window.location.href = '/SignIn';
+    window.location.href = createPageUrl('SignIn');
   };
 
   const checkAppState = async () => {
