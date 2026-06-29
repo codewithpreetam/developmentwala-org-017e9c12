@@ -514,16 +514,37 @@ export default function EntityDetailPage({
               <>
                 <p className="text-sm text-gray-500 mb-4">Applying as <strong>{user.email}</strong></p>
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Cover Letter / Message (Optional)</label>
-                  <Textarea value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} placeholder="Briefly introduce yourself and why you're interested..." className="min-h-[100px] rounded-xl" />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                    Cover Letter <span className="text-red-500">*</span>
+                  </label>
+                  <Textarea
+                    value={coverLetter}
+                    onChange={(e) => {
+                      const next = e.target.value.slice(0, 2000);
+                      setCoverLetter(next);
+                      if (formErrors.coverLetter) setFormErrors((p) => ({ ...p, coverLetter: undefined }));
+                    }}
+                    placeholder="Briefly introduce yourself and why you're a strong fit (minimum 30 characters)..."
+                    className={`min-h-[120px] rounded-xl ${formErrors.coverLetter ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                    aria-invalid={!!formErrors.coverLetter}
+                    maxLength={2000}
+                  />
+                  <div className="flex items-center justify-between mt-1.5">
+                    {formErrors.coverLetter ? (
+                      <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{formErrors.coverLetter}</p>
+                    ) : <span />}
+                    <span className={`text-xs ${coverLetter.length > 1900 ? 'text-amber-600' : 'text-gray-400'}`}>{coverLetter.length}/2000</span>
+                  </div>
                 </div>
                 {/* CV Selection */}
                 <div className="mb-5">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Resume / CV</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Resume / CV <span className="text-red-500">*</span>
+                  </label>
                   <div className="flex flex-col gap-2">
                     {userProfile?.cv_url && (
                       <label className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-colors ${cvChoice === 'profile' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
-                        <input type="radio" name="cv" value="profile" checked={cvChoice === 'profile'} onChange={() => setCvChoice('profile')} className="text-blue-600" />
+                        <input type="radio" name="cv" value="profile" checked={cvChoice === 'profile'} onChange={() => { setCvChoice('profile'); setFormErrors((p) => ({ ...p, cvUrl: undefined })); }} className="text-blue-600" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-800">Use profile CV</p>
                           <a href={userProfile.cv_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline truncate block">View uploaded CV →</a>
@@ -544,28 +565,29 @@ export default function EntityDetailPage({
                             ) : (
                               <label className="cursor-pointer flex items-center gap-2 text-xs text-blue-600 hover:text-blue-700">
                                 {uploadingCv ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
-                                {uploadingCv ? 'Uploading...' : 'Click to select PDF'}
-                                <input type="file" accept=".pdf" onChange={handleCvUpload} className="hidden" disabled={uploadingCv} />
+                                {uploadingCv ? 'Uploading...' : 'Click to upload PDF or Word (max 5 MB)'}
+                                <input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={handleCvUpload} className="hidden" disabled={uploadingCv} />
                               </label>
                             )}
                           </div>
                         )}
                       </div>
                     </label>
-                    {!userProfile?.cv_url && cvChoice !== 'new' && (
-                      <p className="text-xs text-gray-400">No CV in profile yet. You can upload one above or skip.</p>
+                    {formErrors.cvUrl && (
+                      <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{formErrors.cvUrl}</p>
                     )}
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <button onClick={handleApply} disabled={applying}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
+                  <button onClick={handleApply} disabled={applying || uploadingCv}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
                     {applying ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4" /> Submit Application</>}
                   </button>
-                  <button onClick={() => setShowApplyModal(false)} className="px-5 py-3 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Cancel</button>
+                  <button onClick={() => setShowApplyModal(false)} disabled={applying} className="px-5 py-3 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 disabled:opacity-50 font-medium">Cancel</button>
                 </div>
               </>
             )}
+
           </div>
         </div>
       )}
