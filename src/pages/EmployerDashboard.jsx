@@ -25,6 +25,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, LineChart, Line
 } from 'recharts';
+import DOMPurify from 'isomorphic-dompurify';
 
 const ACCENT = '#4F46E5';
 
