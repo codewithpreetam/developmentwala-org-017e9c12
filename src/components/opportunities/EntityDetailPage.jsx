@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useSearchParams } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
+import { z } from 'zod';
+import { toast } from 'sonner';
 import {
   ArrowLeft, MapPin, Calendar, Building2, ExternalLink, Mail,
   Clock, Share2, CheckCircle2, Globe, DollarSign, GraduationCap,
-  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin
+  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle
 } from 'lucide-react';
 import EmployerCard from './EmployerCard';
 import OrgProfileLink from './OrgProfileLink';
@@ -17,6 +19,20 @@ import { base44 } from '@/api/base44Client';
 import { redirectToSignIn, setLoginRoleHint } from '@/lib/auth/redirect';
 import MobileHeader from '../MobileHeader';
 import { Textarea } from '@/components/ui/textarea';
+
+const applySchema = z.object({
+  coverLetter: z
+    .string()
+    .trim()
+    .min(30, 'Please write at least 30 characters about why you are a fit.')
+    .max(2000, 'Cover letter must be 2000 characters or fewer.'),
+  cvUrl: z
+    .string()
+    .trim()
+    .url('Please attach a CV before submitting.')
+    .max(2048, 'CV link is too long.'),
+});
+
 
 const locationLabels = { online: 'Online', offline: 'In-person', hybrid: 'Hybrid' };
 
@@ -57,6 +73,8 @@ export default function EntityDetailPage({
   const [applied, setApplied] = useState(false);
   const [orgData, setOrgData] = useState(null);
   const [shareMsg, setShareMsg] = useState('');
+  const [formErrors, setFormErrors] = useState({});
+
 
   useEffect(() => {
     base44.auth.me().then(u => {
@@ -117,47 +135,82 @@ export default function EntityDetailPage({
   const handleCvUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('CV must be 5 MB or smaller.');
+      return;
+    }
+    const allowed = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (file.type && !allowed.includes(file.type)) {
+      toast.error('Please upload a PDF or Word document.');
+      return;
+    }
     setUploadingCv(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setNewCvUrl(file_url);
-    setUploadingCv(false);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setNewCvUrl(file_url);
+      setFormErrors((prev) => ({ ...prev, cvUrl: undefined }));
+      toast.success('CV uploaded.');
+    } catch (err) {
+      toast.error(err?.message || 'Could not upload your CV.');
+    } finally {
+      setUploadingCv(false);
+    }
   };
 
   const handleApply = async () => {
     if (!user) {
       setLoginRoleHint('job_seeker');
-      redirectToSignIn(window.location.href);
+      redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '');
       return;
     }
+
+    const cvUrl = cvChoice === 'profile' ? (userProfile?.cv_url || '') : newCvUrl;
+    const parsed = applySchema.safeParse({ coverLetter, cvUrl });
+    if (!parsed.success) {
+      const errors = {};
+      for (const issue of parsed.error.issues) {
+        errors[issue.path[0]] = issue.message;
+      }
+      setFormErrors(errors);
+      toast.error('Please fix the highlighted fields.');
+      return;
+    }
+    setFormErrors({});
     setApplying(true);
-    // Determine which CV URL to attach
-    let cvUrl = '';
-    if (cvChoice === 'profile') {
-      cvUrl = userProfile?.cv_url || '';
-    } else {
-      cvUrl = newCvUrl;
-      // Also update profile CV if user uploaded a new one
-      if (newCvUrl && userProfile?.id) {
+    try {
+      if (cvChoice === 'new' && newCvUrl && userProfile?.id) {
         await base44.entities.UserProfile.update(userProfile.id, { cv_url: newCvUrl }).catch(() => {});
       }
+      const orgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name || '';
+      await base44.entities.Application.create({
+        opportunity_id: item.id,
+        opportunity_title: item.title,
+        opportunity_type: resolvedType,
+        organization: orgName,
+        applicant_email: user.email,
+        applicant_name: user.full_name || '',
+        cover_letter: parsed.data.coverLetter,
+        cv_url: parsed.data.cvUrl,
+        employer_email: item.submitted_by_email || '',
+        status: 'applied',
+      });
+      setApplied(true);
+      setShowApplyModal(false);
+      setCoverLetter('');
+      toast.success('Application submitted! The employer has been notified.');
+    } catch (err) {
+      if (err?.code === 'ALREADY_APPLIED') {
+        setApplied(true);
+        setShowApplyModal(false);
+        toast.info('You have already applied to this opportunity.');
+      } else {
+        toast.error(err?.message || 'Could not submit your application. Please try again.');
+      }
+    } finally {
+      setApplying(false);
     }
-    const orgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name || '';
-    await base44.entities.Application.create({
-      opportunity_id: item.id,
-      opportunity_title: item.title,
-      opportunity_type: resolvedType,
-      organization: orgName,
-      applicant_email: user.email,
-      applicant_name: user.full_name || '',
-      cover_letter: coverLetter,
-      cv_url: cvUrl || null,
-      employer_email: item.submitted_by_email || '',
-      status: 'applied',
-    });
-    setApplied(true);
-    setApplying(false);
-    setShowApplyModal(false);
   };
+
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -453,24 +506,46 @@ export default function EntityDetailPage({
                 <p className="text-gray-600 mb-5">Please sign in to apply for this opportunity.</p>
                 <button onClick={() => {
                   setLoginRoleHint('job_seeker');
-                  redirectToSignIn(window.location.href);
+                  redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '');
                 }}
+
                   className="bg-blue-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-blue-700">Sign In to Apply</button>
               </div>
             ) : (
               <>
                 <p className="text-sm text-gray-500 mb-4">Applying as <strong>{user.email}</strong></p>
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Cover Letter / Message (Optional)</label>
-                  <Textarea value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} placeholder="Briefly introduce yourself and why you're interested..." className="min-h-[100px] rounded-xl" />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                    Cover Letter <span className="text-red-500">*</span>
+                  </label>
+                  <Textarea
+                    value={coverLetter}
+                    onChange={(e) => {
+                      const next = e.target.value.slice(0, 2000);
+                      setCoverLetter(next);
+                      if (formErrors.coverLetter) setFormErrors((p) => ({ ...p, coverLetter: undefined }));
+                    }}
+                    placeholder="Briefly introduce yourself and why you're a strong fit (minimum 30 characters)..."
+                    className={`min-h-[120px] rounded-xl ${formErrors.coverLetter ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                    aria-invalid={!!formErrors.coverLetter}
+                    maxLength={2000}
+                  />
+                  <div className="flex items-center justify-between mt-1.5">
+                    {formErrors.coverLetter ? (
+                      <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{formErrors.coverLetter}</p>
+                    ) : <span />}
+                    <span className={`text-xs ${coverLetter.length > 1900 ? 'text-amber-600' : 'text-gray-400'}`}>{coverLetter.length}/2000</span>
+                  </div>
                 </div>
                 {/* CV Selection */}
                 <div className="mb-5">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Resume / CV</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Resume / CV <span className="text-red-500">*</span>
+                  </label>
                   <div className="flex flex-col gap-2">
                     {userProfile?.cv_url && (
                       <label className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-colors ${cvChoice === 'profile' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
-                        <input type="radio" name="cv" value="profile" checked={cvChoice === 'profile'} onChange={() => setCvChoice('profile')} className="text-blue-600" />
+                        <input type="radio" name="cv" value="profile" checked={cvChoice === 'profile'} onChange={() => { setCvChoice('profile'); setFormErrors((p) => ({ ...p, cvUrl: undefined })); }} className="text-blue-600" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-800">Use profile CV</p>
                           <a href={userProfile.cv_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline truncate block">View uploaded CV →</a>
@@ -491,28 +566,29 @@ export default function EntityDetailPage({
                             ) : (
                               <label className="cursor-pointer flex items-center gap-2 text-xs text-blue-600 hover:text-blue-700">
                                 {uploadingCv ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
-                                {uploadingCv ? 'Uploading...' : 'Click to select PDF'}
-                                <input type="file" accept=".pdf" onChange={handleCvUpload} className="hidden" disabled={uploadingCv} />
+                                {uploadingCv ? 'Uploading...' : 'Click to upload PDF or Word (max 5 MB)'}
+                                <input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={handleCvUpload} className="hidden" disabled={uploadingCv} />
                               </label>
                             )}
                           </div>
                         )}
                       </div>
                     </label>
-                    {!userProfile?.cv_url && cvChoice !== 'new' && (
-                      <p className="text-xs text-gray-400">No CV in profile yet. You can upload one above or skip.</p>
+                    {formErrors.cvUrl && (
+                      <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{formErrors.cvUrl}</p>
                     )}
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <button onClick={handleApply} disabled={applying}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
+                  <button onClick={handleApply} disabled={applying || uploadingCv}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
                     {applying ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4" /> Submit Application</>}
                   </button>
-                  <button onClick={() => setShowApplyModal(false)} className="px-5 py-3 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Cancel</button>
+                  <button onClick={() => setShowApplyModal(false)} disabled={applying} className="px-5 py-3 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 disabled:opacity-50 font-medium">Cancel</button>
                 </div>
               </>
             )}
+
           </div>
         </div>
       )}
