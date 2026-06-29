@@ -78,7 +78,7 @@ export default function SubmitJob() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', location: '', country: DEFAULT_COUNTRY,
+    title: '', description: '', location: '', state: '', country: DEFAULT_COUNTRY,
     opportunity_type: 'job', job_type: '', sector: '', salary: '', deadline: '',
     location_type: '', funding_type: '', duration: '', stipend_amount: '', grant_amount: '',
     eligible_countries: '', scholarship_level: '', field_of_study: '', education_requirement: '',
@@ -87,6 +87,7 @@ export default function SubmitJob() {
     organization: '',
     tags: '', submitted_by_name: '', submitted_by_email: '',
   });
+
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
