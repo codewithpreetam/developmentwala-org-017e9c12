@@ -20,6 +20,7 @@ import { base44 } from '@/api/base44Client';
 import { redirectToSignIn, setLoginRoleHint } from '@/lib/auth/redirect';
 import MobileHeader from '../MobileHeader';
 import { Textarea } from '@/components/ui/textarea';
+import CoverLetterField from './CoverLetterField';
 
 const applySchema = z.object({
   coverLetter: z
