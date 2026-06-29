@@ -160,6 +160,7 @@ export default function SignUp() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+              <p className="mt-1.5 text-xs text-gray-500">At least 8 characters, including uppercase, lowercase, number, and symbol.</p>
             </div>
             <div>
               <label htmlFor="signup-confirm" className="block text-sm font-medium text-gray-700 mb-1.5">Confirm password</label>
