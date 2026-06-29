@@ -628,9 +628,43 @@ export default function JobDetail() {
                 <DetailRow icon={Users} label="Experience Required" value={job.experience_required} />
               </div>
 
+              {/* Share */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-6">
+                <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Share2 className="w-4 h-4 text-gray-500" /> Share this {typeLabels[opType]}
+                </h3>
+                <div className="grid grid-cols-3 gap-2">
+                  <button onClick={shareToWhatsApp}
+                    className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-gray-200 hover:bg-green-50 hover:border-green-200 transition-colors"
+                    aria-label="Share on WhatsApp">
+                    <MessageCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-xs font-medium text-gray-700">WhatsApp</span>
+                  </button>
+                  <button onClick={shareToLinkedIn}
+                    className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-gray-200 hover:bg-blue-50 hover:border-blue-200 transition-colors"
+                    aria-label="Share on LinkedIn">
+                    <Linkedin className="w-5 h-5 text-blue-700" />
+                    <span className="text-xs font-medium text-gray-700">LinkedIn</span>
+                  </button>
+                  <button onClick={copyLink}
+                    className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors"
+                    aria-label="Copy link">
+                    {copied ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : <LinkIcon className="w-5 h-5 text-gray-600" />}
+                    <span className="text-xs font-medium text-gray-700">{copied ? 'Copied' : 'Copy Link'}</span>
+                  </button>
+                </div>
+                {typeof navigator !== 'undefined' && 'share' in navigator && (
+                  <button onClick={handleShare}
+                    className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition-colors">
+                    <Share2 className="w-4 h-4" /> Share…
+                  </button>
+                )}
+              </div>
+
               <Link to={createPageUrl(listingPage)} className="flex items-center gap-2 text-gray-500 hover:text-blue-600 text-sm">
                 <ArrowLeft className="w-4 h-4" /> Back to all {typeLabels[opType]}s
               </Link>
+
             </aside>
           </div>
         </div>
