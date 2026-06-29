@@ -63,6 +63,7 @@ function downloadCSV(data, filename) {
 
 export default function AdminDashboard() {
   const { isAdmin, logout, loading: authLoading } = useAdminAuth();
+  const { user: authUser } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [tab, setTabState] = useState(searchParams.get('tab') || 'overview');
