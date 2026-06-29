@@ -350,6 +350,8 @@ export default function Jobs() {
   const location = useLocation();
   const [page, setPage] = useState(1);
   const [useServerSearch, setUseServerSearch] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [savedMap, setSavedMap] = useState({});
 
   const toggleSection = (key) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
 
@@ -358,7 +360,39 @@ export default function Jobs() {
     if (params.get('q')) setSearch(params.get('q'));
     if (params.get('sector')) setSectors([params.get('sector')]);
     loadJobs();
+    base44.auth.me().then(u => {
+      if (!u) return;
+      setCurrentUser(u);
+      base44.entities.SavedOpportunity.filter({ user_email: u.email }).then(saved => {
+        const map = {};
+        saved.forEach(s => { if (s.opportunity_type === 'job') map[s.opportunity_id] = s.id; });
+        setSavedMap(map);
+      }).catch(() => {});
+    }).catch(() => {});
   }, []);
+
+  const handleToggleSave = async (item) => {
+    if (!currentUser) {
+      redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '/jobs');
+      return;
+    }
+    try {
+      if (savedMap[item.id]) {
+        await base44.entities.SavedOpportunity.delete(savedMap[item.id]);
+        setSavedMap(prev => { const m = { ...prev }; delete m[item.id]; return m; });
+      } else {
+        const created = await base44.entities.SavedOpportunity.create({
+          user_email: currentUser.email,
+          opportunity_type: 'job',
+          opportunity_id: item.id,
+        });
+        setSavedMap(prev => ({ ...prev, [item.id]: created.id }));
+      }
+    } catch (e) {
+      console.error('toggle save failed', e);
+    }
+  };
+
 
   const loadJobs = async () => {
     const params = new URLSearchParams(location.search);
