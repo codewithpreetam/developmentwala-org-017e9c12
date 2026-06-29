@@ -6,6 +6,7 @@ import { useAuth } from '../auth/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { useSiteSettings } from '../../hooks/useSiteSettings';
 import { getLogoUrl, getSiteName } from '@/lib/brand';
+import UserAvatar from '@/components/shared/UserAvatar';
 
 const opportunityLinks = [
   { label: 'Jobs', page: 'Jobs', icon: Briefcase, desc: 'Full-time & contract roles' },
