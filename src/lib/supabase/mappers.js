@@ -47,10 +47,12 @@ function formatSalary(row) {
   const val = Number(row.salary_value);
   if (Number.isNaN(val)) return null;
   const currency = row.salary_currency || 'INR';
-  if (val >= 100000) return `${currency} ${(val / 100000).toFixed(1)}L`;
-  if (val >= 1000) return `${currency} ${Math.round(val / 1000)}K`;
-  return `${currency} ${val}`;
+  const symbol = currency === 'INR' ? '₹' : `${currency} `;
+  if (val >= 100000) return `${symbol}${(val / 100000).toFixed(1)}L`;
+  if (val >= 1000) return `${symbol}${Math.round(val / 1000)}K`;
+  return `${symbol}${val}`;
 }
+
 
 function normalizeEmploymentType(value) {
   if (!value) return 'full_time';
