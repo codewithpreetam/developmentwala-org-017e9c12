@@ -19,7 +19,7 @@ const typeLabels = {
   group_discussion: 'Group Discussion', other: 'Other',
 };
 
-export default function EmployerInterviewPanel({ employerEmail, orgName, allApplicants = [], prefillApp = null, onPrefillConsumed }) {
+export default function EmployerInterviewPanel({ employerEmail, employerId, orgName, allApplicants = [], prefillApp = null, onPrefillConsumed }) {
   const queryClient = useQueryClient();
   const shortlistedApplicants = allApplicants.filter(a => ['shortlisted', 'interview'].includes(a.status));
   const [view, setView] = useState('calendar');
