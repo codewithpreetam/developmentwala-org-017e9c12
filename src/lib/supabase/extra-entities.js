@@ -50,7 +50,8 @@ export const BlogPost = {
     if (criteria.status) query = query.eq('status', criteria.status);
     if (criteria.slug) query = query.eq('slug', criteria.slug);
     if (criteria.id) query = query.eq('id', criteria.id);
-    const { data, error } = await query.limit(limit);
+    const { data, error } = await query.order('created_at', { ascending: false }).limit(limit);
+
     if (error) throw error;
     let rows = (data || []).map(mapBlogPost);
     if (criteria.categories?.length) {
