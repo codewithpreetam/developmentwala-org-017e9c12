@@ -599,9 +599,22 @@ export default function Home() {
               <div className="grid md:grid-cols-3 gap-4">
                 {blogPosts.map((post) => (
                   <Link key={post.id} to={`/blog/${post.slug}`}
-                    className="group bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition-all overflow-hidden">
-                    {post.featured_image && (
-                      <img src={post.featured_image} alt="" className="w-full h-36 object-cover" />
+                    className="group bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition-all overflow-hidden flex flex-col">
+                    {post.featured_image ? (
+                      <img
+                        src={post.featured_image}
+                        alt={post.title}
+                        width={1200}
+                        height={630}
+                        loading="lazy"
+                        decoding="async"
+                        sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+                        className="w-full aspect-[1200/630] object-cover"
+                      />
+                    ) : (
+                      <div className="w-full aspect-[1200/630] bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+                        <span className="text-4xl font-bold text-blue-200">{post.title?.[0]}</span>
+                      </div>
                     )}
                     <div className="p-5">
                       <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">{post.title}</h3>
@@ -610,6 +623,7 @@ export default function Home() {
                     </div>
                   </Link>
                 ))}
+
               </div>
             </div>
           </section>

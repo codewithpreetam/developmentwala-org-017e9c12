@@ -10,6 +10,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { format } from 'date-fns';
+import { resizeImageToCoverWebp } from '@/lib/image/compress';
+
 
 function slugify(str) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -125,10 +127,17 @@ export default function BlogManager() {
     const file = e.target.files[0];
     if (!file) return;
     setUploadingImg(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    u('featured_image', file_url);
-    setUploadingImg(false);
+    try {
+      // Force 1200×630 (Google/OG recommended), center-crop, encode as WebP.
+      const resized = await resizeImageToCoverWebp(file, { width: 1200, height: 630, targetBytes: 200 * 1024 });
+      const { file_url } = await base44.integrations.Core.UploadFile({ file: resized });
+      u('featured_image', file_url);
+    } finally {
+      setUploadingImg(false);
+      e.target.value = '';
+    }
   };
+
 
   const toggleCategory = (slug) => {
     const cats = editPost.categories || [];
@@ -570,7 +579,7 @@ export default function BlogManager() {
               ) : (
                 <label className="block cursor-pointer border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-blue-300 transition-colors">
                   {uploadingImg ? <Loader2 className="w-8 h-8 text-blue-400 animate-spin mx-auto mb-1" /> : <Upload className="w-8 h-8 text-gray-300 mx-auto mb-1" />}
-                  <p className="text-xs text-gray-500">{uploadingImg ? 'Uploading...' : 'Upload image (JPG, PNG)'}</p>
+                  <p className="text-xs text-gray-500">{uploadingImg ? 'Resizing & uploading…' : 'Upload image (any size — auto-resized to 1200×630 WebP)'}</p>
                   <input type="file" accept="image/*" onChange={handleFeaturedImageUpload} className="hidden" />
                 </label>
               )}

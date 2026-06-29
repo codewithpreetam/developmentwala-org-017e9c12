@@ -8,13 +8,14 @@ const STATIC_ROUTES = [
   "/privacy-policy", "/terms-of-use", "/legal",
 ];
 
-async function fetchTable(table: string): Promise<Array<{ slug?: string; id: string | number; updated_at?: string; created_at?: string }>> {
+async function fetchTable(table: string, extraQuery = ""): Promise<Array<{ slug?: string; id: string | number; updated_at?: string; created_at?: string }>> {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
   if (!url || !key) return [];
   try {
+    const qs = `select=id,slug,updated_at,created_at&limit=5000${extraQuery ? `&${extraQuery}` : ""}`;
     const res = await fetch(
-      `${url}/rest/v1/${table}?select=id,slug,updated_at,created_at&limit=5000`,
+      `${url}/rest/v1/${table}?${qs}`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` } },
     );
     if (!res.ok) return [];
@@ -24,6 +25,7 @@ async function fetchTable(table: string): Promise<Array<{ slug?: string; id: str
   }
 }
 
+
 function urlEntry(loc: string, lastmod?: string, changefreq = "daily", priority = "0.7") {
   return `<url><loc>${loc}</loc>${lastmod ? `<lastmod>${new Date(lastmod).toISOString()}</lastmod>` : ""}<changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
 }
@@ -32,13 +34,16 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const [jobs, internships, fellowships, scholarships, grants, events] = await Promise.all([
+        const [jobs, internships, fellowships, scholarships, grants, events, blogPosts, blogCategories] = await Promise.all([
           fetchTable("jobs"),
           fetchTable("internships"),
           fetchTable("fellowships"),
           fetchTable("scholarships"),
           fetchTable("grants"),
           fetchTable("events"),
+          fetchTable("blog_posts", "status=eq.published"),
+          fetchTable("blog_categories"),
+
         ]);
 
         const parts: string[] = [];
@@ -56,6 +61,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           ["scholarships", scholarships],
           ["grants", grants],
           ["events", events],
+          ["blog", blogPosts],
+          ["blog/category", blogCategories],
         ];
         for (const [seg, rows] of sections) {
           for (const row of rows) {
@@ -63,6 +70,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             parts.push(urlEntry(`${SITE}/${seg}/${slug}`, row.updated_at || row.created_at, "daily", "0.9"));
           }
         }
+
 
         parts.push("</urlset>");
         return new Response(parts.join(""), {

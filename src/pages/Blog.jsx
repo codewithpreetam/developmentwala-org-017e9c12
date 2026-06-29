@@ -142,14 +142,24 @@ function BlogCard({ post, categories }) {
   return (
     <Link to={`/blog/${post.slug || post.id}`} className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-200 flex flex-col">
       {post.featured_image ? (
-        <div className="aspect-[16/9] overflow-hidden">
-          <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+        <div className="aspect-[1200/630] overflow-hidden bg-gray-100">
+          <img
+            src={post.featured_image}
+            alt={post.title}
+            width={1200}
+            height={630}
+            loading="lazy"
+            decoding="async"
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
         </div>
       ) : (
-        <div className="aspect-[16/9] bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="aspect-[1200/630] bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
           <span className="text-4xl font-bold text-blue-200">{post.title?.[0]}</span>
         </div>
       )}
+
       <div className="p-5 flex flex-col flex-1">
         <div className="flex flex-wrap gap-1.5 mb-3">
           {postCats.slice(0, 2).map(cat => (

@@ -6,7 +6,9 @@ import Footer from '../components/layout/Footer';
 import SEOHead from '../components/shared/SEOHead';
 import { Calendar, Clock, ArrowLeft, Tag, ChevronRight } from 'lucide-react';
 import AuthorBox from '../components/blog/AuthorBox';
+import ShareButtons from '../components/blog/ShareButtons';
 import { format } from 'date-fns';
+
 
 export default function BlogPost() {
   const [post, setPost] = useState(null);
@@ -50,22 +52,52 @@ export default function BlogPost() {
   );
 
   const postCats = (post.categories || []).map(slug => categories.find(c => c.slug === slug)).filter(Boolean);
+  const canonicalUrl = `https://developmentwala.org/blog/${post.slug || post.id}`;
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.meta_description || post.excerpt || post.title,
+    image: post.featured_image ? [post.featured_image] : undefined,
+    datePublished: post.created_date,
+    dateModified: post.updated_date || post.created_date,
+    author: { '@type': 'Person', name: post.author_name || 'DevelopmentWala Editorial' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'DevelopmentWala.org',
+      logo: { '@type': 'ImageObject', url: 'https://developmentwala.org/icon-512.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+    keywords: post.tags || undefined,
+  };
 
   return (
     <div>
       <SEOHead
         title={post.meta_title || `${post.title} — DevelopmentWala.org Blog`}
         description={post.meta_description || post.excerpt || post.title}
-        canonical={`https://developmentwala.com/blog/${post.slug || post.id}`}
+        canonical={canonicalUrl}
+        image={post.featured_image || undefined}
+        structuredData={articleSchema}
       />
       <Navbar />
 
-      {/* Featured Image */}
+      {/* Featured Image — 1200×630 (responsive) */}
       {post.featured_image && (
-        <div className="w-full bg-gray-900" style={{ maxHeight: '460px', overflow: 'hidden' }}>
-          <img src={post.featured_image} alt={post.title} className="w-full object-cover" style={{ maxHeight: '460px', minHeight: '200px', width: '100%' }} />
+        <div className="w-full bg-gray-900">
+          <img
+            src={post.featured_image}
+            alt={post.title}
+            width={1200}
+            height={630}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            className="w-full h-auto max-h-[460px] object-cover aspect-[1200/630]"
+          />
         </div>
       )}
+
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
         {/* Breadcrumb */}
@@ -102,7 +134,11 @@ export default function BlogPost() {
                 <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" />{post.created_date ? format(new Date(post.created_date), 'dd MMM yyyy') : ''}</span>
                 {post.read_time && <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" />{post.read_time} min read</span>}
               </div>
+              <div className="mt-5">
+                <ShareButtons url={canonicalUrl} title={post.title} summary={post.excerpt || ''} />
+              </div>
             </div>
+
 
             {/* Content */}
             <div
@@ -122,7 +158,12 @@ export default function BlogPost() {
               </div>
             )}
 
+            <div className="mt-10 pt-6 border-t border-gray-100">
+              <ShareButtons url={canonicalUrl} title={post.title} summary={post.excerpt || ''} />
+            </div>
+
             <AuthorBox />
+
 
             <div className="mt-8">
               <Link to="/blog" className="flex items-center gap-2 text-blue-600 hover:underline text-sm font-medium">
