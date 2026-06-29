@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from '@/lib/router-adapter';
+import { Link, useSearchParams } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '../components/auth/AuthContext';
