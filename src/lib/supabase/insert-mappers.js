@@ -36,7 +36,7 @@ function isPending(payload) {
   return payload.status === 'pending' || payload.is_active === false;
 }
 
-export function toJobInsert(payload, { employerId } = {}) {
+export function toJobInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const today = new Date().toISOString().split('T')[0];
   const deadline = payload.deadline;
