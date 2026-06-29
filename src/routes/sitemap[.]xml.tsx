@@ -8,13 +8,14 @@ const STATIC_ROUTES = [
   "/privacy-policy", "/terms-of-use", "/legal",
 ];
 
-async function fetchTable(table: string): Promise<Array<{ slug?: string; id: string | number; updated_at?: string; created_at?: string }>> {
+async function fetchTable(table: string, extraQuery = ""): Promise<Array<{ slug?: string; id: string | number; updated_at?: string; created_at?: string }>> {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
   if (!url || !key) return [];
   try {
+    const qs = `select=id,slug,updated_at,created_at&limit=5000${extraQuery ? `&${extraQuery}` : ""}`;
     const res = await fetch(
-      `${url}/rest/v1/${table}?select=id,slug,updated_at,created_at&limit=5000`,
+      `${url}/rest/v1/${table}?${qs}`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` } },
     );
     if (!res.ok) return [];
@@ -23,6 +24,7 @@ async function fetchTable(table: string): Promise<Array<{ slug?: string; id: str
     return [];
   }
 }
+
 
 function urlEntry(loc: string, lastmod?: string, changefreq = "daily", priority = "0.7") {
   return `<url><loc>${loc}</loc>${lastmod ? `<lastmod>${new Date(lastmod).toISOString()}</lastmod>` : ""}<changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
