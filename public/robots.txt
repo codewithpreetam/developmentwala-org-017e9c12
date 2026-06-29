@@ -1,13 +1,55 @@
 User-agent: *
 Allow: /
+Disallow: /admin-dashboard
+Disallow: /admin-login
+Disallow: /employer-dashboard
+Disallow: /candidate-dashboard
+Disallow: /employer-profile
+Disallow: /post-opportunity
+Disallow: /edit-opportunity
+Disallow: /submit-job
+Disallow: /submit-internship
+Disallow: /submit-fellowship
+Disallow: /submit-scholarship
+Disallow: /submit-grant
+Disallow: /submit-event
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /choose-role
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /api/
 
 # Allow major search and AI crawlers explicitly
 User-agent: Googlebot
+Allow: /
+User-agent: Googlebot-Image
+Allow: /
+User-agent: Googlebot-News
+Allow: /
+User-agent: AdsBot-Google
 Allow: /
 User-agent: Bingbot
 Allow: /
 User-agent: DuckDuckBot
 Allow: /
+User-agent: YandexBot
+Allow: /
+User-agent: Baiduspider
+Allow: /
+User-agent: facebookexternalhit
+Allow: /
+User-agent: Twitterbot
+Allow: /
+User-agent: LinkedInBot
+Allow: /
+User-agent: Slackbot
+Allow: /
+User-agent: WhatsApp
+Allow: /
+
+# AI / answer-engine crawlers
 User-agent: GPTBot
 Allow: /
 User-agent: OAI-SearchBot
@@ -16,9 +58,13 @@ User-agent: ChatGPT-User
 Allow: /
 User-agent: PerplexityBot
 Allow: /
+User-agent: Perplexity-User
+Allow: /
 User-agent: ClaudeBot
 Allow: /
 User-agent: Claude-Web
+Allow: /
+User-agent: anthropic-ai
 Allow: /
 User-agent: Google-Extended
 Allow: /
@@ -26,5 +72,16 @@ User-agent: Applebot
 Allow: /
 User-agent: Applebot-Extended
 Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: Amazonbot
+Allow: /
+User-agent: cohere-ai
+Allow: /
+User-agent: Meta-ExternalAgent
+Allow: /
 
+Host: https://developmentwala.org
 Sitemap: https://developmentwala.org/sitemap.xml
