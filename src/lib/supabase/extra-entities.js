@@ -312,8 +312,11 @@ export const Interview = {
     } else if (payload.scheduled_at) {
       scheduledAt = payload.scheduled_at;
     }
+    // application_id column is bigint in DB but our app uses uuid; only pass it when numeric
+    const appIdNum = payload.application_id && /^\d+$/.test(String(payload.application_id)) ? Number(payload.application_id) : null;
     const { data, error } = await supabase.from('interviews').insert({
-      application_id: payload.application_id || null,
+      application_id: appIdNum,
+
       candidate_email: payload.candidate_email,
       employer_email: payload.employer_email,
       opportunity_title: payload.job_title || payload.opportunity_title,
