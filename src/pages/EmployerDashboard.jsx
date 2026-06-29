@@ -1112,6 +1112,13 @@ export default function EmployerDashboard() {
               <EmployerMessagingPanel user={user} orgName={orgForm.org_name} />
             </div>
           )}
+
+          {/* NOTIFICATIONS */}
+          {tab === 'notifications' && (
+            <div className="max-w-4xl">
+              <NotificationsPanel userEmail={user.email} role="employer" />
+            </div>
+          )}
         </main>
         </PullToRefresh>
       </div>
