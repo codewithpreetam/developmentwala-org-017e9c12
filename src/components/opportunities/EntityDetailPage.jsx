@@ -391,8 +391,10 @@ export default function EntityDetailPage({
       <SEOHead
         title={`${item.title}${orgName ? ` — ${orgName}` : ''} | DevelopmentWala.org`}
         description={item.description?.replace(/[#*_[\]]/g, '').substring(0, 160)}
-        canonical={`https://developmentwala.org/${listingPage.toLowerCase()}/${item.id}`}
+        canonical={`https://developmentwala.org/${listingPage.toLowerCase()}/${item.slug || item.id}`}
+        image={item.logo_url || item.banner_image || orgData?.logo_url || undefined}
         structuredData={structuredData}
+
       />
       <Navbar />
       <MobileHeader title={item?.title} />
