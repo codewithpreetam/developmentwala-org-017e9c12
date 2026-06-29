@@ -115,6 +115,8 @@ export default function SignIn() {
 
           <RoleToggle role={role} onChange={(id) => { setRole(id); setError(''); }} roles={[roleConfig.job_seeker, roleConfig.employer]} />
 
+          <SocialAuthButtons next={next} mode="signin" />
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="signin-email" className="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
