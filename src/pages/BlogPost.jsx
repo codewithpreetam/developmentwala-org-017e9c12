@@ -6,7 +6,9 @@ import Footer from '../components/layout/Footer';
 import SEOHead from '../components/shared/SEOHead';
 import { Calendar, Clock, ArrowLeft, Tag, ChevronRight } from 'lucide-react';
 import AuthorBox from '../components/blog/AuthorBox';
+import ShareButtons from '../components/blog/ShareButtons';
 import { format } from 'date-fns';
+
 
 export default function BlogPost() {
   const [post, setPost] = useState(null);
