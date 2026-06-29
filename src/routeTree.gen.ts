@@ -31,6 +31,7 @@ import { Route as InternshipDetailRouteImport } from './routes/internship-detail
 import { Route as GrantDetailRouteImport } from './routes/grant-detail'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FellowshipDetailRouteImport } from './routes/fellowship-detail'
+import { Route as FeaturedRouteImport } from './routes/featured'
 import { Route as EventDetailRouteImport } from './routes/event-detail'
 import { Route as EmployersRouteImport } from './routes/employers'
 import { Route as EmployerProfileRouteImport } from './routes/employer-profile'
@@ -168,6 +169,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const FellowshipDetailRoute = FellowshipDetailRouteImport.update({
   id: '/fellowship-detail',
   path: '/fellowship-detail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturedRoute = FeaturedRouteImport.update({
+  id: '/featured',
+  path: '/featured',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventDetailRoute = EventDetailRouteImport.update({
@@ -323,6 +329,7 @@ export interface FileRoutesByFullPath {
   '/employer-profile': typeof EmployerProfileRoute
   '/employers': typeof EmployersRoute
   '/event-detail': typeof EventDetailRoute
+  '/featured': typeof FeaturedRoute
   '/fellowship-detail': typeof FellowshipDetailRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/grant-detail': typeof GrantDetailRoute
@@ -375,6 +382,7 @@ export interface FileRoutesByTo {
   '/employer-profile': typeof EmployerProfileRoute
   '/employers': typeof EmployersRoute
   '/event-detail': typeof EventDetailRoute
+  '/featured': typeof FeaturedRoute
   '/fellowship-detail': typeof FellowshipDetailRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/grant-detail': typeof GrantDetailRoute
@@ -428,6 +436,7 @@ export interface FileRoutesById {
   '/employer-profile': typeof EmployerProfileRoute
   '/employers': typeof EmployersRoute
   '/event-detail': typeof EventDetailRoute
+  '/featured': typeof FeaturedRoute
   '/fellowship-detail': typeof FellowshipDetailRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/grant-detail': typeof GrantDetailRoute
@@ -482,6 +491,7 @@ export interface FileRouteTypes {
     | '/employer-profile'
     | '/employers'
     | '/event-detail'
+    | '/featured'
     | '/fellowship-detail'
     | '/forgot-password'
     | '/grant-detail'
@@ -534,6 +544,7 @@ export interface FileRouteTypes {
     | '/employer-profile'
     | '/employers'
     | '/event-detail'
+    | '/featured'
     | '/fellowship-detail'
     | '/forgot-password'
     | '/grant-detail'
@@ -586,6 +597,7 @@ export interface FileRouteTypes {
     | '/employer-profile'
     | '/employers'
     | '/event-detail'
+    | '/featured'
     | '/fellowship-detail'
     | '/forgot-password'
     | '/grant-detail'
@@ -639,6 +651,7 @@ export interface RootRouteChildren {
   EmployerProfileRoute: typeof EmployerProfileRoute
   EmployersRoute: typeof EmployersRoute
   EventDetailRoute: typeof EventDetailRoute
+  FeaturedRoute: typeof FeaturedRoute
   FellowshipDetailRoute: typeof FellowshipDetailRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GrantDetailRoute: typeof GrantDetailRoute
@@ -834,6 +847,13 @@ declare module '@tanstack/react-router' {
       path: '/fellowship-detail'
       fullPath: '/fellowship-detail'
       preLoaderRoute: typeof FellowshipDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/featured': {
+      id: '/featured'
+      path: '/featured'
+      fullPath: '/featured'
+      preLoaderRoute: typeof FeaturedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/event-detail': {
@@ -1047,6 +1067,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmployerProfileRoute: EmployerProfileRoute,
   EmployersRoute: EmployersRoute,
   EventDetailRoute: EventDetailRoute,
+  FeaturedRoute: FeaturedRoute,
   FellowshipDetailRoute: FellowshipDetailRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GrantDetailRoute: GrantDetailRoute,

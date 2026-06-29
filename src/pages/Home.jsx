@@ -383,9 +383,14 @@ export default function Home() {
                   <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Featured Opportunities</h2>
                   <p className="text-gray-500 text-base mt-2">Editor-selected roles, fellowships and grants worth your attention.</p>
                 </div>
+                {featuredItems.length > 8 && (
+                  <Link to="/featured" className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 hover:gap-2.5 transition-all shrink-0">
+                    View all <ArrowUpRight className="w-4 h-4" />
+                  </Link>
+                )}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-                {featuredItems.map(item => {
+                {featuredItems.slice(0, 8).map(item => {
                   const orgName = orgNameFromItem(item);
                   const deadline = item.deadline || item.application_deadline || item.registration_deadline;
                   return (
@@ -429,6 +434,13 @@ export default function Home() {
                 })}
 
               </div>
+              {featuredItems.length > 8 && (
+                <div className="mt-8 flex justify-center">
+                  <Link to="/featured" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition-colors">
+                    View more featured opportunities <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              )}
             </div>
           </section>
         )}
