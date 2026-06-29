@@ -187,12 +187,69 @@ export default function EmployerDashboard() {
   };
 
   const handleLogoUpload = async (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
+    e.target.value = '';
     if (!file) return;
+
+    setLogoError('');
+    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif'];
+    if (file.type && !allowed.includes(file.type)) {
+      setLogoError('Unsupported format. Use JPG, PNG, WebP, SVG or GIF.');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setLogoError('Logo must be 2 MB or smaller.');
+      return;
+    }
+
     setUploadingLogo(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    uo('logo_url', file_url);
-    setUploadingLogo(false);
+    setLogoProgress(10);
+    // Fake-progress while the upload runs (Supabase JS client does not surface XHR progress).
+    const tick = setInterval(() => {
+      setLogoProgress((p) => (p < 85 ? p + Math.max(2, Math.round((90 - p) / 8)) : p));
+    }, 200);
+
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file, folder: 'org-logos' });
+      if (!file_url) throw new Error('Upload succeeded but no URL was returned.');
+      uo('logo_url', file_url);
+      setLogoProgress(95);
+
+      // Persist immediately so the logo syncs everywhere even if the user forgets to save.
+      try {
+        if (org?.id) {
+          const saved = await base44.entities.Organization.update(org.id, { logo_url: file_url });
+          setOrg(saved);
+        } else {
+          const data = { ...orgForm, logo_url: file_url, user_email: user.email, email: orgForm.contact_email || user.email, org_name: orgForm.org_name || user.full_name || 'My Organization' };
+          const saved = await base44.entities.Organization.create(data);
+          setOrg(saved);
+        }
+        setSavedMsg('Logo updated!');
+        setTimeout(() => setSavedMsg(''), 2500);
+      } catch (persistErr) {
+        setLogoError(persistErr?.message || 'Logo uploaded but could not be saved. Click Save Profile to retry.');
+      }
+      setLogoProgress(100);
+    } catch (err) {
+      setLogoError(err?.message || 'Could not upload logo. Please try again.');
+    } finally {
+      clearInterval(tick);
+      setTimeout(() => { setUploadingLogo(false); setLogoProgress(0); }, 400);
+    }
+  };
+
+  const handleLogoRemove = async () => {
+    setLogoError('');
+    uo('logo_url', '');
+    if (org?.id) {
+      try {
+        const saved = await base44.entities.Organization.update(org.id, { logo_url: '' });
+        setOrg(saved);
+      } catch (err) {
+        setLogoError(err?.message || 'Could not remove logo.');
+      }
+    }
   };
 
   const submitContact = async () => {
