@@ -72,24 +72,8 @@ export default function EditOpportunity() {
 
   const u = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
-  const handleBannerUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size > 2 * 1024 * 1024) { alert('Image must be under 2MB'); return; }
-    setUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    u('banner_image', file_url);
-    setUploading(false);
-  };
 
-  const handleLogoUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    u('logo_url', file_url);
-    setUploading(false);
-  };
+
 
   const save = async () => {
     setSaving(true);
