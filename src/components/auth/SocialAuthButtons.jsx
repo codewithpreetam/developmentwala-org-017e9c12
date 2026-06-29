@@ -45,7 +45,17 @@ export default function SocialAuthButtons({ next = '', mode = 'signin' }) {
   };
 
   const handleLinkedIn = () => {
-    toast.info('LinkedIn sign-in is coming soon. Please use Google or email for now.');
+    setLoading('linkedin');
+    try {
+      if (next) {
+        try { sessionStorage.setItem('post_auth_redirect', next); } catch {}
+      }
+      const target = `/api/auth/linkedin/start?next=${encodeURIComponent(next || '/')}`;
+      window.location.href = target;
+    } catch (err) {
+      toast.error(err?.message || 'LinkedIn sign-in failed.');
+      setLoading(null);
+    }
   };
 
   const verb = mode === 'signup' ? 'Sign up' : 'Continue';
@@ -66,9 +76,12 @@ export default function SocialAuthButtons({ next = '', mode = 'signin' }) {
       <button
         type="button"
         onClick={handleLinkedIn}
-        className="w-full h-11 inline-flex items-center justify-center gap-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-sm font-medium text-gray-700 transition"
+        disabled={loading === 'linkedin'}
+        className="w-full h-11 inline-flex items-center justify-center gap-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-sm font-medium text-gray-700 transition disabled:opacity-60"
       >
-        <LinkedInIcon className="w-5 h-5" />
+        {loading === 'linkedin'
+          ? <Loader2 className="w-4 h-4 animate-spin" />
+          : <LinkedInIcon className="w-5 h-5" />}
         <span>{verb} with LinkedIn</span>
       </button>
       <div className="relative py-2">
