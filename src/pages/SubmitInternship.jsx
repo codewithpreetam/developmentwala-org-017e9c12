@@ -65,13 +65,16 @@ export default function SubmitInternship() {
         </FormField>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Organization Name">
-            <Input value={form.organization_name} onChange={e => u('organization_name', e.target.value)} placeholder="Your NGO name" className="h-11 rounded-xl" />
-          </FormField>
           <FormField label="Organization Type">
             <Select value={form.organization_type} onValueChange={v => u('organization_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
               <SelectContent>{orgTypeOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+            </Select>
+          </FormField>
+          <FormField label="Sector">
+            <Select value={form.sector} onValueChange={v => u('sector', v)}>
+              <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select sector" /></SelectTrigger>
+              <SelectContent>{sectorOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
             </Select>
           </FormField>
         </div>
