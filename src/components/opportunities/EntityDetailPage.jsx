@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import {
   ArrowLeft, MapPin, Calendar, Building2, ExternalLink, Mail,
   Clock, Share2, CheckCircle2, Globe, DollarSign, GraduationCap,
-  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle
+  FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle, Bookmark, BookmarkCheck
 } from 'lucide-react';
 import EmployerCard from './EmployerCard';
 import OrgProfileLink from './OrgProfileLink';
@@ -74,6 +74,8 @@ export default function EntityDetailPage({
   const [orgData, setOrgData] = useState(null);
   const [shareMsg, setShareMsg] = useState('');
   const [formErrors, setFormErrors] = useState({});
+  const [savedId, setSavedId] = useState(null);
+  const [savingToggle, setSavingToggle] = useState(false);
 
 
   useEffect(() => {

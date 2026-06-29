@@ -592,7 +592,7 @@ export default function Jobs() {
                 </div>
               ) : filtered.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {paginated.map(job => <OpportunityCard key={job.id} opportunity={job} />)}
+                  {paginated.map(job => <OpportunityCard key={job.id} opportunity={job} isSaved={!!savedMap[job.id]} onToggleSave={() => handleToggleSave(job)} />)}
                   {totalPages > 1 && (
                     <div className="flex items-center justify-center gap-3 pt-6 col-span-full">
                       <button type="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}
