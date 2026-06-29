@@ -848,6 +848,7 @@ export default function EmployerDashboard() {
                         <button onClick={() => { setSelectedJobId(job.id); setTab('applicants'); }} className="flex items-center gap-1.5 text-xs text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 font-medium"><Users className="w-3.5 h-3.5" /> Applicants</button>
                         <Link to={createPageUrl(`EditOpportunity?id=${job.id}&type=${job._type}`)} className="flex items-center gap-1.5 text-xs text-orange-600 bg-orange-50 px-3 py-1.5 rounded-lg hover:bg-orange-100 font-medium"><Pencil className="w-3.5 h-3.5" /> Edit</Link>
                         <Link to={createPageUrl(`${detailPageMap[job._type] || 'JobDetail'}?id=${job.id}`)} className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg hover:bg-gray-100 font-medium"><Eye className="w-3.5 h-3.5" /> View</Link>
+                        <button onClick={() => handleDeletePost(job)} disabled={deletingPostId === job.id} className="flex items-center gap-1.5 text-xs text-red-600 bg-red-50 px-3 py-1.5 rounded-lg hover:bg-red-100 font-medium disabled:opacity-60"><Trash2 className="w-3.5 h-3.5" /> {deletingPostId === job.id ? 'Deleting…' : 'Delete'}</button>
                       </div>
                     </div>
                   ))}
