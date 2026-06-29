@@ -440,7 +440,7 @@ export default function EntityDetailPage({
                       {item.banner_image && <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">{item.title}</h1>}
                       {orgName && (
                         <div className="flex items-center gap-2 mt-3 text-gray-600">
-                          {item.logo_url ? <img src={item.logo_url} alt={orgName} className="w-6 h-6 rounded object-contain" /> : <Building2 className="w-4 h-4" />}
+                          {orgLogo ? <img src={orgLogo} alt={orgName} className="w-6 h-6 rounded object-contain" /> : <Building2 className="w-4 h-4" />}
                           <OrgProfileLink orgData={orgData} orgName={orgName} className="font-medium text-blue-600 hover:underline" />
                         </div>
                       )}
