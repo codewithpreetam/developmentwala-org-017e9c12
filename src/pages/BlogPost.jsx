@@ -134,7 +134,11 @@ export default function BlogPost() {
                 <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" />{post.created_date ? format(new Date(post.created_date), 'dd MMM yyyy') : ''}</span>
                 {post.read_time && <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" />{post.read_time} min read</span>}
               </div>
+              <div className="mt-5">
+                <ShareButtons url={canonicalUrl} title={post.title} summary={post.excerpt || ''} />
+              </div>
             </div>
+
 
             {/* Content */}
             <div
