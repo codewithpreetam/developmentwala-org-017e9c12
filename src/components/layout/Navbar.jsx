@@ -112,9 +112,7 @@ export default function Navbar() {
                   onBlur={() => setTimeout(() => setUserMenuOpen(false), 150)}
                   className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-black/10 text-sm font-medium text-gray-700 hover:bg-black/5 transition-colors"
                 >
-                  <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <User className="w-3.5 h-3.5 text-gray-600" />
-                  </div>
+                  <UserAvatar user={user} size="xs" background="#111827" />
                   <span className="max-w-24 truncate">{user.full_name || user.email.split('@')[0]}</span>
                   <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
