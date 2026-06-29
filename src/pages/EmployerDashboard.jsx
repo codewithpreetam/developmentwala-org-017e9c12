@@ -67,6 +67,8 @@ export default function EmployerDashboard() {
   const [savedMsg, setSavedMsg] = useState('');
   const [orgForm, setOrgForm] = useState({ org_name: '', ngo_type: '', website: '', location: '', about: '', sector: '', contact_email: '', linkedin_url: '', twitter_url: '', facebook_url: '', instagram_url: '', logo_url: '' });
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [logoError, setLogoError] = useState('');
+  const [logoProgress, setLogoProgress] = useState(0);
   const [selectedJobId, setSelectedJobId] = useState('');
   const [viewingProfile, setViewingProfile] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
