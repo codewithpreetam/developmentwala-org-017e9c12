@@ -869,6 +869,7 @@ export const entities = {
   Notification,
   Interview,
   ContactMessage,
+  ContactReply,
   EmailSubscription,
   BlogPost,
   BlogCategory,
