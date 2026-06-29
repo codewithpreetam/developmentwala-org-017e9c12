@@ -11,7 +11,7 @@ import { SITE_NAME } from '@/lib/brand';
 
 export default function ResetPassword() {
   const navigate = useNavigate();
-  const token = new URLSearchParams(window.location.search).get('token') || '';
+  const token = typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('token') || '') : '';
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [showPassword, setShowPassword] = useState(false);
