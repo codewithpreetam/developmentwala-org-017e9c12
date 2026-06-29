@@ -195,6 +195,7 @@ export default function Home() {
   const typeCounts = homeData?.typeCounts || {};
   const featuredItems = homeData?.featuredItems || [];
   const topOrgs = homeData?.topOrgs || [];
+  const sectorCounts = homeData?.sectorCounts || {};
   const testimonials = homeData?.testimonials || [];
   const blogPosts = homeData?.blogPosts || [];
   const stats = homeData?.stats || {
