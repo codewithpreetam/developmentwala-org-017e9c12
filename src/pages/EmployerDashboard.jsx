@@ -14,6 +14,7 @@ import EmployerProfileSection from '../components/employer/EmployerProfileSectio
 import EmployerAnalytics from '../components/employer/EmployerAnalytics';
 import EmployerInterviewPanel from '../components/interview/EmployerInterviewPanel';
 import PullToRefresh from '../components/PullToRefresh';
+import EmployerMessagingPanel from '../components/messaging/EmployerMessagingPanel';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
