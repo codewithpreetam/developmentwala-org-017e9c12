@@ -60,7 +60,10 @@ function downloadCSV(data, filename) {
 export default function AdminDashboard() {
   const { isAdmin, logout, loading: authLoading } = useAdminAuth();
   const navigate = useNavigate();
-  const [tab, setTab] = useState('overview');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [tab, setTabState] = useState(searchParams.get('tab') || 'overview');
+  const setTab = (next) => { setTabState(next); setSearchParams({ tab: next }, { replace: true }); };
+  useEffect(() => { const t = searchParams.get('tab'); if (t && t !== tab) setTabState(t); }, [searchParams]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [allItems, setAllItems] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
