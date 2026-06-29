@@ -470,19 +470,27 @@ export default function CandidateDashboard() {
                   <div className="space-y-3">
                     {applications.slice(0, 5).map(app => {
                       const status = statusInfo[app.status] || statusInfo.applied;
+                      const detailUrl = app.detail_url || (app.detail_page && app.opportunity_id ? `/${app.detail_page}?id=${app.opportunity_id}` : null);
                       return (
-                        <div key={app.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer" onClick={() => setViewingApp(app)}>
+                        <div key={app.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50">
                           <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${ACCENT}20` }}>
                             <Briefcase className="w-4 h-4" style={{ color: ACCENT }} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-gray-900 truncate">{app.opportunity_title || 'Opportunity'}</p>
+                            {detailUrl ? (
+                              <Link to={detailUrl} className="text-sm font-semibold text-gray-900 truncate hover:underline block" style={{ color: 'inherit' }}>
+                                {app.opportunity_title || 'Opportunity'}
+                              </Link>
+                            ) : (
+                              <p className="text-sm font-semibold text-gray-900 truncate">{app.opportunity_title || 'Opportunity'}</p>
+                            )}
                             <p className="text-xs text-gray-400">{app.organization || ''} {app.created_date ? '· ' + new Date(app.created_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : ''}</p>
                           </div>
-                          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${status.color}`}>{status.label}</span>
+                          <button onClick={() => setViewingApp(app)} className={`text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${status.color} hover:opacity-80`} title="View application details">{status.label}</button>
                         </div>
                       );
                     })}
+
                   </div>
                 )}
               </div>
