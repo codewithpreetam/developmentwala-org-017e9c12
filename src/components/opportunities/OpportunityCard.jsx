@@ -49,22 +49,28 @@ export default function OpportunityCard({ opportunity, compact = false, isSaved 
   const bannerImage = opportunity.banner_image
     || (type === 'event' ? (opportunity.poster_url || opportunity.logo_url) : null);
 
+  const showImageSection = !['internship', 'fellowship'].includes(type) && (opportunity.banner_image || type === 'event');
+
   return (
     <Link to={detailHref}>
       <article className={`bg-white rounded-xl border hover:shadow-md transition-all duration-200 group h-full flex flex-col overflow-hidden ${opportunity.featured ? 'border-yellow-300 shadow-sm' : 'border-gray-200 hover:border-blue-300'}`}>
-        {bannerImage ? (
-          <div className="w-full aspect-video overflow-hidden shrink-0 bg-gray-50">
-            <img
-              src={bannerImage}
-              alt={opportunity.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-        ) : type === 'event' ? (
-          <div className="w-full aspect-video bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center shrink-0">
-            <Calendar className="w-10 h-10 text-pink-400" />
-          </div>
-        ) : null}
+        {showImageSection && (
+          <>
+            {opportunity.banner_image ? (
+              <div className="w-full aspect-video overflow-hidden shrink-0 bg-gray-50">
+                <img
+                  src={bannerImage}
+                  alt={opportunity.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ) : (
+              <div className="w-full aspect-video bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center shrink-0">
+                <Calendar className="w-10 h-10 text-pink-400" />
+              </div>
+            )}
+          </>
+        )}
 
         <div className="p-5 flex flex-col flex-1">
         {opportunity.featured && (

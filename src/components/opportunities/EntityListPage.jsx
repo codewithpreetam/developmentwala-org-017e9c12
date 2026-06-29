@@ -260,6 +260,7 @@ export default function EntityListPage({
                     item={item}
                     detailPageParam={detailPageParam}
                     accentColor={accentColor}
+                    type={type}
                     isSaved={!!savedMap[item.id]}
                     onToggleSave={() => handleToggleSave(item)}
                   />
