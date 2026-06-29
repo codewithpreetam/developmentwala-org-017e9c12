@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import {
-  ArrowLeft, MapPin, Calendar, Building2, ExternalLink, Mail,
+  ArrowLeft, MapPin, Calendar, CalendarPlus, Building2, ExternalLink, Mail,
   Clock, Share2, CheckCircle2, Globe, DollarSign, GraduationCap,
   FileText, Video, Users, Tag, Send, X, Loader2, Link2, Linkedin, AlertCircle, Bookmark, BookmarkCheck
 } from 'lucide-react';
@@ -271,6 +271,67 @@ export default function EntityDetailPage({
     window.open(url, '_blank', 'width=600,height=600');
   };
 
+  const buildGoogleCalendarUrl = () => {
+    if (!item?.event_date) return null;
+    const fmt = (d) => {
+      const pad = (n) => String(n).padStart(2, '0');
+      return (
+        d.getUTCFullYear().toString() +
+        pad(d.getUTCMonth() + 1) +
+        pad(d.getUTCDate()) + 'T' +
+        pad(d.getUTCHours()) +
+        pad(d.getUTCMinutes()) +
+        pad(d.getUTCSeconds()) + 'Z'
+      );
+    };
+    // Parse start: combine event_date + event_time when present.
+    let start;
+    if (item.event_time && /^\d{1,2}:\d{2}/.test(item.event_time)) {
+      start = new Date(`${item.event_date}T${item.event_time.length === 5 ? item.event_time + ':00' : item.event_time}`);
+    } else {
+      start = new Date(item.event_date);
+    }
+    if (Number.isNaN(start.getTime())) return null;
+    let end;
+    if (item.event_end_date) {
+      end = new Date(item.event_end_date);
+      if (Number.isNaN(end.getTime())) end = new Date(start.getTime() + 60 * 60 * 1000);
+    } else {
+      end = new Date(start.getTime() + 60 * 60 * 1000);
+    }
+    const details = [
+      item.description ? item.description.replace(/[#*_>`]/g, '').slice(0, 800) : '',
+      '',
+      `More info: ${typeof window !== 'undefined' ? window.location.href : ''}`,
+    ].filter(Boolean).join('\n');
+    const location = item.location_type === 'online'
+      ? (item.registration_link || 'Online')
+      : (item.location || item.country || '');
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: item.title || 'Event',
+      dates: `${fmt(start)}/${fmt(end)}`,
+      details,
+      location,
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  };
+
+  const handleAddToGoogleCalendar = () => {
+    if (!user) {
+      setLoginRoleHint('job_seeker');
+      redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '');
+      return;
+    }
+    const url = buildGoogleCalendarUrl();
+    if (!url) {
+      toast.error('Event date is missing — cannot add to calendar.');
+      return;
+    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+
   const accentBg = { blue: 'bg-blue-600', purple: 'bg-purple-600', indigo: 'bg-indigo-600', yellow: 'bg-yellow-500', green: 'bg-green-600', pink: 'bg-pink-600' };
 
   if (loading) return (
@@ -514,8 +575,19 @@ export default function EntityDetailPage({
                   {!applyUrl && !applyEmail && typeLabel === 'Event' && (
                     <p className="text-white/70 text-sm text-center">Check description for registration details.</p>
                   )}
+                  {typeLabel === 'Event' && item.event_date && (
+                    <button
+                      onClick={handleAddToGoogleCalendar}
+                      className="flex items-center justify-center gap-2 w-full bg-white text-gray-800 font-semibold px-5 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+                      title={user ? 'Add this event to your Google Calendar' : 'Sign in to add this event to your Google Calendar'}
+                    >
+                      <CalendarPlus className="w-4 h-4" />
+                      {user ? 'Add to Google Calendar' : 'Sign in to add to Google Calendar'}
+                    </button>
+                  )}
                 </div>
               </div>
+
 
               <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
                 <h3 className="font-bold text-gray-900">Details</h3>
