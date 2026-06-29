@@ -204,8 +204,7 @@ export default function EmployerDashboard() {
   const saveOrg = async () => {
     setSaving(true);
     try {
-      const { org_name: _lockedOrgName, ...editableOrg } = orgForm;
-      const data = { ...editableOrg, user_email: user.email };
+      const data = { ...orgForm, user_email: user.email };
       let saved;
       if (org?.id) {
         saved = await base44.entities.Organization.update(org.id, data);
@@ -219,7 +218,7 @@ export default function EmployerDashboard() {
         setOrg(saved);
       }
       setOrgForm((prev) => ({
-        org_name: prev.org_name,
+        org_name: saved.org_name ?? saved.name ?? prev.org_name,
         ngo_type: saved.ngo_type ?? prev.ngo_type,
         website: saved.website ?? '',
         location: saved.location ?? '',
