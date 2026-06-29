@@ -670,6 +670,13 @@ export default function AdminDashboard() {
 
               {/* NEWSLETTER */}
               {tab === 'newsletter' && <NewsletterPanel />}
+
+              {/* NOTIFICATIONS */}
+              {tab === 'notifications' && authUser?.email && (
+                <div className="max-w-4xl">
+                  <NotificationsPanel userEmail={authUser.email} role="admin" />
+                </div>
+              )}
             </>
           )}
         </main>
