@@ -201,6 +201,13 @@ export default function SubmitJob() {
                       <p className="text-xs text-gray-400 mt-1">Markdown supported</p>
                     </FormField>
 
+                    <FormField label="Organization Name" required={adminPost} hint={adminPost ? 'Name of the hiring organization this opportunity is for.' : 'Auto-filled from your organization profile.'}>
+                      <Input value={form.organization} onChange={(e) => update('organization', e.target.value)}
+                        placeholder="e.g. Mary Foundation"
+                        required={adminPost}
+                        className="h-11 rounded-xl border-gray-200" />
+                    </FormField>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       {type === 'job' && (
                         <FormField label="Salary / Compensation" required>
