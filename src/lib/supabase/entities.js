@@ -190,7 +190,8 @@ function createTableEntity(table, mapFn, type = 'job') {
         throw new Error('You must be signed in to post an opportunity.');
       }
 
-      const insert = toOpportunityInsert(type, payload, { employerId });
+      const organizationEmployerId = payload.organization_employer_id ?? await ensureOwnedOrgIdForSession();
+      const insert = toOpportunityInsert(type, payload, { employerId, organizationEmployerId });
       const { data, error } = await supabase.from(table).insert(insert).select('*').single();
       if (error) throw error;
       return mapFn(data);
