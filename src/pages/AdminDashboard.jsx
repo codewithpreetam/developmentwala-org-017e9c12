@@ -254,7 +254,7 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center gap-3">
             <NotificationBell userEmail="admin" />
-            <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: ACCENT }}>A</div>
+            <UserAvatar user={authUser} size="sm" background={ACCENT} />
           </div>
         </header>
 
