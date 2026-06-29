@@ -81,10 +81,7 @@ export default function SubmitEvent() {
           <Textarea value={form.description} onChange={e => u('description', e.target.value)} placeholder="What is this event about? Who should attend? Key speakers..." required className="min-h-[160px] rounded-xl" />
         </FormField>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField label="Organizer Name">
-            <Input value={form.organizer_name} onChange={e => u('organizer_name', e.target.value)} placeholder="Organizing NGO or institution" className="h-11 rounded-xl" />
-          </FormField>
+        <div>
           <FormField label="Organizer Type">
             <Select value={form.organizer_type} onValueChange={v => u('organizer_type', v)}>
               <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select type" /></SelectTrigger>
