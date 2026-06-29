@@ -630,100 +630,98 @@ export default function EntityDetailPage({
 
       {/* Apply Modal */}
       {showApplyModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
-          <div className="bg-white rounded-2xl p-7 w-full max-w-lg shadow-2xl">
-            <div className="flex items-center justify-between mb-5">
-              <h3 className="font-bold text-gray-900 text-lg">Apply for {item.title}</h3>
-              <button onClick={() => setShowApplyModal(false)} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5 text-gray-500" /></button>
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-start sm:items-center justify-center p-3 sm:p-6 overflow-y-auto">
+          <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl my-auto max-h-[95vh] flex flex-col">
+            <div className="flex items-center justify-between px-5 sm:px-7 py-4 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl">
+              <h3 className="font-bold text-gray-900 text-lg sm:text-xl truncate pr-3">Apply for {item.title}</h3>
+              <button onClick={() => setShowApplyModal(false)} className="p-2 hover:bg-gray-100 rounded-lg shrink-0"><X className="w-5 h-5 text-gray-500" /></button>
             </div>
-            {!user ? (
-              <div className="text-center py-6">
-                <p className="text-gray-600 mb-5">Please sign in to apply for this opportunity.</p>
-                <button onClick={() => {
-                  setLoginRoleHint('job_seeker');
-                  redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '');
-                }}
-
-                  className="bg-blue-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-blue-700">Sign In to Apply</button>
-              </div>
-            ) : (
-              <>
-                <p className="text-sm text-gray-500 mb-4">Applying as <strong>{user.email}</strong></p>
-                <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Cover Letter <span className="text-red-500">*</span>
-                  </label>
-                  <Textarea
-                    value={coverLetter}
-                    onChange={(e) => {
-                      const next = e.target.value.slice(0, 2000);
-                      setCoverLetter(next);
-                      if (formErrors.coverLetter) setFormErrors((p) => ({ ...p, coverLetter: undefined }));
-                    }}
-                    placeholder="Briefly introduce yourself and why you're a strong fit (minimum 30 characters)..."
-                    className={`min-h-[120px] rounded-xl ${formErrors.coverLetter ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
-                    aria-invalid={!!formErrors.coverLetter}
-                    maxLength={2000}
-                  />
-                  <div className="flex items-center justify-between mt-1.5">
-                    {formErrors.coverLetter ? (
-                      <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{formErrors.coverLetter}</p>
-                    ) : <span />}
-                    <span className={`text-xs ${coverLetter.length > 1900 ? 'text-amber-600' : 'text-gray-400'}`}>{coverLetter.length}/2000</span>
-                  </div>
+            <div className="px-5 sm:px-7 py-5 overflow-y-auto">
+              {!user ? (
+                <div className="text-center py-6">
+                  <p className="text-gray-600 mb-5">Please sign in to apply for this opportunity.</p>
+                  <button onClick={() => {
+                    setLoginRoleHint('job_seeker');
+                    redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '');
+                  }}
+                    className="bg-blue-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-blue-700">Sign In to Apply</button>
                 </div>
-                {/* CV Selection */}
-                <div className="mb-5">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Resume / CV <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex flex-col gap-2">
-                    {userProfile?.cv_url && (
-                      <label className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-colors ${cvChoice === 'profile' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
-                        <input type="radio" name="cv" value="profile" checked={cvChoice === 'profile'} onChange={() => { setCvChoice('profile'); setFormErrors((p) => ({ ...p, cvUrl: undefined })); }} className="text-blue-600" />
+              ) : (
+                <>
+                  <p className="text-sm text-gray-500 mb-5">Applying as <strong className="text-gray-800">{user.email}</strong></p>
+                  <div className="mb-5">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                      Cover Letter <span className="text-red-500">*</span>
+                    </label>
+                    <CoverLetterField
+                      value={coverLetter}
+                      onChange={(v) => { setCoverLetter(v); if (formErrors.coverLetter) setFormErrors((p) => ({ ...p, coverLetter: undefined })); }}
+                      invalid={!!formErrors.coverLetter}
+                      placeholder="Briefly introduce yourself and why you're a strong fit (minimum 30 characters)..."
+                    />
+                    <div className="flex items-center justify-between mt-1.5">
+                      {formErrors.coverLetter ? (
+                        <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{formErrors.coverLetter}</p>
+                      ) : <span className="text-xs text-gray-400">Use the toolbar for <strong>bold</strong>, <em>italic</em>, <u>underline</u>, or bullet points.</span>}
+                      <span className={`text-xs ${coverLetter.length > 1900 ? 'text-amber-600' : 'text-gray-400'}`}>{coverLetter.length}/2000</span>
+                    </div>
+                  </div>
+                  <div className="mb-5">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Resume / CV <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex flex-col gap-2">
+                      {userProfile?.cv_url && (
+                        <label className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-colors ${cvChoice === 'profile' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
+                          <input type="radio" name="cv" value="profile" checked={cvChoice === 'profile'} onChange={() => { setCvChoice('profile'); setFormErrors((p) => ({ ...p, cvUrl: undefined })); }} className="text-blue-600" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-800">Use CV from my profile</p>
+                            <a href={userProfile.cv_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline truncate block">View uploaded CV →</a>
+                          </div>
+                        </label>
+                      )}
+                      <label className={`flex items-start gap-3 p-3 rounded-xl border-2 cursor-pointer transition-colors ${cvChoice === 'new' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
+                        <input type="radio" name="cv" value="new" checked={cvChoice === 'new'} onChange={() => setCvChoice('new')} className="text-blue-600 mt-1" />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-800">Use profile CV</p>
-                          <a href={userProfile.cv_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline truncate block">View uploaded CV →</a>
+                          <p className="text-sm font-medium text-gray-800">{userProfile?.cv_url ? 'Upload a different CV for this application' : 'Upload CV'}</p>
+                          <p className="text-xs text-gray-500 mt-0.5">Won't replace your profile CV.</p>
+                          {cvChoice === 'new' && (
+                            <div className="mt-2">
+                              {newCvUrl ? (
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <CheckCircle2 className="w-4 h-4 text-green-600" />
+                                  <a href={newCvUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">CV uploaded ✓</a>
+                                  <label className="text-xs text-gray-500 hover:text-blue-600 cursor-pointer underline">
+                                    Replace
+                                    <input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={handleCvUpload} className="hidden" disabled={uploadingCv} />
+                                  </label>
+                                </div>
+                              ) : (
+                                <label className="cursor-pointer inline-flex items-center gap-2 text-xs text-blue-600 hover:text-blue-700 border border-dashed border-blue-300 rounded-lg px-3 py-2">
+                                  {uploadingCv ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
+                                  {uploadingCv ? 'Uploading...' : 'Click to upload PDF or Word (max 5 MB)'}
+                                  <input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={handleCvUpload} className="hidden" disabled={uploadingCv} />
+                                </label>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </label>
-                    )}
-                    <label className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-colors ${cvChoice === 'new' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
-                      <input type="radio" name="cv" value="new" checked={cvChoice === 'new'} onChange={() => setCvChoice('new')} className="text-blue-600" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-800">{userProfile?.cv_url ? 'Upload a different CV' : 'Upload CV'}</p>
-                        {cvChoice === 'new' && (
-                          <div className="mt-2">
-                            {newCvUrl ? (
-                              <div className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-green-600" />
-                                <a href={newCvUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">CV uploaded ✓</a>
-                              </div>
-                            ) : (
-                              <label className="cursor-pointer flex items-center gap-2 text-xs text-blue-600 hover:text-blue-700">
-                                {uploadingCv ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
-                                {uploadingCv ? 'Uploading...' : 'Click to upload PDF or Word (max 5 MB)'}
-                                <input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={handleCvUpload} className="hidden" disabled={uploadingCv} />
-                              </label>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </label>
-                    {formErrors.cvUrl && (
-                      <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{formErrors.cvUrl}</p>
-                    )}
+                      {formErrors.cvUrl && (
+                        <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{formErrors.cvUrl}</p>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="flex gap-3">
-                  <button onClick={handleApply} disabled={applying || uploadingCv}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
-                    {applying ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4" /> Submit Application</>}
-                  </button>
-                  <button onClick={() => setShowApplyModal(false)} disabled={applying} className="px-5 py-3 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 disabled:opacity-50 font-medium">Cancel</button>
-                </div>
-              </>
-            )}
-
+                  <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
+                    <button onClick={() => setShowApplyModal(false)} disabled={applying} className="px-5 py-3 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 disabled:opacity-50 font-medium">Cancel</button>
+                    <button onClick={handleApply} disabled={applying || uploadingCv}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
+                      {applying ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4" /> Submit Application</>}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
