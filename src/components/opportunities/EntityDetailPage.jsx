@@ -395,11 +395,11 @@ export default function EntityDetailPage({
                   {item.featured && <span className="text-xs font-semibold bg-yellow-400/90 text-yellow-900 px-2.5 py-1 rounded-full">⭐ Featured</span>}
                 </div>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight drop-shadow">{item.title}</h1>
-                {(item.organization_name || item.organizer_name || item.funding_agency || item.provider_name) && (
+                {orgName && (
                   <p className="text-white/80 mt-1 text-sm">
                     <OrgProfileLink
                       orgData={orgData}
-                      orgName={item.organization_name || item.organizer_name || item.funding_agency || item.provider_name}
+                      orgName={orgName}
                       className="text-white/90 hover:text-white hover:underline font-medium"
                     />
                   </p>
