@@ -7,7 +7,7 @@ import {
   Building2, Briefcase, Users, Plus, Save, LogOut,
   CheckCircle2, Eye, Pencil, X, Mail, Phone, MapPin,
   GraduationCap, Briefcase as BriefcaseIcon, FileText, Star, Download, User, History,
-  BarChart2, Archive, MessageSquare, CalendarDays, LayoutDashboard, Search, TrendingUp, ChevronRight, Trash2, AlertTriangle, Bookmark, Clock, Upload, Camera, Home, CalendarPlus, CheckCircle, XCircle, Filter, SlidersHorizontal
+  BarChart2, Archive, MessageSquare, CalendarDays, LayoutDashboard, Search, TrendingUp, ChevronRight, Trash2, AlertTriangle, Bookmark, Clock, Upload, Camera, Home, CalendarPlus, CheckCircle, XCircle, Filter, SlidersHorizontal, Bell
 } from 'lucide-react';
 import StatusUpdateModal from '../components/employer/StatusUpdateModal';
 import EmployerProfileSection from '../components/employer/EmployerProfileSection';
