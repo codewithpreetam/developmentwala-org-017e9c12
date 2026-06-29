@@ -15,27 +15,28 @@ import SEOHead from '../components/shared/SEOHead';
 import { opportunityDetailUrl } from '@/utils/opportunityUrl';
 
 const sectors = [
-  { icon: BookOpen, label: 'Education', value: 'education' },
-  { icon: Heart, label: 'Health', value: 'health' },
-  { icon: TreePine, label: 'Environment', value: 'environment' },
-  { icon: Shield, label: 'Human Rights', value: 'human_rights' },
-  { icon: Users, label: 'Livelihood', value: 'livelihood' },
-  { icon: Zap, label: 'Disaster Relief', value: 'disaster_relief' },
+  { icon: BookOpen, label: 'Education', value: 'education', accent: 'from-blue-50 to-blue-100/40', iconColor: 'text-blue-600' },
+  { icon: Heart, label: 'Health', value: 'health', accent: 'from-rose-50 to-rose-100/40', iconColor: 'text-rose-600' },
+  { icon: TreePine, label: 'Environment', value: 'environment', accent: 'from-emerald-50 to-emerald-100/40', iconColor: 'text-emerald-600' },
+  { icon: Shield, label: 'Human Rights', value: 'human_rights', accent: 'from-indigo-50 to-indigo-100/40', iconColor: 'text-indigo-600' },
+  { icon: Users, label: 'Livelihood', value: 'livelihood', accent: 'from-amber-50 to-amber-100/40', iconColor: 'text-amber-600' },
+  { icon: Zap, label: 'Disaster Relief', value: 'disaster_relief', accent: 'from-orange-50 to-orange-100/40', iconColor: 'text-orange-600' },
 ];
 
+// Order: Jobs, Fellowships (before Internships), Internships, Scholarships, Grants, Events
 const opportunitySections = [
-  { type: 'job', title: 'Latest Jobs', icon: Briefcase, page: 'Jobs', detailParam: 'JobDetail' },
-  { type: 'internship', title: 'Internships', icon: GraduationCap, page: 'Internships', detailParam: 'InternshipDetail' },
-  { type: 'scholarship', title: 'Scholarships', icon: GraduationCap, page: 'Scholarships', detailParam: 'ScholarshipDetail' },
-  { type: 'fellowship', title: 'Fellowships', icon: Star, page: 'Fellowships', detailParam: 'FellowshipDetail' },
-  { type: 'event', title: 'Events', icon: Calendar, page: 'Events', detailParam: 'EventDetail' },
-  { type: 'grant', title: 'Grants', icon: DollarSign, page: 'Grants', detailParam: 'GrantDetail' },
+  { type: 'job', title: 'Latest Jobs', icon: Briefcase, page: 'Jobs', detailParam: 'JobDetail', tint: 'bg-blue-50 text-blue-600 ring-blue-100' },
+  { type: 'fellowship', title: 'Fellowships', icon: Star, page: 'Fellowships', detailParam: 'FellowshipDetail', tint: 'bg-indigo-50 text-indigo-600 ring-indigo-100' },
+  { type: 'internship', title: 'Internships', icon: GraduationCap, page: 'Internships', detailParam: 'InternshipDetail', tint: 'bg-violet-50 text-violet-600 ring-violet-100' },
+  { type: 'scholarship', title: 'Scholarships', icon: BookOpen, page: 'Scholarships', detailParam: 'ScholarshipDetail', tint: 'bg-amber-50 text-amber-600 ring-amber-100' },
+  { type: 'grant', title: 'Grants', icon: DollarSign, page: 'Grants', detailParam: 'GrantDetail', tint: 'bg-emerald-50 text-emerald-600 ring-emerald-100' },
+  { type: 'event', title: 'Events', icon: Calendar, page: 'Events', detailParam: 'EventDetail', tint: 'bg-pink-50 text-pink-600 ring-pink-100' },
 ];
 
 const typeLinks = [
   { label: 'Jobs', page: 'Jobs', icon: Briefcase },
-  { label: 'Internships', page: 'Internships', icon: GraduationCap },
   { label: 'Fellowships', page: 'Fellowships', icon: Star },
+  { label: 'Internships', page: 'Internships', icon: GraduationCap },
   { label: 'Scholarships', page: 'Scholarships', icon: BookOpen },
   { label: 'Grants', page: 'Grants', icon: DollarSign },
   { label: 'Events', page: 'Events', icon: Calendar },
