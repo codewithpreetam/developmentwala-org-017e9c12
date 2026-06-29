@@ -165,6 +165,36 @@ export default function EntityDetailPage({
     }
   };
 
+  const handleToggleSave = async () => {
+    if (!user) {
+      setLoginRoleHint('job_seeker');
+      redirectToSignIn(typeof window !== 'undefined' ? window.location.href : '');
+      return;
+    }
+    if (!item) return;
+    setSavingToggle(true);
+    try {
+      if (savedId) {
+        await base44.entities.SavedOpportunity.delete(savedId);
+        setSavedId(null);
+        toast.success('Removed from saved.');
+      } else {
+        const created = await base44.entities.SavedOpportunity.create({
+          user_email: user.email,
+          opportunity_type: resolvedType,
+          opportunity_id: item.id,
+        });
+        setSavedId(created.id);
+        toast.success('Saved to your dashboard.');
+      }
+    } catch (e) {
+      toast.error(e?.message || 'Could not update saved opportunities.');
+    } finally {
+      setSavingToggle(false);
+    }
+  };
+
+
   const handleApply = async () => {
     if (!user) {
       setLoginRoleHint('job_seeker');
