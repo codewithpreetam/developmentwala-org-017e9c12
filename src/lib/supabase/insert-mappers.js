@@ -72,7 +72,7 @@ export function toJobInsert(payload, { employerId, organizationEmployerId } = {}
   };
 }
 
-export function toInternshipInsert(payload, { employerId } = {}) {
+export function toInternshipInsert(payload, { employerId, organizationEmployerId } = {}) {
   const { city, state } = parseLocation(payload.location, payload.state);
   const pending = isPending(payload);
   return {
