@@ -24,7 +24,7 @@ export default function SubmitEvent() {
   const { user } = useAuth();
   const adminPost = isPlatformAdmin(user);
   const [form, setForm] = useState({
-    title: '', description: '', organizer_type: '', event_category: '',
+    title: '', description: '', organizer_name: '', organizer_type: '', event_category: '',
     sector: '', event_date: '', event_end_date: '', event_time: '', location: '',
     location_type: '', country: DEFAULT_COUNTRY, registration_deadline: '',
     is_free: true, registration_fee: '', banner_image: '', tags: '', submitted_by_name: '', submitted_by_email: '',
