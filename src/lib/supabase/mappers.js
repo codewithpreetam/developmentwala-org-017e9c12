@@ -160,7 +160,10 @@ export function mapEvent(row, extra = {}) {
   return baseOpportunity(row, 'event', {
     organizer: row.organizer,
     type: row.type,
+    event_category: row.type,
     mode: row.mode,
+    location_type: deriveLocationType(row),
+    event_date: row.start_date,
     start_date: row.start_date,
     end_date: row.end_date,
     link: row.link,
