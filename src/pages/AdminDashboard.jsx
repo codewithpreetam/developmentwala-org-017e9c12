@@ -184,7 +184,7 @@ export default function AdminDashboard() {
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'settings', label: 'Site Settings', icon: Settings },
     { id: 'pending', label: `Pending${pending.length > 0 ? ` (${pending.length})` : ''}`, icon: Inbox },
-    { id: 'featured', label: `Featured (${featured.length}/8)`, icon: Star },
+    { id: 'featured', label: `Featured (${featured.length})`, icon: Star },
     { id: 'post', label: 'Post New', icon: Plus },
     { id: 'my-posts', label: `My Posts${adminPosts.length ? ` (${adminPosts.length})` : ''}`, icon: User },
     { id: 'all', label: 'All Opportunities', icon: List },
