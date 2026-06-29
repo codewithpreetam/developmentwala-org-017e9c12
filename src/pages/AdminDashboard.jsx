@@ -217,15 +217,19 @@ export default function AdminDashboard() {
           </Link>
         </div>
         <div className="px-5 py-4 border-b border-white/10">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 overflow-hidden" style={{ background: ACCENT }}>
-              <img src={DEFAULT_LOGO} alt="DW" className="w-full h-full object-contain p-1" />
+              {authUser?.profile_image
+                ? <img src={authUser.profile_image} alt="Admin" className="w-full h-full object-cover" />
+                : <img src={DEFAULT_LOGO} alt="DW" className="w-full h-full object-contain p-1" />}
             </div>
-            <div className="min-w-0">
-              <p className="text-white text-sm font-semibold">DevelopmentWala.org</p>
-              <p className="text-gray-400 text-xs">Admin Account</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-white text-sm font-semibold truncate">{authUser?.full_name || 'DevelopmentWala.org'}</p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <p className="text-gray-400 text-[11px] truncate">Admin Account</p>
+                <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded-full font-medium shrink-0">Admin</span>
+              </div>
             </div>
-            <span className="ml-auto text-xs bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-medium shrink-0">Admin</span>
           </div>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
