@@ -183,9 +183,16 @@ export default function EntityListPage({
 
   const filtered = items.filter(item => {
     const q = search.toLowerCase();
-    const matchQ = !search || [item.title, item.organization_name, item.organizer_name, item.funding_agency, item.provider_name, item.location, item.country, item.description, item.tags]
-      .filter(Boolean).some(f => f.toLowerCase().includes(q));
-    return matchQ && extraFilters.every(f => !filters[f.key] || (item[f.key] || '') === filters[f.key]);
+    const matchQ = !search || [item.title, item.organization, item.organization_name, item.organizer_name, item.funding_agency, item.provider_name, item.location, item.country, item.description, item.tags]
+      .filter(Boolean).some(f => String(f).toLowerCase().includes(q));
+    const matchFilters = extraFilters.every(f => {
+      const fv = filters[f.key];
+      if (!fv) return true;
+      const iv = item[f.key];
+      if (iv == null) return false;
+      return String(iv).toLowerCase() === String(fv).toLowerCase();
+    });
+    return matchQ && matchFilters;
   });
 
   return (
