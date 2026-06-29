@@ -520,9 +520,14 @@ export default function EmployerDashboard() {
               <input type="text" placeholder="Search..." className="pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none w-56" />
             </div>
             <NotificationBell userEmail={user.email} userRole="employer" />
-            <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold cursor-pointer" style={{ background: ACCENT }}
-              onClick={() => setTab('profile')}>
-              {(orgForm.org_name || user.full_name || 'E').charAt(0).toUpperCase()}
+            <div onClick={() => setTab('profile')} className="cursor-pointer">
+              {empProfilePic ? (
+                <img src={empProfilePic} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
+              ) : (
+                <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: ACCENT }}>
+                  {(orgForm.org_name || user.full_name || 'E').charAt(0).toUpperCase()}
+                </div>
+              )}
             </div>
           </div>
         </header>
