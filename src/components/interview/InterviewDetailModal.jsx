@@ -25,6 +25,28 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
   const [action, setAction] = useState(null); // 'cancel' | 'reschedule' | 'complete'
   const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
+  const [candidate, setCandidate] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadCandidate() {
+      if (!interview?.candidate_email) return;
+      const { data } = await supabase
+        .from('users')
+        .select('first_name,last_name,email,profile_image_url,phone')
+        .eq('email', interview.candidate_email)
+        .maybeSingle();
+      if (!cancelled && data) setCandidate(data);
+    }
+    loadCandidate();
+    return () => { cancelled = true; };
+  }, [interview?.candidate_email]);
+
+  const candidateName = (
+    [candidate?.first_name, candidate?.last_name].filter(Boolean).join(' ').trim()
+    || interview.candidate_name
+    || (interview.candidate_email ? interview.candidate_email.split('@')[0] : 'Candidate')
+  );
 
   const handleAction = async () => {
     setSaving(true);
