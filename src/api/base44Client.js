@@ -183,11 +183,12 @@ async function invokeFunction(name, payload) {
       subject: payload.subject,
       message: payload.message,
     });
+    const escHtml = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
     const { queueNotificationEmail } = await import('@/lib/supabase/extra-entities');
     await queueNotificationEmail(
       'admin@developmentwala.org',
-      `Contact: ${payload.subject || 'New message'}`,
-      `<p>From ${payload.name} (${payload.email})</p><p>${payload.message}</p>`
+      `Contact: ${escHtml(payload.subject || 'New message')}`,
+      `<p>From ${escHtml(payload.name)} (${escHtml(payload.email)})</p><p>${escHtml(payload.message).replace(/\n/g,'<br>')}</p>`
     ).catch(() => {});
     return { data: { success: true } };
   }
