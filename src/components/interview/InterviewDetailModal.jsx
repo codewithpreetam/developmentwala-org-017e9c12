@@ -97,12 +97,17 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
         <div className="p-6 space-y-4">
           {/* Candidate */}
           <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
-              <User className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <div className="font-semibold text-gray-900">{interview.candidate_name || 'Candidate'}</div>
-              <div className="text-sm text-gray-500">{interview.candidate_email}</div>
+            {candidate?.profile_image_url ? (
+              <img src={candidate.profile_image_url} alt={candidateName} className="w-10 h-10 rounded-xl object-cover shrink-0" />
+            ) : (
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+                <User className="w-5 h-5 text-blue-600" />
+              </div>
+            )}
+            <div className="min-w-0">
+              <div className="font-semibold text-gray-900 truncate">{candidateName}</div>
+              <div className="text-sm text-gray-500 truncate">{interview.candidate_email}</div>
+              {candidate?.phone && <div className="text-xs text-gray-500 truncate">{candidate.phone}</div>}
             </div>
           </div>
 
