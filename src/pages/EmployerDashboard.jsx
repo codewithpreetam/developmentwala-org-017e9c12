@@ -551,37 +551,53 @@ export default function EmployerDashboard() {
                 <h2 className="text-lg font-bold text-gray-900 mb-6">Organization Profile</h2>
                 <div className="space-y-5">
                   {/* Logo Upload */}
-                  <div className="flex items-center gap-5 p-5 bg-gray-50 rounded-xl border border-gray-100">
-                    <div className="relative shrink-0">
-                      {orgForm.logo_url ? (
-                        <img src={orgForm.logo_url} alt="Org Logo" className="w-20 h-20 rounded-xl object-contain border border-gray-200 bg-white p-1" />
-                      ) : (
-                        <div className="w-20 h-20 rounded-xl flex items-center justify-center text-white text-2xl font-bold bg-gradient-to-br from-indigo-500 to-blue-600">
-                          {(orgForm.org_name || 'O').charAt(0).toUpperCase()}
-                        </div>
-                      )}
-                      {uploadingLogo && (
-                        <div className="absolute inset-0 rounded-xl bg-black/40 flex items-center justify-center">
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-900 text-sm mb-1">Organization Logo</p>
-                      <p className="text-xs text-gray-400 mb-2">Shown on job listings, detail pages and employer profile</p>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <label className="cursor-pointer text-xs font-semibold text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 hover:opacity-90 transition-opacity" style={{ background: ACCENT }}>
-                          <Camera className="w-3.5 h-3.5" />
-                          {orgForm.logo_url ? 'Replace Logo' : 'Upload Logo'}
-                          <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" disabled={uploadingLogo} />
-                        </label>
-                        {orgForm.logo_url && (
-                          <button onClick={() => uo('logo_url', '')} className="text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg border border-red-200 flex items-center gap-1.5 transition-colors">
-                            <Trash2 className="w-3.5 h-3.5" /> Remove
-                          </button>
+                  <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="flex items-center gap-5">
+                      <div className="relative shrink-0">
+                        {orgForm.logo_url ? (
+                          <img src={orgForm.logo_url} alt="Org Logo" className="w-20 h-20 rounded-xl object-contain border border-gray-200 bg-white p-1" />
+                        ) : (
+                          <div className="w-20 h-20 rounded-xl flex items-center justify-center text-white text-2xl font-bold bg-gradient-to-br from-indigo-500 to-blue-600">
+                            {(orgForm.org_name || 'O').charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                        {uploadingLogo && (
+                          <div className="absolute inset-0 rounded-xl bg-black/50 flex items-center justify-center">
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          </div>
                         )}
                       </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-gray-900 text-sm mb-1">Organization Logo</p>
+                        <p className="text-xs text-gray-400 mb-2">Shown on listings, detail pages and your public profile. Synced automatically.</p>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <label className={`cursor-pointer text-xs font-semibold text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 hover:opacity-90 transition-opacity ${uploadingLogo ? 'opacity-60 cursor-not-allowed' : ''}`} style={{ background: ACCENT }}>
+                            <Camera className="w-3.5 h-3.5" />
+                            {uploadingLogo ? 'Uploading...' : orgForm.logo_url ? 'Replace Logo' : 'Upload Logo'}
+                            <input type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml,image/gif" onChange={handleLogoUpload} className="hidden" disabled={uploadingLogo} />
+                          </label>
+                          {orgForm.logo_url && !uploadingLogo && (
+                            <button type="button" onClick={handleLogoRemove} className="text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg border border-red-200 flex items-center gap-1.5 transition-colors">
+                              <Trash2 className="w-3.5 h-3.5" /> Remove
+                            </button>
+                          )}
+                          <span className="text-[11px] text-gray-400">JPG, PNG, WebP, SVG · Max 2 MB</span>
+                        </div>
+                      </div>
                     </div>
+                    {uploadingLogo && (
+                      <div className="mt-4">
+                        <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-indigo-500 transition-all duration-200" style={{ width: `${logoProgress}%` }} />
+                        </div>
+                        <p className="text-[11px] text-gray-500 mt-1">Uploading {logoProgress}%</p>
+                      </div>
+                    )}
+                    {logoError && (
+                      <p className="text-xs text-red-600 mt-3 flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5" /> {logoError}
+                      </p>
+                    )}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
