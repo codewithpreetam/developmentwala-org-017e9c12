@@ -1801,6 +1801,10 @@ export type Database = {
       }
       has_role: { Args: { _role: string; _user_id: string }; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
+      is_employer_of_candidate: {
+        Args: { _candidate_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
