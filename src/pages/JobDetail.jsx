@@ -573,7 +573,9 @@ export default function JobDetail() {
                   ) : null}
                 />
                 <DetailRow icon={MapPin} label="Location" value={job.location || (job.location_type === 'online' ? 'Online' : null)} />
+                <DetailRow icon={MapPin} label="State" value={job.state} />
                 <DetailRow icon={Globe} label="Country" value={job.country || job.eligible_countries} />
+
                 <DetailRow icon={Briefcase} label="Job Type" value={jobTypeLabels[job.job_type]} />
                 <DetailRow icon={Clock} label="Duration" value={job.duration} />
                 <DetailRow icon={IndianRupee} label="Salary / Stipend" value={job.salary || job.stipend_amount} />
