@@ -7,6 +7,7 @@ import {
   Mail, MessageCircle, BookmarkCheck, Settings, Inbox, Star, List, FileText,
 } from 'lucide-react';
 import UserAvatar from '@/components/shared/UserAvatar';
+import Navbar from '@/components/layout/Navbar';
 
 const ACCENT = '#4F46E5';
 
