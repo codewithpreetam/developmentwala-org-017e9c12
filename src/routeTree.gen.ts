@@ -40,6 +40,7 @@ import { Route as EditOpportunityRouteImport } from './routes/edit-opportunity'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ChooseRoleRouteImport } from './routes/choose-role'
 import { Route as CandidateDashboardRouteImport } from './routes/candidate-dashboard'
+import { Route as ApiDocsRouteImport } from './routes/api-docs'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AdminDashboardRouteImport } from './routes/admin-dashboard'
 import { Route as IndexRouteImport } from './routes/index'
@@ -59,6 +60,7 @@ import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
 import { Route as ApiPublicRssDotxmlRouteImport } from './routes/api/public/rss[.]xml'
+import { Route as ApiPublicV1SplatRouteImport } from './routes/api/public/v1.$'
 import { Route as ApiAuthLinkedinStartRouteImport } from './routes/api/auth.linkedin.start'
 import { Route as ApiAuthLinkedinCallbackRouteImport } from './routes/api/auth.linkedin.callback'
 
@@ -217,6 +219,11 @@ const CandidateDashboardRoute = CandidateDashboardRouteImport.update({
   path: '/candidate-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDocsRoute = ApiDocsRouteImport.update({
+  id: '/api-docs',
+  path: '/api-docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin-login',
   path: '/admin-login',
@@ -312,6 +319,11 @@ const ApiPublicRssDotxmlRoute = ApiPublicRssDotxmlRouteImport.update({
   path: '/api/public/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1SplatRoute = ApiPublicV1SplatRouteImport.update({
+  id: '/api/public/v1/$',
+  path: '/api/public/v1/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthLinkedinStartRoute = ApiAuthLinkedinStartRouteImport.update({
   id: '/api/auth/linkedin/start',
   path: '/api/auth/linkedin/start',
@@ -327,6 +339,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin-dashboard': typeof AdminDashboardRoute
   '/admin-login': typeof AdminLoginRoute
+  '/api-docs': typeof ApiDocsRoute
   '/candidate-dashboard': typeof CandidateDashboardRoute
   '/choose-role': typeof ChooseRoleRoute
   '/contact': typeof ContactRoute
@@ -376,11 +389,13 @@ export interface FileRoutesByFullPath {
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
+  '/api/public/v1/$': typeof ApiPublicV1SplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-dashboard': typeof AdminDashboardRoute
   '/admin-login': typeof AdminLoginRoute
+  '/api-docs': typeof ApiDocsRoute
   '/candidate-dashboard': typeof CandidateDashboardRoute
   '/choose-role': typeof ChooseRoleRoute
   '/contact': typeof ContactRoute
@@ -430,12 +445,14 @@ export interface FileRoutesByTo {
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
+  '/api/public/v1/$': typeof ApiPublicV1SplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin-dashboard': typeof AdminDashboardRoute
   '/admin-login': typeof AdminLoginRoute
+  '/api-docs': typeof ApiDocsRoute
   '/candidate-dashboard': typeof CandidateDashboardRoute
   '/choose-role': typeof ChooseRoleRoute
   '/contact': typeof ContactRoute
@@ -485,6 +502,7 @@ export interface FileRoutesById {
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
+  '/api/public/v1/$': typeof ApiPublicV1SplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -492,6 +510,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-dashboard'
     | '/admin-login'
+    | '/api-docs'
     | '/candidate-dashboard'
     | '/choose-role'
     | '/contact'
@@ -541,11 +560,13 @@ export interface FileRouteTypes {
     | '/blog/category/$slug'
     | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
+    | '/api/public/v1/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin-dashboard'
     | '/admin-login'
+    | '/api-docs'
     | '/candidate-dashboard'
     | '/choose-role'
     | '/contact'
@@ -595,11 +616,13 @@ export interface FileRouteTypes {
     | '/blog/category/$slug'
     | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
+    | '/api/public/v1/$'
   id:
     | '__root__'
     | '/'
     | '/admin-dashboard'
     | '/admin-login'
+    | '/api-docs'
     | '/candidate-dashboard'
     | '/choose-role'
     | '/contact'
@@ -649,12 +672,14 @@ export interface FileRouteTypes {
     | '/blog/category/$slug'
     | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
+    | '/api/public/v1/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  ApiDocsRoute: typeof ApiDocsRoute
   CandidateDashboardRoute: typeof CandidateDashboardRoute
   ChooseRoleRoute: typeof ChooseRoleRoute
   ContactRoute: typeof ContactRoute
@@ -704,6 +729,7 @@ export interface RootRouteChildren {
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
   ApiAuthLinkedinCallbackRoute: typeof ApiAuthLinkedinCallbackRoute
   ApiAuthLinkedinStartRoute: typeof ApiAuthLinkedinStartRoute
+  ApiPublicV1SplatRoute: typeof ApiPublicV1SplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -925,6 +951,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CandidateDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api-docs': {
+      id: '/api-docs'
+      path: '/api-docs'
+      fullPath: '/api-docs'
+      preLoaderRoute: typeof ApiDocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin-login': {
       id: '/admin-login'
       path: '/admin-login'
@@ -1058,6 +1091,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/$': {
+      id: '/api/public/v1/$'
+      path: '/api/public/v1/$'
+      fullPath: '/api/public/v1/$'
+      preLoaderRoute: typeof ApiPublicV1SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/linkedin/start': {
       id: '/api/auth/linkedin/start'
       path: '/api/auth/linkedin/start'
@@ -1079,6 +1119,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminLoginRoute: AdminLoginRoute,
+  ApiDocsRoute: ApiDocsRoute,
   CandidateDashboardRoute: CandidateDashboardRoute,
   ChooseRoleRoute: ChooseRoleRoute,
   ContactRoute: ContactRoute,
@@ -1128,6 +1169,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogCategorySlugRoute: BlogCategorySlugRoute,
   ApiAuthLinkedinCallbackRoute: ApiAuthLinkedinCallbackRoute,
   ApiAuthLinkedinStartRoute: ApiAuthLinkedinStartRoute,
+  ApiPublicV1SplatRoute: ApiPublicV1SplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
