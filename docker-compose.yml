@@ -1,0 +1,32 @@
+# Drop this file into Hostinger VPS → Docker Manager → "Create new project".
+# It pulls the prebuilt image from GitHub Container Registry (GHCR), so no
+# build happens on the VPS itself.
+#
+# Before deploying:
+#   1. Push this repo to GitHub — the workflow in .github/workflows/docker.yml
+#      builds and publishes ghcr.io/<owner>/<repo>:latest on every push to main.
+#   2. If your GHCR package is private, run once on the VPS:
+#         echo <GITHUB_PAT> | docker login ghcr.io -u <github-username> --password-stdin
+#   3. Create a .env file next to this docker-compose.yml with the variables
+#      listed in .env.example (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, etc.).
+
+services:
+  app:
+    # Replace <owner>/<repo> with your GitHub path, e.g. ghcr.io/johndoe/developmentwala:latest
+    image: ghcr.io/OWNER/REPO:latest
+    container_name: developmentwala
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOST: 0.0.0.0
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
