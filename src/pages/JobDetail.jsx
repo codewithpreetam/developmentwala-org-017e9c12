@@ -363,7 +363,7 @@ export default function JobDetail() {
         '@type': 'Organization',
         name: orgName || 'DevelopmentWala.org',
         sameAs: orgData?.website || 'https://developmentwala.org',
-        logo: job.logo_url || orgData?.logo_url || 'https://media.api.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp',
+        logo: job.logo_url || orgData?.logo_url || '/logo-192.webp',
       },
       jobLocation: !isRemote && (locality || region)
         ? {

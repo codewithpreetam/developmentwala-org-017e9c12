@@ -82,7 +82,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 const SITE_URL = "https://developmentwala.org";
 const SITE_TITLE = "DevelopmentWala.org — NGO & Social Sector Jobs, Internships, Fellowships, Scholarships in India";
 const SITE_DESC = "India's dedicated platform for NGO, CSR and social sector careers. Find jobs, internships, fellowships, scholarships, grants and events from leading NGOs and development organisations.";
-const SITE_IMAGE = "https://media.api.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp";
+const SITE_IMAGE = "/logo-192.webp";
 
 const organizationLd = {
   "@context": "https://schema.org",
@@ -142,7 +142,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://ymrzpbpjhmdkjmgqswnw.supabase.co" },
-      { rel: "dns-prefetch", href: "https://media.api.com" },
+      { rel: "dns-prefetch", href: "/" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" },
       { rel: "alternate", type: "application/rss+xml", title: "DevelopmentWala.org RSS Feed", href: `${SITE_URL}/api/public/rss.xml` },
       { rel: "sitemap", type: "application/xml", href: `${SITE_URL}/sitemap.xml` },
