@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Building2, MapPin, Briefcase, Loader2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -53,7 +53,7 @@ export default function EmployerProfile() {
   }, []);
 
   const loadByOrgId = async (orgId) => {
-    const orgs = await base44.entities.Organization.filter({ id: orgId });
+    const orgs = await api.entities.Organization.filter({ id: orgId });
     if (orgs.length > 0) {
       setOrg(orgs[0]);
       setActiveType('all');
@@ -63,7 +63,7 @@ export default function EmployerProfile() {
   };
 
   const loadByOrgName = async (orgName) => {
-    const orgs = await base44.entities.Organization.filter({ org_name: orgName });
+    const orgs = await api.entities.Organization.filter({ org_name: orgName });
     if (orgs.length > 0) {
       setOrg(orgs[0]);
       setActiveType('all');
@@ -79,14 +79,14 @@ export default function EmployerProfile() {
       return;
     }
 
-    const relatedOrgs = await base44.entities.Organization.filter({ org_name: orgRecord.org_name });
+    const relatedOrgs = await api.entities.Organization.filter({ org_name: orgRecord.org_name });
     const emails = [...new Set(
       relatedOrgs.map((o) => o.user_email || o.email).filter(Boolean)
     )];
 
     const results = await Promise.all(
       OPPORTUNITY_ENTITIES.map(({ type, entity }) =>
-        base44.entities[entity].filter({ status: 'published' }, '-created_date', 500)
+        api.entities[entity].filter({ status: 'published' }, '-created_date', 500)
           .then((items) => items.map((item) => ({ ...item, _type: type })))
       )
     );

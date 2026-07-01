@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { KeyRound, Eye, EyeOff, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -32,7 +32,7 @@ export default function ResetPassword() {
     }
     setSubmitting(true);
     try {
-      const res = await base44.auth.resetPassword(token, password);
+      const res = await api.auth.resetPassword(token, password);
       if (res?.success) {
         setDone(true);
         setTimeout(() => navigate(createPageUrl('SignIn')), 2500);

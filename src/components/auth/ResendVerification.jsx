@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Loader2, Mail } from 'lucide-react';
 
 export default function ResendVerification({ email, className = '' }) {
@@ -12,7 +12,7 @@ export default function ResendVerification({ email, className = '' }) {
     setSending(true);
     setError('');
     try {
-      await base44.auth.resendVerification(email.trim());
+      await api.auth.resendVerification(email.trim());
       setSent(true);
     } catch (err) {
       setError(err.message || 'Could not resend email. Try again or contact support.');

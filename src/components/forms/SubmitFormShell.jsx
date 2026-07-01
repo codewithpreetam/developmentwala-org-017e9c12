@@ -3,7 +3,7 @@ import { Loader2 } from 'lucide-react';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 import SEOHead from '../shared/SEOHead';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '../auth/AuthContext';
 import { isPlatformAdmin } from '@/lib/supabase/auth';
 import { loadEmployerContactDefaults } from '@/lib/employerContact';
@@ -20,7 +20,7 @@ export default function SubmitFormShell({ title, subtitle, seoTitle, seoDesc, on
       let me = user;
       if (!me) {
         try {
-          me = await base44.auth.me();
+          me = await api.auth.me();
         } catch {
           return;
         }

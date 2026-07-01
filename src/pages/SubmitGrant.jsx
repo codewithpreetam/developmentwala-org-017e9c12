@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '../components/auth/AuthContext';
 import { isPlatformAdmin, opportunitySubmitStatus } from '@/lib/supabase/auth';
 import { applyEmployerContactFields } from '@/lib/employerContact';
@@ -38,7 +38,7 @@ export default function SubmitGrant() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    await base44.entities.Grant.create({
+    await api.entities.Grant.create({
       ...form,
       status: opportunitySubmitStatus(user),
       submitted_by_email: user?.email,

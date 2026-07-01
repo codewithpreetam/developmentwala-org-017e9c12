@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { CheckCircle2, XCircle, Loader2, ArrowRight } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -19,7 +19,7 @@ export default function VerifyEmail() {
       setMessage('This verification link is invalid. Please register again or contact support.');
       return;
     }
-    base44.auth.verifyEmail(token).then((res) => {
+    api.auth.verifyEmail(token).then((res) => {
       if (res?.success) {
         setStatus('success');
         setMessage('Your email is verified. You can now sign in to your account.');

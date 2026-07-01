@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Mail, MessageCircle, Linkedin, Instagram, Youtube, Facebook, ArrowRight } from 'lucide-react';
@@ -22,7 +22,7 @@ export default function Footer() {
     setStatusMsg('');
     setIsError(false);
     try {
-      const res = await base44.functions.invoke('subscribeToMailchimp', { email: email.trim() });
+      const res = await api.functions.invoke('subscribeToMailchimp', { email: email.trim() });
       const data = res.data;
       if (data?.success) {
         setSubscribed(true);

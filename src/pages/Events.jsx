@@ -1,5 +1,5 @@
 import React from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import EntityListPage from '../components/opportunities/EntityListPage';
 import { sectorOptions } from '../components/forms/formOptions';
 
@@ -19,7 +19,7 @@ const filters = [
 export default function Events() {
   return (
     <EntityListPage
-      entity={base44.entities.Event}
+      entity={api.entities.Event}
       detailPageParam="EventDetail"
       type="event"
       title="NGO Events & Conferences"

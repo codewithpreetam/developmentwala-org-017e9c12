@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Bell, BellOff, Check, Mail, Loader2, Settings2 } from 'lucide-react';
 
 const SECTORS = [
@@ -38,7 +38,7 @@ export default function EmailSubscriptionCard({ user, profile }) {
 
   useEffect(() => {
     if (!user?.email) return;
-    base44.entities.EmailSubscription.filter({ user_email: user.email })
+    api.entities.EmailSubscription.filter({ user_email: user.email })
       .then(items => {
         if (items.length > 0) {
           const s = items[0];
@@ -68,9 +68,9 @@ export default function EmailSubscriptionCard({ user, profile }) {
       frequency: 'weekly',
     };
     if (sub) {
-      await base44.entities.EmailSubscription.update(sub.id, data);
+      await api.entities.EmailSubscription.update(sub.id, data);
     } else {
-      const created = await base44.entities.EmailSubscription.create(data);
+      const created = await api.entities.EmailSubscription.create(data);
       setSub(created);
     }
     setSaving(false);

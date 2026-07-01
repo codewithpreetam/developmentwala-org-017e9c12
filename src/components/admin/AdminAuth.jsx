@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 
 const AdminAuthContext = createContext(null);
 
@@ -11,7 +11,7 @@ export function AdminAuthProvider({ children }) {
     let cancelled = false;
     (async () => {
       try {
-        const user = await base44.auth.me();
+        const user = await api.auth.me();
         const role = user?.role;
         const ok = role === 'admin' || role === 'super_admin';
         if (!cancelled) {
@@ -33,7 +33,7 @@ export function AdminAuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const user = await base44.auth.login(email, password);
+      const user = await api.auth.login(email, password);
       if (user.role === 'super_admin' || user.role === 'admin') {
         sessionStorage.setItem('ngo_admin', 'yes');
         setIsAdmin(true);

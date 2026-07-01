@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@/lib/router-adapter';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import {
   Star, Briefcase, GraduationCap, BookOpen, IndianRupee, Calendar,
   Building2, Clock, ArrowRight, ArrowLeft,
@@ -29,12 +29,12 @@ function orgNameFromItem(item) {
 
 async function fetchAllFeatured() {
   const [jobs, internships, fellowships, scholarships, grants, events] = await Promise.all([
-    base44.entities.Job.filter({ status: 'published', featured: true }, '-created_date', 500),
-    base44.entities.Internship.filter({ status: 'published', featured: true }, '-created_date', 500),
-    base44.entities.Fellowship.filter({ status: 'published', featured: true }, '-created_date', 500),
-    base44.entities.Scholarship.filter({ status: 'published', featured: true }, '-created_date', 500),
-    base44.entities.Grant.filter({ status: 'published', featured: true }, '-created_date', 500),
-    base44.entities.Event.filter({ status: 'published', featured: true }, '-created_date', 500),
+    api.entities.Job.filter({ status: 'published', featured: true }, '-created_date', 500),
+    api.entities.Internship.filter({ status: 'published', featured: true }, '-created_date', 500),
+    api.entities.Fellowship.filter({ status: 'published', featured: true }, '-created_date', 500),
+    api.entities.Scholarship.filter({ status: 'published', featured: true }, '-created_date', 500),
+    api.entities.Grant.filter({ status: 'published', featured: true }, '-created_date', 500),
+    api.entities.Event.filter({ status: 'published', featured: true }, '-created_date', 500),
   ]);
   return {
     job: jobs, internship: internships, fellowship: fellowships,

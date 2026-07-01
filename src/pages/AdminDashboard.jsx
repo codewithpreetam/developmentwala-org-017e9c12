@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useSearchParams } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { createClient } from '@/lib/supabase/client';
 
 const supabase = createClient();
@@ -88,11 +88,11 @@ export default function AdminDashboard() {
   const loadAll = async () => {
     setLoading(true);
     const [jobs, internships, fellowships, scholarships, grants, events, users, profiles, contactMsgs] = await Promise.all([
-      base44.entities.Job.list('-created_date', 500), base44.entities.Internship.list('-created_date', 500),
-      base44.entities.Fellowship.list('-created_date', 500), base44.entities.Scholarship.list('-created_date', 500),
-      base44.entities.Grant.list('-created_date', 500), base44.entities.Event.list('-created_date', 500),
-      base44.entities.User.list('-created_date', 500), base44.entities.UserProfile.list('-created_date', 500),
-      base44.entities.ContactMessage.list('-created_date', 200),
+      api.entities.Job.list('-created_date', 500), api.entities.Internship.list('-created_date', 500),
+      api.entities.Fellowship.list('-created_date', 500), api.entities.Scholarship.list('-created_date', 500),
+      api.entities.Grant.list('-created_date', 500), api.entities.Event.list('-created_date', 500),
+      api.entities.User.list('-created_date', 500), api.entities.UserProfile.list('-created_date', 500),
+      api.entities.ContactMessage.list('-created_date', 200),
     ]);
     const combined = [
       ...normalize(jobs,'job'), ...normalize(internships,'internship'), ...normalize(fellowships,'fellowship'),
@@ -101,13 +101,13 @@ export default function AdminDashboard() {
     setAllItems(combined); setAllUsers(users); setAllProfiles(profiles); setContacts(contactMsgs); setLoading(false);
   };
 
-  const getEntity = (type) => base44.entities[typeConfig[type].entity];
+  const getEntity = (type) => api.entities[typeConfig[type].entity];
 
   const reject = async (item) => {
     setProcessing(true);
     await getEntity(item._type).update(item.id, { status: 'rejected' });
     const email = item.submitted_by_email || item.created_by;
-    if (email) await base44.entities.Notification.create({ user_email: email, title: 'Opportunity Not Approved', message: `Your ${item._type} "${item.title}" was not approved.`, type: 'rejection', read: false, link: '' }).catch(() => {});
+    if (email) await api.entities.Notification.create({ user_email: email, title: 'Opportunity Not Approved', message: `Your ${item._type} "${item.title}" was not approved.`, type: 'rejection', read: false, link: '' }).catch(() => {});
     await loadAll(); setPreviewItem(null); setProcessing(false);
   };
 
@@ -133,8 +133,8 @@ export default function AdminDashboard() {
     if (!confirm('Delete this user and their profile?')) return;
     setProcessing(true);
     const profile = allProfiles.find(p => p.user_email === allUsers.find(u => u.id === userId)?.email);
-    if (profile) await base44.entities.UserProfile.delete(profile.id).catch(() => {});
-    await base44.entities.User.delete(userId).catch(() => {});
+    if (profile) await api.entities.UserProfile.delete(profile.id).catch(() => {});
+    await api.entities.User.delete(userId).catch(() => {});
     await loadAll(); setProcessing(false);
   };
 
@@ -142,7 +142,7 @@ export default function AdminDashboard() {
     setProcessing(true);
     await getEntity(item._type).update(item.id, { status: 'published' });
     const email = item.submitted_by_email || item.created_by;
-    if (email) await base44.entities.Notification.create({ user_email: email, title: 'Your opportunity is now live!', message: `Your ${item._type} "${item.title}" has been approved and is now published on DevelopmentWala.org.`, type: 'approval', read: false, link: `/${typeConfig[item._type].detailPage}?id=${item.id}` }).catch(() => {});
+    if (email) await api.entities.Notification.create({ user_email: email, title: 'Your opportunity is now live!', message: `Your ${item._type} "${item.title}" has been approved and is now published on DevelopmentWala.org.`, type: 'approval', read: false, link: `/${typeConfig[item._type].detailPage}?id=${item.id}` }).catch(() => {});
     await loadAll(); setPreviewItem(null); setProcessing(false);
   };
 

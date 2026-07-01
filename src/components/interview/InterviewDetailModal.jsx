@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { supabase } from '@/integrations/supabase/client';
 import { X, Video, Calendar, Clock, User, AlertCircle, CheckCircle2, RotateCcw, ExternalLink, Mail, Phone, MapPin, Briefcase, GraduationCap, FileText } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -94,11 +94,11 @@ export default function InterviewDetailModal({ interview, onClose, onUpdated, vi
         if (reschedLink) updates.meeting_link = reschedLink;
         if (note) updates.notes = `${interview.notes ? interview.notes + '\n\n' : ''}[Rescheduled] ${note}`;
       }
-      await base44.entities.Interview.update(interview.id, updates);
+      await api.entities.Interview.update(interview.id, updates);
 
       // Notify candidate (trigger also fires, but include extra context)
       if (viewerRole === 'employer' && (action === 'cancel' || action === 'reschedule')) {
-        await base44.entities.Notification.create({
+        await api.entities.Notification.create({
           user_email: interview.candidate_email,
           title: action === 'cancel' ? 'Interview Cancelled' : 'Interview Rescheduled',
           message: action === 'cancel'

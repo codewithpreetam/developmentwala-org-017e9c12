@@ -1,5 +1,5 @@
 import React from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import EntityDetailPage from '../components/opportunities/EntityDetailPage';
 
 export default function InternshipDetail() {
@@ -17,7 +17,7 @@ export default function InternshipDetail() {
 
   return (
     <EntityDetailPage
-      entity={base44.entities.Internship}
+      entity={api.entities.Internship}
       listingPage="Internships"
       typeLabel="Internship"
       accentColor="purple"

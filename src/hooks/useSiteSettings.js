@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 
 // Module-level cache so settings are only fetched once per session
 let cache = null;
@@ -10,7 +10,7 @@ function notify(settings) {
 }
 
 export async function refreshSiteSettings() {
-  const items = await base44.entities.SiteSettings.list();
+  const items = await api.entities.SiteSettings.list();
   cache = items[0] || null;
   notify(cache);
   return cache;

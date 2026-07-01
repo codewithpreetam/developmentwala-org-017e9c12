@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Link, useParams, useSearchParams } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
@@ -25,12 +25,12 @@ import OrgProfileLink from '../components/opportunities/OrgProfileLink';
 
 async function loadOrgForOpportunity(record) {
   if (record.submitted_by_email) {
-    const orgs = await base44.entities.Organization.filter({ user_email: record.submitted_by_email });
+    const orgs = await api.entities.Organization.filter({ user_email: record.submitted_by_email });
     if (orgs.length > 0) return orgs[0];
   }
   const name = record.organization || record.funding_agency;
   if (name) {
-    const orgs = await base44.entities.Organization.filter({ org_name: name });
+    const orgs = await api.entities.Organization.filter({ org_name: name });
     if (orgs.length > 0) return orgs[0];
   }
   return null;
@@ -78,7 +78,7 @@ export default function JobDetail() {
 
   useEffect(() => {
     if (!user) { setUserProfile(null); return; }
-    base44.entities.UserProfile.filter({ user_email: user.email })
+    api.entities.UserProfile.filter({ user_email: user.email })
       .then((p) => {
         setUserProfile(p[0] || null);
         setCvChoice(p[0]?.cv_url ? 'profile' : 'new');
@@ -99,7 +99,7 @@ export default function JobDetail() {
   }, [user, job]);
 
   const loadBySlug = async (slug) => {
-    const results = await base44.entities.Job.filter({ slug, status: 'published' });
+    const results = await api.entities.Job.filter({ slug, status: 'published' });
     if (results.length > 0) {
       setJob(results[0]);
       loadOrgForOpportunity(results[0]).then(setOrgData).catch(() => {});
@@ -108,7 +108,7 @@ export default function JobDetail() {
   };
 
   const loadJob = async (id) => {
-    const results = await base44.entities.Job.filter({ id });
+    const results = await api.entities.Job.filter({ id });
     if (results.length > 0 && results[0].status === 'published') {
       setJob(results[0]);
       loadOrgForOpportunity(results[0]).then(setOrgData).catch(() => {});
@@ -117,7 +117,7 @@ export default function JobDetail() {
   };
 
   const checkIfApplied = async () => {
-    const existing = await base44.entities.Application.filter({ opportunity_id: job.id, applicant_email: user.email });
+    const existing = await api.entities.Application.filter({ opportunity_id: job.id, applicant_email: user.email });
     if (existing.length > 0) setApplied(true);
   };
 
@@ -129,7 +129,7 @@ export default function JobDetail() {
     if (file.type && !allowed.includes(file.type)) { toast.error('Please upload a PDF or Word document.'); return; }
     setUploadingCv(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await api.integrations.Core.UploadFile({ file });
       setNewCvUrl(file_url);
       setFormErrors((p) => ({ ...p, cvUrl: undefined }));
       toast.success('CV uploaded.');
@@ -141,7 +141,7 @@ export default function JobDetail() {
   };
 
   const handleApply = async () => {
-    if (!user) { base44.auth.redirectToLogin(window.location.href); return; }
+    if (!user) { api.auth.redirectToLogin(window.location.href); return; }
     const cvUrl = cvChoice === 'profile' ? (userProfile?.cv_url || '') : newCvUrl;
     const errs = {};
     if (coverLetter.trim().length > 0 && coverLetter.trim().length < 30) {
@@ -154,9 +154,9 @@ export default function JobDetail() {
     setApplying(true);
     try {
       if (cvChoice === 'new' && newCvUrl && userProfile?.id) {
-        base44.entities.UserProfile.update(userProfile.id, { cv_url: userProfile.cv_url || newCvUrl }).catch(() => {});
+        api.entities.UserProfile.update(userProfile.id, { cv_url: userProfile.cv_url || newCvUrl }).catch(() => {});
       }
-      await base44.entities.Application.create({
+      await api.entities.Application.create({
         opportunity_id: job.id,
         opportunity_title: job.title,
         opportunity_type: job.opportunity_type || 'job',
@@ -363,7 +363,7 @@ export default function JobDetail() {
         '@type': 'Organization',
         name: orgName || 'DevelopmentWala.org',
         sameAs: orgData?.website || 'https://developmentwala.org',
-        logo: job.logo_url || orgData?.logo_url || 'https://media.base44.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp',
+        logo: job.logo_url || orgData?.logo_url || 'https://media.api.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp',
       },
       jobLocation: !isRemote && (locality || region)
         ? {
@@ -684,7 +684,7 @@ export default function JobDetail() {
               {!user ? (
                 <div className="text-center py-6">
                   <p className="text-gray-600 mb-5">Please sign in to apply for this opportunity.</p>
-                  <button onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                  <button onClick={() => api.auth.redirectToLogin(window.location.href)}
                     className="bg-blue-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-blue-700">Sign In to Apply</button>
                 </div>
               ) : (

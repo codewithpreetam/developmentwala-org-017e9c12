@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useLocation, Link } from '@/lib/router-adapter';
 import dwHireAd from '@/assets/dw-hire-ad.png.asset.json';
 
@@ -362,10 +362,10 @@ export default function Jobs() {
     if (params.get('q')) setSearch(params.get('q'));
     if (params.get('sector')) setSectors([params.get('sector')]);
     loadJobs();
-    base44.auth.me().then(u => {
+    api.auth.me().then(u => {
       if (!u) return;
       setCurrentUser(u);
-      base44.entities.SavedOpportunity.filter({ user_email: u.email }).then(saved => {
+      api.entities.SavedOpportunity.filter({ user_email: u.email }).then(saved => {
         const map = {};
         saved.forEach(s => { if (s.opportunity_type === 'job') map[s.opportunity_id] = s.id; });
         setSavedMap(map);
@@ -380,10 +380,10 @@ export default function Jobs() {
     }
     try {
       if (savedMap[item.id]) {
-        await base44.entities.SavedOpportunity.delete(savedMap[item.id]);
+        await api.entities.SavedOpportunity.delete(savedMap[item.id]);
         setSavedMap(prev => { const m = { ...prev }; delete m[item.id]; return m; });
       } else {
-        const created = await base44.entities.SavedOpportunity.create({
+        const created = await api.entities.SavedOpportunity.create({
           user_email: currentUser.email,
           opportunity_type: 'job',
           opportunity_id: item.id,
@@ -419,7 +419,7 @@ export default function Jobs() {
     } catch {
       /* fall back to client filter */
     }
-    const data = await base44.entities.Job.filter({ status: 'published', opportunity_type: 'job' }, '-created_date', 500);
+    const data = await api.entities.Job.filter({ status: 'published', opportunity_type: 'job' }, '-created_date', 500);
     setJobs(data);
     setUseServerSearch(false);
     setLoading(false);

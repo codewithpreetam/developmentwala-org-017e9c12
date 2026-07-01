@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { ArrowRight, AlertCircle, Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -53,7 +53,7 @@ export default function SignUp() {
     }
     setSubmitting(true);
     try {
-      const result = await base44.auth.register({
+      const result = await api.auth.register({
         email: form.email.trim(),
         password: form.password,
         firstName: form.firstName.trim(),

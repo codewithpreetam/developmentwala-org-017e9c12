@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import SEOHead from '../components/shared/SEOHead';
@@ -52,7 +52,7 @@ export default function Contact() {
     try {
       const subject = form.subject || 'New enquiry from Contact page';
       const message = `${form.organization ? `Organization: ${form.organization}\n\n` : ''}${form.message}`;
-      const res = await base44.functions.invoke('sendContactEmail', { ...form, subject, message });
+      const res = await api.functions.invoke('sendContactEmail', { ...form, subject, message });
       if (res.data?.success) setSubmitted(true);
       else setError(res.data?.error || 'Something went wrong. Please try again.');
     } catch {

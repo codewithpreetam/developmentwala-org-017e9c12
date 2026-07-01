@@ -1,4 +1,4 @@
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 
 export async function loadEmployerContactDefaults(user) {
   if (!user?.email) {
@@ -6,9 +6,9 @@ export async function loadEmployerContactDefaults(user) {
   }
 
   const [profiles, orgs] = await Promise.all([
-    base44.entities.UserProfile.filter({ user_email: user.email, user_type: 'employer' }).catch(() => []),
+    api.entities.UserProfile.filter({ user_email: user.email, user_type: 'employer' }).catch(() => []),
     user.role === 'employer' || user.role === 'super_admin'
-      ? base44.entities.Organization.filter({ user_email: user.email }).catch(() => [])
+      ? api.entities.Organization.filter({ user_email: user.email }).catch(() => [])
       : Promise.resolve([]),
   ]);
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { ArrowLeft, Mail, Loader2, CheckCircle2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -18,7 +18,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await base44.auth.requestPasswordReset(email.trim());
+      await api.auth.requestPasswordReset(email.trim());
       setSent(true);
     } finally {
       setSubmitting(false);

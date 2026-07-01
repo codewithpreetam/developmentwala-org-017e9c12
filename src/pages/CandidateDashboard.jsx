@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '../components/auth/AuthContext';
 import {
   User, Briefcase, Bell, Save, Upload, Camera,
@@ -136,9 +136,9 @@ export default function CandidateDashboard() {
 
   const loadData = async () => {
     const [apps, allNotifs, saved] = await Promise.all([
-      base44.entities.Application.filter({ applicant_email: user.email }, '-created_date', 100),
-      base44.entities.Notification.filter({ user_email: user.email }, '-created_date', 100),
-      base44.entities.SavedOpportunity.filter({ user_email: user.email }, '-created_date', 100),
+      api.entities.Application.filter({ applicant_email: user.email }, '-created_date', 100),
+      api.entities.Notification.filter({ user_email: user.email }, '-created_date', 100),
+      api.entities.SavedOpportunity.filter({ user_email: user.email }, '-created_date', 100),
     ]);
     setSavedItems(saved);
     setApplications(apps);
@@ -150,7 +150,7 @@ export default function CandidateDashboard() {
     setNotifications(notifs);
     const unread = notifs.filter(n => !n.read);
     if (unread.length > 0) {
-      await Promise.all(unread.map(n => base44.entities.Notification.update(n.id, { read: true })));
+      await Promise.all(unread.map(n => api.entities.Notification.update(n.id, { read: true })));
     }
   };
 
@@ -160,16 +160,16 @@ export default function CandidateDashboard() {
   const submitContact = async () => {
     if (!contactForm.subject.trim() || !contactForm.message.trim()) return;
     setContactSending(true);
-    await base44.entities.ContactMessage.create({ name: form.full_name || user.full_name || '', email: user.email, subject: contactForm.subject, message: contactForm.message });
-    await base44.functions.invoke('sendContactEmail', { name: form.full_name || user.full_name || '', email: user.email, subject: contactForm.subject, message: contactForm.message }).catch(() => {});
+    await api.entities.ContactMessage.create({ name: form.full_name || user.full_name || '', email: user.email, subject: contactForm.subject, message: contactForm.message });
+    await api.functions.invoke('sendContactEmail', { name: form.full_name || user.full_name || '', email: user.email, subject: contactForm.subject, message: contactForm.message }).catch(() => {});
     setContactSending(false); setContactSent(true); setContactForm({ subject: '', message: '' });
   };
 
   const saveProfile = async () => {
     setSaving(true);
     const data = { ...form, user_email: user.email, user_type: 'job_seeker' };
-    if (profile?.id) await base44.entities.UserProfile.update(profile.id, data);
-    else await base44.entities.UserProfile.create(data);
+    if (profile?.id) await api.entities.UserProfile.update(profile.id, data);
+    else await api.entities.UserProfile.create(data);
     await refreshProfile();
     if (user?.user_id) {
       const score = await getProfileCompletion(user.user_id);
@@ -181,7 +181,7 @@ export default function CandidateDashboard() {
   const handleCVUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const { file_url } = await api.integrations.Core.UploadFile({ file });
     u('cv_url', file_url);
   };
 
@@ -191,11 +191,11 @@ export default function CandidateDashboard() {
     setUploadingPic(true);
     setPicError('');
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file, folder: 'avatars' });
+      const { file_url } = await api.integrations.Core.UploadFile({ file, folder: 'avatars' });
       u('profile_picture', file_url);
       const data = { ...form, profile_picture: file_url, user_email: user.email, user_type: 'job_seeker' };
-      if (profile?.id) await base44.entities.UserProfile.update(profile.id, data);
-      else await base44.entities.UserProfile.create(data);
+      if (profile?.id) await api.entities.UserProfile.update(profile.id, data);
+      else await api.entities.UserProfile.create(data);
       await refreshProfile();
     } catch (err) {
       setPicError(err.message || 'Failed to upload profile picture');
@@ -210,7 +210,7 @@ export default function CandidateDashboard() {
     setPicError('');
     try {
       const data = { ...form, profile_picture: '', user_email: user.email, user_type: 'job_seeker' };
-      if (profile?.id) await base44.entities.UserProfile.update(profile.id, data);
+      if (profile?.id) await api.entities.UserProfile.update(profile.id, data);
       await refreshProfile();
     } catch (err) {
       setPicError(err.message || 'Failed to remove profile picture');
@@ -637,7 +637,7 @@ export default function CandidateDashboard() {
                   <button
                     onClick={async () => {
                       setDeleting(true);
-                      if (profile?.id) await base44.entities.UserProfile.delete(profile.id);
+                      if (profile?.id) await api.entities.UserProfile.delete(profile.id);
                       setDeleteModal(false);
                       logout();
                     }}
@@ -743,7 +743,7 @@ export default function CandidateDashboard() {
                           </Link>
                         )}
                         <button onClick={async () => {
-                          await base44.entities.SavedOpportunity.delete(item.id);
+                          await api.entities.SavedOpportunity.delete(item.id);
                           setSavedItems(prev => prev.filter(s => s.id !== item.id));
                         }} className="flex items-center gap-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg border border-red-200">
                           <X className="w-3.5 h-3.5" /> Remove
