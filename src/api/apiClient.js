@@ -198,7 +198,7 @@ async function invokeFunction(name, payload) {
   throw new Error(`Unknown function: ${name}`);
 }
 
-export const base44 = {
+export const api = {
   auth,
   entities,
   integrations: {
