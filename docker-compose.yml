@@ -12,8 +12,7 @@
 
 services:
   app:
-    # Replace <owner>/<repo> with your GitHub path, e.g. ghcr.io/johndoe/developmentwala:latest
-    image: ghcr.io/OWNER/REPO:latest
+    image: ghcr.io/codewithpreetam/developmentwala-org-017e9c12:latest
     container_name: developmentwala
     restart: unless-stopped
     ports:
