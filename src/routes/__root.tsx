@@ -82,7 +82,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 const SITE_URL = "https://developmentwala.org";
 const SITE_TITLE = "DevelopmentWala.org — NGO & Social Sector Jobs, Internships, Fellowships, Scholarships in India";
 const SITE_DESC = "India's dedicated platform for NGO, CSR and social sector careers. Find jobs, internships, fellowships, scholarships, grants and events from leading NGOs and development organisations.";
-const SITE_IMAGE = "/logo-192.webp";
+const SITE_IMAGE = `${SITE_URL}/logo-192.webp`;
 
 const organizationLd = {
   "@context": "https://schema.org",
