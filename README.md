@@ -1,39 +1,34 @@
-**Welcome to your Base44 project** 
+# DevelopmentWala.org
 
-**About**
+India's platform for NGO, CSR, and social sector jobs, internships, fellowships, scholarships, grants, and events.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+## Tech Stack
 
-This project contains everything you need to run your app locally.
+- TanStack Start (React 19 + Vite 7)
+- Tailwind CSS v4
+- Supabase (Postgres, Auth, Storage)
+- Deployed on Node.js VPS (Docker + Nginx)
 
-**Edit the code in your local development environment**
+## Local Development
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
-
-**Prerequisites:** 
-
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
-
-```
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
-
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
+```bash
+bun install
+bun run dev
 ```
 
-Run the app: `npm run dev`
+Environment variables live in `.env` (see `.env.example`).
 
-**Publish your changes**
+## Production Build
 
-Open [Base44.com](http://Base44.com) and click on Publish.
+```bash
+DEPLOY_TARGET=node bun run build
+node dist/server/index.mjs
+```
 
-**Docs & Support**
+## Docker
 
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+```bash
+docker compose up -d
+```
 
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+See `Dockerfile` and `docker-compose.yml` for details.
