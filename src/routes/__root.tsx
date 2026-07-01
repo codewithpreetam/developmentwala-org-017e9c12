@@ -142,7 +142,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://ymrzpbpjhmdkjmgqswnw.supabase.co" },
-      { rel: "dns-prefetch", href: "/" },
+      { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" },
       { rel: "alternate", type: "application/rss+xml", title: "DevelopmentWala.org RSS Feed", href: `${SITE_URL}/api/public/rss.xml` },
       { rel: "sitemap", type: "application/xml", href: `${SITE_URL}/sitemap.xml` },
