@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Save, ArrowLeft, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -62,7 +62,7 @@ export default function EditOpportunity() {
 
   const loadItem = async (t, id) => {
     const cfg = entityMap[t];
-    const data = await base44.entities[cfg.entity].filter({ id }, '-created_date', 1);
+    const data = await api.entities[cfg.entity].filter({ id }, '-created_date', 1);
     if (data.length > 0) {
       setItem(data[0]);
       setForm(data[0]);
@@ -78,7 +78,7 @@ export default function EditOpportunity() {
   const save = async () => {
     setSaving(true);
     const cfg = entityMap[type];
-    await base44.entities[cfg.entity].update(item.id, form);
+    await api.entities[cfg.entity].update(item.id, form);
     setSavedMsg('Changes saved successfully!');
     setTimeout(() => setSavedMsg(''), 3000);
     setSaving(false);

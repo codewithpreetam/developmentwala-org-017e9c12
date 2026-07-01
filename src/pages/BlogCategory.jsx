@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from '@/lib/router-adapter';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import SEOHead from '../components/shared/SEOHead';
@@ -17,8 +17,8 @@ export default function BlogCategory() {
   useEffect(() => {
     const slug = window.location.pathname.split('/blog/category/')[1];
     Promise.all([
-      base44.entities.BlogPost.filter({ status: 'published' }, '-created_date', 200),
-      base44.entities.BlogCategory.list('-created_date', 100),
+      api.entities.BlogPost.filter({ status: 'published' }, '-created_date', 200),
+      api.entities.BlogCategory.list('-created_date', 100),
     ]).then(([allPosts, cats]) => {
       const cat = cats.find(c => c.slug === slug);
       setCategory(cat || { name: slug, slug });

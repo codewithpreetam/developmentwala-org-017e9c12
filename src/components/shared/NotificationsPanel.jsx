@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bell, Loader2, ExternalLink, CheckCheck } from 'lucide-react';
 import { Link } from '@/lib/router-adapter';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 
 const PAGE = 20;
 
@@ -13,7 +13,7 @@ export default function NotificationsPanel({ userEmail, role }) {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.Notification.filter({ user_email: userEmail }, '-created_date', 200);
+      const data = await api.entities.Notification.filter({ user_email: userEmail }, '-created_date', 200);
       setItems(data || []);
     } finally {
       setLoading(false);
@@ -25,12 +25,12 @@ export default function NotificationsPanel({ userEmail, role }) {
   const markAll = async () => {
     const unread = items.filter(n => !n.read);
     if (unread.length === 0) return;
-    await Promise.all(unread.map(n => base44.entities.Notification.update(n.id, { read: true }).catch(() => null)));
+    await Promise.all(unread.map(n => api.entities.Notification.update(n.id, { read: true }).catch(() => null)));
     setItems(prev => prev.map(n => ({ ...n, read: true })));
   };
 
   const markOne = async (id) => {
-    await base44.entities.Notification.update(id, { read: true }).catch(() => null);
+    await api.entities.Notification.update(id, { read: true }).catch(() => null);
     setItems(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
   };
 

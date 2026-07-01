@@ -3,7 +3,7 @@ import { Link, useLocation } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Menu, X, ChevronDown, User, LogOut, LayoutDashboard, GraduationCap, Star, BookOpen, IndianRupee, Calendar, Briefcase } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useSiteSettings } from '../../hooks/useSiteSettings';
 import { getLogoUrl, getSiteName } from '@/lib/brand';
 import UserAvatar from '@/components/shared/UserAvatar';

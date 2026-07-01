@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Building2, MapPin, Search, Globe, Briefcase, ArrowRight, Loader2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -26,7 +26,7 @@ export default function Employers() {
   const loadOrgs = async () => {
     setLoading(true);
     try {
-      const allOrgs = await base44.entities.Organization.list('-created_date', 300);
+      const allOrgs = await api.entities.Organization.list('-created_date', 300);
 
       const orgMap = {};
       allOrgs.forEach(o => {
@@ -41,12 +41,12 @@ export default function Employers() {
       setLoading(false);
 
       const [jobs, internships, fellowships, scholarships, grants, events] = await Promise.all([
-        base44.entities.Job.filter({ status: 'published' }, '-created_date', 500),
-        base44.entities.Internship.filter({ status: 'published' }, '-created_date', 500),
-        base44.entities.Fellowship.filter({ status: 'published' }, '-created_date', 500),
-        base44.entities.Scholarship.filter({ status: 'published' }, '-created_date', 500),
-        base44.entities.Grant.filter({ status: 'published' }, '-created_date', 500),
-        base44.entities.Event.filter({ status: 'published' }, '-created_date', 500),
+        api.entities.Job.filter({ status: 'published' }, '-created_date', 500),
+        api.entities.Internship.filter({ status: 'published' }, '-created_date', 500),
+        api.entities.Fellowship.filter({ status: 'published' }, '-created_date', 500),
+        api.entities.Scholarship.filter({ status: 'published' }, '-created_date', 500),
+        api.entities.Grant.filter({ status: 'published' }, '-created_date', 500),
+        api.entities.Event.filter({ status: 'published' }, '-created_date', 500),
       ]);
       const allOpps = [...jobs, ...internships, ...fellowships, ...scholarships, ...grants, ...events];
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import EntityDetailPage from '../components/opportunities/EntityDetailPage';
 
 export default function EventDetail() {
@@ -20,7 +20,7 @@ export default function EventDetail() {
 
   return (
     <EntityDetailPage
-      entity={base44.entities.Event}
+      entity={api.entities.Event}
       listingPage="Events"
       typeLabel="Event"
       accentColor="pink"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Calendar, Video, Clock, Building2, ExternalLink } from 'lucide-react';
 import InterviewDetailModal from './InterviewDetailModal';
 
@@ -30,7 +30,7 @@ export default function CandidateInterviewSection({ userEmail }) {
 
   const loadInterviews = async () => {
     setLoading(true);
-    const data = await base44.entities.Interview.filter({ candidate_email: userEmail }, '-date', 100);
+    const data = await api.entities.Interview.filter({ candidate_email: userEmail }, '-date', 100);
     setInterviews(data);
     setLoading(false);
   };

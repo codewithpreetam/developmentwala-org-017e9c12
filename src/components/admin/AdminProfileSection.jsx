@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { createClient } from '@/lib/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Camera, Save, CheckCircle2, Trash2, Shield } from 'lucide-react';
@@ -56,7 +56,7 @@ export default function AdminProfileSection({ user, ACCENT = '#4F46E5', onProfil
     if (!file) return;
     setUploading(true); setError('');
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file, folder: 'avatars' });
+      const { file_url } = await api.integrations.Core.UploadFile({ file, folder: 'avatars' });
       f('profile_image', file_url);
       await persist({ profile_image: file_url });
       onProfilePicChange?.(file_url);

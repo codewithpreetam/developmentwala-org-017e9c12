@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Upload, X, Image as ImageIcon } from 'lucide-react';
 
 export default function ImageUploadField({ value, onChange, label = 'Upload Image', hint = 'Recommended 1200×630px • JPG/PNG/WebP • Auto-converted to WebP (max 150 KB)' }) {
@@ -23,7 +23,7 @@ export default function ImageUploadField({ value, onChange, label = 'Upload Imag
 
     setError('');
     setUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const { file_url } = await api.integrations.Core.UploadFile({ file });
     onChange(file_url);
     setUploading(false);
   };

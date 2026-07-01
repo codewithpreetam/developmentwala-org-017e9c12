@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { refreshSiteSettings } from '../../hooks/useSiteSettings';
 import {
   GripVertical, Upload, CheckCircle2, Image, Globe, Eye, EyeOff, Save, RefreshCw
@@ -108,7 +108,7 @@ export default function SiteSettingsPanel() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.entities.SiteSettings.list().then(items => {
+    api.entities.SiteSettings.list().then(items => {
       if (items.length > 0) {
         const s = items[0];
         setSettingsId(s.id);
@@ -126,7 +126,7 @@ export default function SiteSettingsPanel() {
     const file = e.target.files[0];
     if (!file) return;
     setUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const { file_url } = await api.integrations.Core.UploadFile({ file });
     setLogoUrl(file_url);
     setUploading(false);
   };
@@ -141,9 +141,9 @@ export default function SiteSettingsPanel() {
       sectors: sectors,
     };
     if (settingsId) {
-      await base44.entities.SiteSettings.update(settingsId, data);
+      await api.entities.SiteSettings.update(settingsId, data);
     } else {
-      const created = await base44.entities.SiteSettings.create(data);
+      const created = await api.entities.SiteSettings.create(data);
       setSettingsId(created.id);
     }
     await refreshSiteSettings();

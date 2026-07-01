@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import {
   Search, ArrowRight, Briefcase, Users, Heart,
   BookOpen, TreePine, Shield, Zap, ChevronRight, TrendingUp,
@@ -67,15 +67,15 @@ async function fetchHomeData() {
     jobs, internships, fellowships, scholarships, grants, events,
     testimonials, blogPosts, orgs,
   ] = await Promise.all([
-    base44.entities.Job.filter({ status: 'published' }, '-created_date', 500),
-    base44.entities.Internship.filter({ status: 'published' }, '-created_date', 500),
-    base44.entities.Fellowship.filter({ status: 'published' }, '-created_date', 500),
-    base44.entities.Scholarship.filter({ status: 'published' }, '-created_date', 500),
-    base44.entities.Grant.filter({ status: 'published' }, '-created_date', 500),
-    base44.entities.Event.filter({ status: 'published' }, '-created_date', 500),
-    base44.entities.Testimonial.filter({ featured: true }).catch(() => []),
-    base44.entities.BlogPost.filter({ status: 'published' }, '-created_date', 3).catch(() => []),
-    base44.entities.Organization.list('-created_date', 200),
+    api.entities.Job.filter({ status: 'published' }, '-created_date', 500),
+    api.entities.Internship.filter({ status: 'published' }, '-created_date', 500),
+    api.entities.Fellowship.filter({ status: 'published' }, '-created_date', 500),
+    api.entities.Scholarship.filter({ status: 'published' }, '-created_date', 500),
+    api.entities.Grant.filter({ status: 'published' }, '-created_date', 500),
+    api.entities.Event.filter({ status: 'published' }, '-created_date', 500),
+    api.entities.Testimonial.filter({ featured: true }).catch(() => []),
+    api.entities.BlogPost.filter({ status: 'published' }, '-created_date', 3).catch(() => []),
+    api.entities.Organization.list('-created_date', 200),
   ]);
 
   const publishedByType = {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Bell, X, ExternalLink } from 'lucide-react';
 import { Link } from '@/lib/router-adapter';
@@ -24,7 +24,7 @@ export default function NotificationBell({ userEmail, userRole }) {
   const { data: notifications = [], isLoading: loading } = useQuery({
     queryKey: ['notifications', userEmail],
     queryFn: async () => {
-      const data = await base44.entities.Notification.filter({ user_email: userEmail }, '-created_date', 50);
+      const data = await api.entities.Notification.filter({ user_email: userEmail }, '-created_date', 50);
       return data.filter(n => isRelevant(n, userRole));
     },
     enabled: !!userEmail,
@@ -40,12 +40,12 @@ export default function NotificationBell({ userEmail, userRole }) {
 
   const markAllRead = async () => {
     const unread = notifications.filter(n => !n.read);
-    await Promise.all(unread.map(n => base44.entities.Notification.update(n.id, { read: true })));
+    await Promise.all(unread.map(n => api.entities.Notification.update(n.id, { read: true })));
     queryClient.setQueryData(['notifications', userEmail], prev => (prev || []).map(n => ({ ...n, read: true })));
   };
 
   const markRead = async (id) => {
-    await base44.entities.Notification.update(id, { read: true });
+    await api.entities.Notification.update(id, { read: true });
     queryClient.setQueryData(['notifications', userEmail], prev => (prev || []).map(n => n.id === id ? { ...n, read: true } : n));
   };
 

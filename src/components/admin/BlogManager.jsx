@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import {
   Plus, Pencil, Trash2, Eye, EyeOff, CheckCircle2, X, Save,
   Upload, Tag, Globe, FileText, Image as ImageIcon, Loader2,
@@ -91,8 +91,8 @@ export default function BlogManager() {
   const loadAll = async () => {
     setLoading(true);
     const [p, c] = await Promise.all([
-      base44.entities.BlogPost.list('-created_date', 200),
-      base44.entities.BlogCategory.list('-created_date', 100),
+      api.entities.BlogPost.list('-created_date', 200),
+      api.entities.BlogCategory.list('-created_date', 100),
     ]);
     setPosts(p);
     setCategories(c);
@@ -130,7 +130,7 @@ export default function BlogManager() {
     try {
       // Force 1200×630 (Google/OG recommended), center-crop, encode as WebP.
       const resized = await resizeImageToCoverWebp(file, { width: 1200, height: 630, targetBytes: 200 * 1024 });
-      const { file_url } = await base44.integrations.Core.UploadFile({ file: resized });
+      const { file_url } = await api.integrations.Core.UploadFile({ file: resized });
       u('featured_image', file_url);
     } finally {
       setUploadingImg(false);
@@ -153,9 +153,9 @@ export default function BlogManager() {
     };
     let saved;
     if (post.id) {
-      saved = await base44.entities.BlogPost.update(post.id, data);
+      saved = await api.entities.BlogPost.update(post.id, data);
     } else {
-      saved = await base44.entities.BlogPost.create(data);
+      saved = await api.entities.BlogPost.create(data);
     }
     return saved;
   };
@@ -206,19 +206,19 @@ export default function BlogManager() {
 
   const deletePost = async (id) => {
     if (!confirm('Delete this post?')) return;
-    await base44.entities.BlogPost.delete(id);
+    await api.entities.BlogPost.delete(id);
     await loadAll();
   };
 
   const toggleStatus = async (post) => {
-    await base44.entities.BlogPost.update(post.id, { status: post.status === 'published' ? 'draft' : 'published' });
+    await api.entities.BlogPost.update(post.id, { status: post.status === 'published' ? 'draft' : 'published' });
     await loadAll();
   };
 
   const addCategory = async () => {
     if (!newCatName || !newCatSlug) return;
     setAddingCat(true);
-    await base44.entities.BlogCategory.create({ name: newCatName, slug: newCatSlug });
+    await api.entities.BlogCategory.create({ name: newCatName, slug: newCatSlug });
     setNewCatName(''); setNewCatSlug('');
     await loadAll();
     setAddingCat(false);
@@ -226,7 +226,7 @@ export default function BlogManager() {
 
   const deleteCategory = async (id) => {
     if (!confirm('Delete this category?')) return;
-    await base44.entities.BlogCategory.delete(id);
+    await api.entities.BlogCategory.delete(id);
     await loadAll();
   };
 

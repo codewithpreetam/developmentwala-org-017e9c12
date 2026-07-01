@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Camera, Save, CheckCircle2, Trash2 } from 'lucide-react';
@@ -22,7 +22,7 @@ export default function EmployerProfileSection({ user, ACCENT, onProfilePicChang
   useEffect(() => { if (user) loadProfile(); }, [user?.id]);
 
   const loadProfile = async () => {
-    const profiles = await base44.entities.UserProfile.filter({ user_email: user.email, user_type: 'employer' });
+    const profiles = await api.entities.UserProfile.filter({ user_email: user.email, user_type: 'employer' });
     if (profiles.length > 0) {
       const p = profiles[0];
       setProfile(p);
@@ -48,9 +48,9 @@ export default function EmployerProfileSection({ user, ACCENT, onProfilePicChang
     const data = { ...form, age: form.age ? Number(form.age) : undefined, user_email: user.email, user_type: 'employer' };
     let updated;
     if (profile?.id) {
-      updated = await base44.entities.UserProfile.update(profile.id, data);
+      updated = await api.entities.UserProfile.update(profile.id, data);
     } else {
-      updated = await base44.entities.UserProfile.create(data);
+      updated = await api.entities.UserProfile.create(data);
       setProfile(updated);
     }
     if (onProfilePicChange) onProfilePicChange(form.profile_picture);
@@ -63,14 +63,14 @@ export default function EmployerProfileSection({ user, ACCENT, onProfilePicChang
     setUploadingPic(true);
     setPicError('');
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file, folder: 'avatars' });
+      const { file_url } = await api.integrations.Core.UploadFile({ file, folder: 'avatars' });
       f('profile_picture', file_url);
       const data = { ...form, profile_picture: file_url, age: form.age ? Number(form.age) : undefined, user_email: user.email, user_type: 'employer' };
       let updated;
       if (profile?.id) {
-        updated = await base44.entities.UserProfile.update(profile.id, data);
+        updated = await api.entities.UserProfile.update(profile.id, data);
       } else {
-        updated = await base44.entities.UserProfile.create(data);
+        updated = await api.entities.UserProfile.create(data);
         setProfile(updated);
       }
       if (onProfilePicChange) onProfilePicChange(file_url);
@@ -91,7 +91,7 @@ export default function EmployerProfileSection({ user, ACCENT, onProfilePicChang
     }
     try {
       const data = { ...form, profile_picture: '', age: form.age ? Number(form.age) : undefined, user_email: user.email, user_type: 'employer' };
-      await base44.entities.UserProfile.update(profile.id, data);
+      await api.entities.UserProfile.update(profile.id, data);
       if (onProfilePicChange) onProfilePicChange('');
     } catch (err) {
       setPicError(err.message || 'Failed to remove profile picture');

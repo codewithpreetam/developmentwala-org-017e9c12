@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '../components/auth/AuthContext';
 import { isPlatformAdmin, opportunitySubmitStatus } from '@/lib/supabase/auth';
 import { applyEmployerContactFields } from '@/lib/employerContact';
@@ -40,7 +40,7 @@ export default function SubmitEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    await base44.entities.Event.create({
+    await api.entities.Event.create({
       ...form,
       status: opportunitySubmitStatus(user),
       submitted_by_email: user?.email,
@@ -48,7 +48,7 @@ export default function SubmitEvent() {
     });
     if (!adminPost) {
       // Notify admin of new submission
-      await base44.entities.Notification.create({
+      await api.entities.Notification.create({
         user_email: 'admin',
         title: '📋 New Event Submitted',
         message: `"${form.title}" was submitted by ${form.submitted_by_name || form.submitted_by_email || 'an anonymous user'} and is pending review.`,

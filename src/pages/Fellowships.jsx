@@ -1,5 +1,5 @@
 import React from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import EntityListPage from '../components/opportunities/EntityListPage';
 import { countryOptions } from '../components/forms/formOptions';
 
@@ -21,7 +21,7 @@ const filters = [
 export default function Fellowships() {
   return (
     <EntityListPage
-      entity={base44.entities.Fellowship}
+      entity={api.entities.Fellowship}
       detailPageParam="FellowshipDetail"
       type="fellowship"
       title="Social Sector Fellowships"

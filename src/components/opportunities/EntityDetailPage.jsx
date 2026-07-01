@@ -16,7 +16,7 @@ import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 import SEOHead from '../shared/SEOHead';
 import ReactMarkdown from 'react-markdown';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { redirectToSignIn, setLoginRoleHint } from '@/lib/auth/redirect';
 import MobileHeader from '../MobileHeader';
 import { Textarea } from '@/components/ui/textarea';
@@ -81,10 +81,10 @@ export default function EntityDetailPage({
 
 
   useEffect(() => {
-    base44.auth.me().then(u => {
+    api.auth.me().then(u => {
       setUser(u);
       if (u) {
-        base44.entities.UserProfile.filter({ user_email: u.email }).then(profiles => {
+        api.entities.UserProfile.filter({ user_email: u.email }).then(profiles => {
           setUserProfile(profiles[0] || null);
         }).catch(() => {});
       }
@@ -114,12 +114,12 @@ export default function EntityDetailPage({
 
   const hydrateItem = async (it) => {
     setItem(it);
-    base44.auth.me().then(u => {
+    api.auth.me().then(u => {
       if (u) {
-        base44.entities.Application.filter({ opportunity_id: it.id, applicant_email: u.email })
+        api.entities.Application.filter({ opportunity_id: it.id, applicant_email: u.email })
           .then(existing => { if (existing.length > 0) setApplied(true); })
           .catch(() => {});
-        base44.entities.SavedOpportunity.filter({ user_email: u.email })
+        api.entities.SavedOpportunity.filter({ user_email: u.email })
           .then(saved => {
             const match = saved.find(s => String(s.opportunity_id) === String(it.id) && (s.opportunity_type || 'job') === resolvedType);
             if (match) setSavedId(match.id);
@@ -128,17 +128,17 @@ export default function EntityDetailPage({
       }
     }).catch(() => {});
     if (it.organization_employer_id) {
-      base44.entities.Organization.filter({ id: it.organization_employer_id })
+      api.entities.Organization.filter({ id: it.organization_employer_id })
         .then(orgs => { if (orgs.length > 0) setOrgData(orgs[0]); })
         .catch(() => {});
     } else if (it.submitted_by_email) {
-      base44.entities.Organization.filter({ user_email: it.submitted_by_email })
+      api.entities.Organization.filter({ user_email: it.submitted_by_email })
         .then(orgs => { if (orgs.length > 0) setOrgData(orgs[0]); })
         .catch(() => {});
     } else {
       const name = it.organization_name || it.organizer_name || it.funding_agency || it.provider_name || it.organization;
       if (name) {
-        base44.entities.Organization.filter({ org_name: name })
+        api.entities.Organization.filter({ org_name: name })
           .then(orgs => { if (orgs.length > 0) setOrgData(orgs[0]); })
           .catch(() => {});
       }
@@ -160,7 +160,7 @@ export default function EntityDetailPage({
     }
     setUploadingCv(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await api.integrations.Core.UploadFile({ file });
       setNewCvUrl(file_url);
       setFormErrors((prev) => ({ ...prev, cvUrl: undefined }));
       toast.success('CV uploaded.');
@@ -181,11 +181,11 @@ export default function EntityDetailPage({
     setSavingToggle(true);
     try {
       if (savedId) {
-        await base44.entities.SavedOpportunity.delete(savedId);
+        await api.entities.SavedOpportunity.delete(savedId);
         setSavedId(null);
         toast.success('Removed from saved.');
       } else {
-        const created = await base44.entities.SavedOpportunity.create({
+        const created = await api.entities.SavedOpportunity.create({
           user_email: user.email,
           opportunity_type: resolvedType,
           opportunity_id: item.id,
@@ -223,10 +223,10 @@ export default function EntityDetailPage({
     setApplying(true);
     try {
       if (cvChoice === 'new' && newCvUrl && userProfile?.id) {
-        await base44.entities.UserProfile.update(userProfile.id, { cv_url: newCvUrl }).catch(() => {});
+        await api.entities.UserProfile.update(userProfile.id, { cv_url: newCvUrl }).catch(() => {});
       }
       const orgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name || '';
-      await base44.entities.Application.create({
+      await api.entities.Application.create({
         opportunity_id: item.id,
         opportunity_title: item.title,
         opportunity_type: resolvedType,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { X, Calendar, Clock, Video, User, ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -70,14 +70,14 @@ export default function CreateInterviewModal({ onClose, onCreated, employerEmail
     e.preventDefault();
     setSaving(true);
     try {
-      const interview = await base44.entities.Interview.create({
+      const interview = await api.entities.Interview.create({
         ...form,
         employer_email: employerEmail,
         employer_id: employerId,
         employer_org: orgName,
       });
 
-      await base44.entities.Notification.create({
+      await api.entities.Notification.create({
         user_email: form.candidate_email,
         title: 'Interview Scheduled',
         message: `Your interview for "${form.job_title}" has been scheduled on ${form.date} at ${form.start_time}.\n\nType: ${form.interview_type.replace(/_/g, ' ')}\n\nMeeting Link: ${form.meeting_link || 'To be shared'}`,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '../components/auth/AuthContext';
 import {
   Building2, Briefcase, Users, Plus, Save, LogOut,
@@ -106,11 +106,11 @@ export default function EmployerDashboard() {
 
     // Fetch in two batches to avoid rate limits
     const [orgs, empProfiles, jobs, internships, fellowships] = await Promise.all([
-      base44.entities.Organization.filter({ user_email: user.email }),
-      base44.entities.UserProfile.filter({ user_email: user.email, user_type: 'employer' }),
-      fetchMine(base44.entities.Job, 'job'),
-      fetchMine(base44.entities.Internship, 'internship'),
-      fetchMine(base44.entities.Fellowship, 'fellowship'),
+      api.entities.Organization.filter({ user_email: user.email }),
+      api.entities.UserProfile.filter({ user_email: user.email, user_type: 'employer' }),
+      fetchMine(api.entities.Job, 'job'),
+      fetchMine(api.entities.Internship, 'internship'),
+      fetchMine(api.entities.Fellowship, 'fellowship'),
     ]);
 
     const signupOrgName = (empProfiles[0]?.org_name || '').trim();
@@ -136,7 +136,7 @@ export default function EmployerDashboard() {
         logo_url: o.logo_url || '',
       });
     } else {
-      const created = await base44.entities.Organization.create({
+      const created = await api.entities.Organization.create({
         user_email: user.email,
         org_name: defaultOrgName,
         email: user.email,
@@ -154,9 +154,9 @@ export default function EmployerDashboard() {
     }
 
     const [scholarships, grants, events] = await Promise.all([
-      fetchMine(base44.entities.Scholarship, 'scholarship'),
-      fetchMine(base44.entities.Grant, 'grant'),
-      fetchMine(base44.entities.Event, 'event'),
+      fetchMine(api.entities.Scholarship, 'scholarship'),
+      fetchMine(api.entities.Grant, 'grant'),
+      fetchMine(api.entities.Event, 'event'),
     ]);
 
     const allPosts = [...jobs, ...internships, ...fellowships, ...scholarships, ...grants, ...events].sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
@@ -165,7 +165,7 @@ export default function EmployerDashboard() {
 
     if (allPosts.length > 0) {
       const appResults = await Promise.all(
-        allPosts.map((j) => base44.entities.Application.filter({ opportunity_id: j.id }, '-created_date', 200))
+        allPosts.map((j) => api.entities.Application.filter({ opportunity_id: j.id }, '-created_date', 200))
       );
       const allApps = appResults.flat();
       const seenIds = new Set();
@@ -174,7 +174,7 @@ export default function EmployerDashboard() {
       setAllApplicants([]);
     }
 
-    const saved = await base44.entities.SavedOpportunity.filter({ user_email: user.email }, '-created_date', 100);
+    const saved = await api.entities.SavedOpportunity.filter({ user_email: user.email }, '-created_date', 100);
     setSavedItems(saved);
   };
 
@@ -191,7 +191,7 @@ export default function EmployerDashboard() {
       setApplicants([]);
       return;
     }
-    const apps = await base44.entities.Application.filter({ opportunity_id: jobId }, '-created_date', 200);
+    const apps = await api.entities.Application.filter({ opportunity_id: jobId }, '-created_date', 200);
     setApplicants(apps);
   };
 
@@ -223,7 +223,7 @@ export default function EmployerDashboard() {
     }, 200);
 
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file, folder: 'org-logos' });
+      const { file_url } = await api.integrations.Core.UploadFile({ file, folder: 'org-logos' });
       if (!file_url) throw new Error('Upload succeeded but no URL was returned.');
       uo('logo_url', file_url);
       setLogoProgress(95);
@@ -231,11 +231,11 @@ export default function EmployerDashboard() {
       // Persist immediately so the logo syncs everywhere even if the user forgets to save.
       try {
         if (org?.id) {
-          const saved = await base44.entities.Organization.update(org.id, { logo_url: file_url });
+          const saved = await api.entities.Organization.update(org.id, { logo_url: file_url });
           setOrg(saved);
         } else {
           const data = { ...orgForm, logo_url: file_url, user_email: user.email, email: orgForm.contact_email || user.email, org_name: orgForm.org_name || user.full_name || 'My Organization' };
-          const saved = await base44.entities.Organization.create(data);
+          const saved = await api.entities.Organization.create(data);
           setOrg(saved);
         }
         setSavedMsg('Logo updated!');
@@ -257,7 +257,7 @@ export default function EmployerDashboard() {
     uo('logo_url', '');
     if (org?.id) {
       try {
-        const saved = await base44.entities.Organization.update(org.id, { logo_url: '' });
+        const saved = await api.entities.Organization.update(org.id, { logo_url: '' });
         setOrg(saved);
       } catch (err) {
         setLogoError(err?.message || 'Could not remove logo.');
@@ -268,8 +268,8 @@ export default function EmployerDashboard() {
   const submitContact = async () => {
     if (!contactForm.subject.trim() || !contactForm.message.trim()) return;
     setContactSending(true);
-    await base44.entities.ContactMessage.create({ name: orgForm.org_name || user.full_name || '', email: user.email, subject: contactForm.subject, message: contactForm.message });
-    await base44.functions.invoke('sendContactEmail', { name: orgForm.org_name || user.full_name || '', email: user.email, subject: contactForm.subject, message: contactForm.message }).catch(() => {});
+    await api.entities.ContactMessage.create({ name: orgForm.org_name || user.full_name || '', email: user.email, subject: contactForm.subject, message: contactForm.message });
+    await api.functions.invoke('sendContactEmail', { name: orgForm.org_name || user.full_name || '', email: user.email, subject: contactForm.subject, message: contactForm.message }).catch(() => {});
     setContactSending(false); setContactSent(true); setContactForm({ subject: '', message: '' });
   };
 
@@ -279,10 +279,10 @@ export default function EmployerDashboard() {
       const data = { ...orgForm, user_email: user.email };
       let saved;
       if (org?.id) {
-        saved = await base44.entities.Organization.update(org.id, data);
+        saved = await api.entities.Organization.update(org.id, data);
         setOrg(saved);
       } else {
-        saved = await base44.entities.Organization.create({
+        saved = await api.entities.Organization.create({
           ...data,
           org_name: orgForm.org_name,
           email: orgForm.contact_email || user.email,
@@ -317,7 +317,7 @@ export default function EmployerDashboard() {
 
   const openApplicantProfile = async (app) => {
     setLoadingProfile(true); setViewingProfile({ app, profile: null });
-    const profiles = await base44.entities.UserProfile.filter({ user_email: app.applicant_email });
+    const profiles = await api.entities.UserProfile.filter({ user_email: app.applicant_email });
     setViewingProfile({ app, profile: profiles[0] || null }); setLoadingProfile(false);
   };
 
@@ -344,12 +344,12 @@ export default function EmployerDashboard() {
         updated_at: new Date().toISOString(),
       };
       const prevHistory = Array.isArray(app.status_history) ? app.status_history : [];
-      await base44.entities.Application.update(app.id, {
+      await api.entities.Application.update(app.id, {
         status: newStatus,
         status_history: [...prevHistory, historyEntry],
       });
       const statusLabel = statusOptions.find(s => s.value === newStatus)?.label || newStatus;
-      await base44.entities.Notification.create({
+      await api.entities.Notification.create({
         user_email: app.applicant_email,
         title: `Application Update: ${statusLabel}`,
         message: message || `Your application for "${app.opportunity_title}" at ${orgForm.org_name || 'the organization'} has been marked as ${statusLabel}.`,
@@ -430,12 +430,12 @@ export default function EmployerDashboard() {
   const typeBadge = { job: 'bg-blue-50 text-blue-700', internship: 'bg-purple-50 text-purple-700', fellowship: 'bg-indigo-50 text-indigo-700', scholarship: 'bg-yellow-50 text-yellow-700', grant: 'bg-green-50 text-green-700', event: 'bg-pink-50 text-pink-700' };
   const detailPageMap = { job: 'JobDetail', internship: 'InternshipDetail', fellowship: 'FellowshipDetail', scholarship: 'ScholarshipDetail', grant: 'GrantDetail', event: 'EventDetail' };
   const entityByType = {
-    job: base44.entities.Job,
-    internship: base44.entities.Internship,
-    fellowship: base44.entities.Fellowship,
-    scholarship: base44.entities.Scholarship,
-    grant: base44.entities.Grant,
-    event: base44.entities.Event,
+    job: api.entities.Job,
+    internship: api.entities.Internship,
+    fellowship: api.entities.Fellowship,
+    scholarship: api.entities.Scholarship,
+    grant: api.entities.Grant,
+    event: api.entities.Event,
   };
   const [deletingPostId, setDeletingPostId] = useState(null);
   const handleDeletePost = async (post) => {
@@ -791,7 +791,7 @@ export default function EmployerDashboard() {
                   <button
                     onClick={async () => {
                       setDeleting(true);
-                      if (org?.id) await base44.entities.Organization.delete(org.id);
+                      if (org?.id) await api.entities.Organization.delete(org.id);
                       setDeleteModal(false);
                       logout();
                     }}
@@ -1090,7 +1090,7 @@ export default function EmployerDashboard() {
                           </a>
                         )}
                         <button onClick={async () => {
-                          await base44.entities.SavedOpportunity.delete(item.id);
+                          await api.entities.SavedOpportunity.delete(item.id);
                           setSavedItems(prev => prev.filter(s => s.id !== item.id));
                         }} className="flex items-center gap-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg border border-red-200">
                           <X className="w-3.5 h-3.5" /> Remove

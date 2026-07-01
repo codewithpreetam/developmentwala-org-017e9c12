@@ -1,7 +1,7 @@
 import { absoluteUrl, breadcrumbList, stripHtml } from "./ssr-fetch";
 
 const ORG_LOGO =
-  "https://media.base44.com/images/public/69b1780f308798c9112e1851/a97f411e6_Development-Wala-Logo-150-x-150pngbv.webp";
+  "/logo-192.webp";
 
 type AnyRow = Record<string, unknown> & { id?: string | number; slug?: string };
 

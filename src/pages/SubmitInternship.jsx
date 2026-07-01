@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '../components/auth/AuthContext';
 import { isPlatformAdmin, opportunitySubmitStatus } from '@/lib/supabase/auth';
 import { applyEmployerContactFields } from '@/lib/employerContact';
@@ -33,7 +33,7 @@ export default function SubmitInternship() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    await base44.entities.Internship.create({
+    await api.entities.Internship.create({
       ...form,
       status: opportunitySubmitStatus(user),
       submitted_by_email: user?.email,

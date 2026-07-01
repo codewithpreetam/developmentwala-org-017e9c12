@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { setSessionUser, clearSessionUser, toAppUser } from '@/lib/supabase/auth';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 
 const supabase = createClient();
 const AuthContext = createContext(null);
@@ -30,7 +30,7 @@ export function AuthProvider({ children }) {
       setUser(appUser);
       setSessionUser(appUser);
       try {
-        const profiles = await base44.entities.UserProfile.filter({ user_email: appUser.email });
+        const profiles = await api.entities.UserProfile.filter({ user_email: appUser.email });
         setProfile(profiles[0] || null);
       } catch {
         setProfile(null);
@@ -84,10 +84,10 @@ export function AuthProvider({ children }) {
   }, [loadProfile]);
 
   const login = async (email, password) => {
-    const me = await base44.auth.login(email, password);
+    const me = await api.auth.login(email, password);
     setUser(me);
     try {
-      const profiles = await base44.entities.UserProfile.filter({ user_email: me.email });
+      const profiles = await api.entities.UserProfile.filter({ user_email: me.email });
       setProfile(profiles[0] || null);
     } catch {
       setProfile(null);
@@ -101,7 +101,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    await base44.auth.logout('/sign-in');
+    await api.auth.logout('/sign-in');
     setUser(null);
     setProfile(null);
     clearSessionUser();

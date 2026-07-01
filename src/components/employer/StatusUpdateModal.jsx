@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Send, CheckCircle2, Loader2 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 
 const statusOptions = [
   { value: 'applied', label: 'Applied', color: 'bg-blue-100 text-blue-700' },
@@ -47,7 +47,7 @@ export default function StatusUpdateModal({ app, orgName, onClose, onUpdated }) 
 
     const prevHistory = Array.isArray(app.status_history) ? app.status_history : [];
 
-    await base44.entities.Application.update(app.id, {
+    await api.entities.Application.update(app.id, {
       status: newStatus,
       status_history: [...prevHistory, historyEntry],
     });
@@ -59,7 +59,7 @@ export default function StatusUpdateModal({ app, orgName, onClose, onUpdated }) 
     if (message) notifMessage += `\n\nMessage from employer: ${message}`;
     if (nextSteps) notifMessage += `\n\nNext Steps: ${nextSteps}`;
 
-    await base44.entities.Notification.create({
+    await api.entities.Notification.create({
       user_email: app.applicant_email,
       title: notifTitle,
       message: notifMessage,

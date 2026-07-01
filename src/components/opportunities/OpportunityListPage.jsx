@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { redirectToSignIn } from '@/lib/auth/redirect';
 import { Search, SlidersHorizontal, X, Briefcase, ChevronDown } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -76,10 +76,10 @@ export default function OpportunityListPage({ type, title, description, metaTitl
     if (params.get('q')) setSearch(params.get('q'));
     if (params.get('sector')) setFilters(f => ({ ...f, sector: params.get('sector') }));
     loadItems();
-    base44.auth.me().then(u => {
+    api.auth.me().then(u => {
       if (!u) return;
       setCurrentUser(u);
-      base44.entities.SavedOpportunity.filter({ user_email: u.email }).then(saved => {
+      api.entities.SavedOpportunity.filter({ user_email: u.email }).then(saved => {
         const map = {};
         saved.forEach(s => { map[s.opportunity_id] = s.id; });
         setSavedMap(map);
@@ -94,10 +94,10 @@ export default function OpportunityListPage({ type, title, description, metaTitl
     }
     const orgName = item.organization || item.funding_agency || '';
     if (savedMap[item.id]) {
-      await base44.entities.SavedOpportunity.delete(savedMap[item.id]);
+      await api.entities.SavedOpportunity.delete(savedMap[item.id]);
       setSavedMap(prev => { const m = { ...prev }; delete m[item.id]; return m; });
     } else {
-      const created = await base44.entities.SavedOpportunity.create({
+      const created = await api.entities.SavedOpportunity.create({
         user_email: currentUser.email,
         opportunity_type: type,
         opportunity_id: item.id,
@@ -107,7 +107,7 @@ export default function OpportunityListPage({ type, title, description, metaTitl
   };
 
   const loadItems = async () => {
-    const data = await base44.entities.Job.filter({ status: 'published', opportunity_type: type }, '-created_date', 300);
+    const data = await api.entities.Job.filter({ status: 'published', opportunity_type: type }, '-created_date', 300);
     setItems(data);
     setLoading(false);
   };

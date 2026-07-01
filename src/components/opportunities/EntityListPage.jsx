@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { Search, SlidersHorizontal, X, Star, MapPin, Calendar, Globe, IndianRupee, Clock, Building2, ArrowRight, Bookmark, BookmarkCheck } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { redirectToSignIn } from '@/lib/auth/redirect';
 import BookmarkButton from './BookmarkButton';
 import { format, isPast, formatDistanceToNow } from 'date-fns';
@@ -219,10 +219,10 @@ export default function EntityListPage({
     loadItems().then(() => {
       // Load auth + saved only after items are fetched, to avoid rate limiting
       setTimeout(() => {
-        base44.auth.me().then(u => {
+        api.auth.me().then(u => {
           if (!u) return;
           setCurrentUser(u);
-          base44.entities.SavedOpportunity.filter({ user_email: u.email }).then(saved => {
+          api.entities.SavedOpportunity.filter({ user_email: u.email }).then(saved => {
             const map = {};
             saved.forEach(s => { map[s.opportunity_id] = s.id; });
             setSavedMap(map);
@@ -239,10 +239,10 @@ export default function EntityListPage({
     }
     const orgName = item.organization_name || item.organizer_name || item.funding_agency || item.provider_name || '';
     if (savedMap[item.id]) {
-      await base44.entities.SavedOpportunity.delete(savedMap[item.id]);
+      await api.entities.SavedOpportunity.delete(savedMap[item.id]);
       setSavedMap(prev => { const m = { ...prev }; delete m[item.id]; return m; });
     } else {
-      const created = await base44.entities.SavedOpportunity.create({
+      const created = await api.entities.SavedOpportunity.create({
         user_email: currentUser.email,
         opportunity_type: type,
         opportunity_id: item.id,

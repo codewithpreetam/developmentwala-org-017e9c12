@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { Calendar, List, Plus, Video, Clock, User, ChevronRight } from 'lucide-react';
 import InterviewCalendar from './InterviewCalendar';
 import CreateInterviewModal from './CreateInterviewModal';
@@ -40,7 +40,7 @@ export default function EmployerInterviewPanel({ employerEmail, employerId, orgN
 
   const { data: interviews = [], isLoading: loading } = useQuery({
     queryKey: ['interviews', employerEmail],
-    queryFn: () => base44.entities.Interview.filter({ employer_email: employerEmail }, '-date', 200),
+    queryFn: () => api.entities.Interview.filter({ employer_email: employerEmail }, '-date', 200),
     enabled: !!employerEmail,
     staleTime: 30000,
   });

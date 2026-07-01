@@ -1,11 +1,11 @@
 import React from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import EntityDetailPage from '../components/opportunities/EntityDetailPage';
 
 export default function GrantDetail() {
   return (
     <EntityDetailPage
-      entity={base44.entities.Grant}
+      entity={api.entities.Grant}
       listingPage="Grants"
       typeLabel="Grant"
       accentColor="green"

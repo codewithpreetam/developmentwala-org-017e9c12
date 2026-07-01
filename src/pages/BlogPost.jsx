@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DOMPurify from 'isomorphic-dompurify';
 import { Link, useParams } from '@/lib/router-adapter';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import SEOHead from '../components/shared/SEOHead';
@@ -22,8 +22,8 @@ export default function BlogPost() {
     if (!slug) { setLoading(false); return; }
 
     Promise.all([
-      base44.entities.BlogPost.list('-created_date', 200),
-      base44.entities.BlogCategory.list('-created_date', 100),
+      api.entities.BlogPost.list('-created_date', 200),
+      api.entities.BlogCategory.list('-created_date', 100),
     ]).then(([posts, cats]) => {
       const found = posts.find(p => p.slug === slug || p.id === slug);
       setPost(found || null);

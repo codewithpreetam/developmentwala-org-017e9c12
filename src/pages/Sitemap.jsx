@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from '@/lib/router-adapter';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Briefcase, GraduationCap, Star, BookOpen, IndianRupee, Calendar, FileText, ExternalLink } from 'lucide-react';
@@ -35,13 +35,13 @@ const typeIcon = { job: Briefcase, internship: GraduationCap, fellowship: Star, 
 const typeLabel = { job: 'Jobs', internship: 'Internships', fellowship: 'Fellowships', scholarship: 'Scholarships', grant: 'Grants', event: 'Events' };
 
 export default function Sitemap() {
-  const { data: jobs = [] } = useQuery({ queryKey: ['sitemap-jobs'], queryFn: () => base44.entities.Job.filter({ status: 'published' }), staleTime: 5 * 60_000 });
-  const { data: internships = [] } = useQuery({ queryKey: ['sitemap-internships'], queryFn: () => base44.entities.Internship.filter({ status: 'published' }), staleTime: 5 * 60_000 });
-  const { data: fellowships = [] } = useQuery({ queryKey: ['sitemap-fellowships'], queryFn: () => base44.entities.Fellowship.filter({ status: 'published' }), staleTime: 5 * 60_000 });
-  const { data: scholarships = [] } = useQuery({ queryKey: ['sitemap-scholarships'], queryFn: () => base44.entities.Scholarship.filter({ status: 'published' }), staleTime: 5 * 60_000 });
-  const { data: grants = [] } = useQuery({ queryKey: ['sitemap-grants'], queryFn: () => base44.entities.Grant.filter({ status: 'published' }), staleTime: 5 * 60_000 });
-  const { data: events = [] } = useQuery({ queryKey: ['sitemap-events'], queryFn: () => base44.entities.Event.filter({ status: 'published' }), staleTime: 5 * 60_000 });
-  const { data: posts = [] } = useQuery({ queryKey: ['sitemap-blog'], queryFn: () => base44.entities.BlogPost.filter({ status: 'published' }), staleTime: 5 * 60_000 });
+  const { data: jobs = [] } = useQuery({ queryKey: ['sitemap-jobs'], queryFn: () => api.entities.Job.filter({ status: 'published' }), staleTime: 5 * 60_000 });
+  const { data: internships = [] } = useQuery({ queryKey: ['sitemap-internships'], queryFn: () => api.entities.Internship.filter({ status: 'published' }), staleTime: 5 * 60_000 });
+  const { data: fellowships = [] } = useQuery({ queryKey: ['sitemap-fellowships'], queryFn: () => api.entities.Fellowship.filter({ status: 'published' }), staleTime: 5 * 60_000 });
+  const { data: scholarships = [] } = useQuery({ queryKey: ['sitemap-scholarships'], queryFn: () => api.entities.Scholarship.filter({ status: 'published' }), staleTime: 5 * 60_000 });
+  const { data: grants = [] } = useQuery({ queryKey: ['sitemap-grants'], queryFn: () => api.entities.Grant.filter({ status: 'published' }), staleTime: 5 * 60_000 });
+  const { data: events = [] } = useQuery({ queryKey: ['sitemap-events'], queryFn: () => api.entities.Event.filter({ status: 'published' }), staleTime: 5 * 60_000 });
+  const { data: posts = [] } = useQuery({ queryKey: ['sitemap-blog'], queryFn: () => api.entities.BlogPost.filter({ status: 'published' }), staleTime: 5 * 60_000 });
 
   const dynamicSections = [
     { key: 'job', items: jobs, page: 'JobDetail', icon: Briefcase },

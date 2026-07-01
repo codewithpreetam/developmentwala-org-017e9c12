@@ -1,5 +1,5 @@
 import React from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import EntityListPage from '../components/opportunities/EntityListPage';
 import { countryOptions, sectorOptions } from '../components/forms/formOptions';
 
@@ -19,7 +19,7 @@ const filters = [
 export default function Scholarships() {
   return (
     <EntityListPage
-      entity={base44.entities.Scholarship}
+      entity={api.entities.Scholarship}
       detailPageParam="ScholarshipDetail"
       type="scholarship"
       title="Scholarships for Social Sector"

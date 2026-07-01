@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPageUrl } from '@/utils';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '../components/auth/AuthContext';
 import { isPlatformAdmin, opportunitySubmitStatus } from '@/lib/supabase/auth';
 import { CheckCircle2, Loader2, ChevronDown, AlertCircle } from 'lucide-react';
@@ -108,7 +108,7 @@ export default function SubmitJob() {
     setError('');
     try {
       const entityName = ENTITY_BY_TYPE[form.opportunity_type] || 'Job';
-      const entity = base44.entities[entityName];
+      const entity = api.entities[entityName];
       if (!entity?.create) throw new Error('Invalid opportunity type.');
 
       await entity.create({
