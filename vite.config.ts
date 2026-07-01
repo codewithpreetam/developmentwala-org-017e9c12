@@ -6,10 +6,15 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// Set DEPLOY_TARGET=node when building for a Node.js host (e.g. Hostinger VPS Ubuntu).
+// Leave unset for the default Cloudflare Workers preset used by Lovable hosting.
+const nodeDeploy = process.env.DEPLOY_TARGET === "node";
+
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  ...(nodeDeploy ? { nitro: { preset: "node-server" } } : {}),
 });
