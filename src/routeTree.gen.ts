@@ -40,6 +40,7 @@ import { Route as EditOpportunityRouteImport } from './routes/edit-opportunity'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ChooseRoleRouteImport } from './routes/choose-role'
 import { Route as CandidateDashboardRouteImport } from './routes/candidate-dashboard'
+import { Route as ApiDocsRouteImport } from './routes/api-docs'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AdminDashboardRouteImport } from './routes/admin-dashboard'
 import { Route as IndexRouteImport } from './routes/index'
@@ -218,6 +219,11 @@ const CandidateDashboardRoute = CandidateDashboardRouteImport.update({
   path: '/candidate-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDocsRoute = ApiDocsRouteImport.update({
+  id: '/api-docs',
+  path: '/api-docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin-login',
   path: '/admin-login',
@@ -333,6 +339,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin-dashboard': typeof AdminDashboardRoute
   '/admin-login': typeof AdminLoginRoute
+  '/api-docs': typeof ApiDocsRoute
   '/candidate-dashboard': typeof CandidateDashboardRoute
   '/choose-role': typeof ChooseRoleRoute
   '/contact': typeof ContactRoute
@@ -388,6 +395,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-dashboard': typeof AdminDashboardRoute
   '/admin-login': typeof AdminLoginRoute
+  '/api-docs': typeof ApiDocsRoute
   '/candidate-dashboard': typeof CandidateDashboardRoute
   '/choose-role': typeof ChooseRoleRoute
   '/contact': typeof ContactRoute
@@ -444,6 +452,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin-dashboard': typeof AdminDashboardRoute
   '/admin-login': typeof AdminLoginRoute
+  '/api-docs': typeof ApiDocsRoute
   '/candidate-dashboard': typeof CandidateDashboardRoute
   '/choose-role': typeof ChooseRoleRoute
   '/contact': typeof ContactRoute
@@ -501,6 +510,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-dashboard'
     | '/admin-login'
+    | '/api-docs'
     | '/candidate-dashboard'
     | '/choose-role'
     | '/contact'
@@ -556,6 +566,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-dashboard'
     | '/admin-login'
+    | '/api-docs'
     | '/candidate-dashboard'
     | '/choose-role'
     | '/contact'
@@ -611,6 +622,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-dashboard'
     | '/admin-login'
+    | '/api-docs'
     | '/candidate-dashboard'
     | '/choose-role'
     | '/contact'
@@ -667,6 +679,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  ApiDocsRoute: typeof ApiDocsRoute
   CandidateDashboardRoute: typeof CandidateDashboardRoute
   ChooseRoleRoute: typeof ChooseRoleRoute
   ContactRoute: typeof ContactRoute
@@ -938,6 +951,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CandidateDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api-docs': {
+      id: '/api-docs'
+      path: '/api-docs'
+      fullPath: '/api-docs'
+      preLoaderRoute: typeof ApiDocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin-login': {
       id: '/admin-login'
       path: '/admin-login'
@@ -1099,6 +1119,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminLoginRoute: AdminLoginRoute,
+  ApiDocsRoute: ApiDocsRoute,
   CandidateDashboardRoute: CandidateDashboardRoute,
   ChooseRoleRoute: ChooseRoleRoute,
   ContactRoute: ContactRoute,
