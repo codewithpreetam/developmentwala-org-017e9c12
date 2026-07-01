@@ -59,6 +59,7 @@ import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
 import { Route as ApiPublicRssDotxmlRouteImport } from './routes/api/public/rss[.]xml'
+import { Route as ApiPublicV1SplatRouteImport } from './routes/api/public/v1.$'
 import { Route as ApiAuthLinkedinStartRouteImport } from './routes/api/auth.linkedin.start'
 import { Route as ApiAuthLinkedinCallbackRouteImport } from './routes/api/auth.linkedin.callback'
 
@@ -312,6 +313,11 @@ const ApiPublicRssDotxmlRoute = ApiPublicRssDotxmlRouteImport.update({
   path: '/api/public/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1SplatRoute = ApiPublicV1SplatRouteImport.update({
+  id: '/api/public/v1/$',
+  path: '/api/public/v1/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthLinkedinStartRoute = ApiAuthLinkedinStartRouteImport.update({
   id: '/api/auth/linkedin/start',
   path: '/api/auth/linkedin/start',
@@ -376,6 +382,7 @@ export interface FileRoutesByFullPath {
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
+  '/api/public/v1/$': typeof ApiPublicV1SplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -430,6 +437,7 @@ export interface FileRoutesByTo {
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
+  '/api/public/v1/$': typeof ApiPublicV1SplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -485,6 +493,7 @@ export interface FileRoutesById {
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/api/auth/linkedin/callback': typeof ApiAuthLinkedinCallbackRoute
   '/api/auth/linkedin/start': typeof ApiAuthLinkedinStartRoute
+  '/api/public/v1/$': typeof ApiPublicV1SplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -541,6 +550,7 @@ export interface FileRouteTypes {
     | '/blog/category/$slug'
     | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
+    | '/api/public/v1/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -595,6 +605,7 @@ export interface FileRouteTypes {
     | '/blog/category/$slug'
     | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
+    | '/api/public/v1/$'
   id:
     | '__root__'
     | '/'
@@ -649,6 +660,7 @@ export interface FileRouteTypes {
     | '/blog/category/$slug'
     | '/api/auth/linkedin/callback'
     | '/api/auth/linkedin/start'
+    | '/api/public/v1/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -704,6 +716,7 @@ export interface RootRouteChildren {
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
   ApiAuthLinkedinCallbackRoute: typeof ApiAuthLinkedinCallbackRoute
   ApiAuthLinkedinStartRoute: typeof ApiAuthLinkedinStartRoute
+  ApiPublicV1SplatRoute: typeof ApiPublicV1SplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1058,6 +1071,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/$': {
+      id: '/api/public/v1/$'
+      path: '/api/public/v1/$'
+      fullPath: '/api/public/v1/$'
+      preLoaderRoute: typeof ApiPublicV1SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/linkedin/start': {
       id: '/api/auth/linkedin/start'
       path: '/api/auth/linkedin/start'
@@ -1128,6 +1148,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogCategorySlugRoute: BlogCategorySlugRoute,
   ApiAuthLinkedinCallbackRoute: ApiAuthLinkedinCallbackRoute,
   ApiAuthLinkedinStartRoute: ApiAuthLinkedinStartRoute,
+  ApiPublicV1SplatRoute: ApiPublicV1SplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
